@@ -1,3 +1,4 @@
-roms/*
-autom4te.cache/*
+/roms/
+/autom4te.cache/
+
 
