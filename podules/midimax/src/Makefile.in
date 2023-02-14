@@ -378,8 +378,6 @@ AUTOMAKE_OPTIONS = subdir-objects
 @BUILD_PODULES_TRUE@	midimax.c $(am__append_5) $(am__append_6) \
 @BUILD_PODULES_TRUE@	$(am__append_7)
 @BUILD_PODULES_TRUE@libmidimax_la_CFLAGS = -I../../../src -I../../common/midi -I../../common/uart
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@AM_CFLAGS = ${CFLAGS} -c -Wall \
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@	-Werror -fpic -potat
 all: all-am
 
 .SUFFIXES:

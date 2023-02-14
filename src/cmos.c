@@ -1,5 +1,5 @@
 /*
- * I2C + CMOS RAM emulation
+    I2C + CMOS RAM emulation
 */
 #include <stdio.h>
 #include <stdlib.h>
@@ -228,10 +228,8 @@ static void cmos_tick(void *p) {
 void cmos_init() {
     struct tm *cur_time_tm;
     time_t cur_time;
-
     time(&cur_time);
     cur_time_tm = localtime(&cur_time);
-
     systemtime.msec = 0;
     systemtime.sec = cur_time_tm->tm_sec;
     systemtime.min = cur_time_tm->tm_min;
@@ -239,7 +237,6 @@ void cmos_init() {
     systemtime.day = cur_time_tm->tm_mday;
     systemtime.mon = cur_time_tm->tm_mon + 1;
     systemtime.year = cur_time_tm->tm_year + 1900;
-
     timer_add(&cmos.timer, cmos_tick, NULL, 1);
 }
 

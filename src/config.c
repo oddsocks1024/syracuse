@@ -39,7 +39,7 @@ void get_config_dir_loc(char *s) {
     strcat(s, "/");
 }
 
-/ * This needs to be made safer */
+/* This needs to be made safer */
 void append_filename(char *dest, const char *s1, const char *s2, int size) {
     strcpy(dest, s1);
     strcat(dest, s2);
