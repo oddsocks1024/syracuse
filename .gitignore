@@ -1,4 +1,3 @@
 /roms/
 /autom4te.cache/
-
-
+*.kate-swp
