@@ -90,34 +90,33 @@ static void readdataerror(st506_t *st506)
     st506->param[1] = st506->ssb;
 }
 
-static int check_chs_params(st506_t *st506, int drive)
-{
-    if (st506->lcyl > 1023)
-    {
+static int check_chs_params(st506_t *st506, int drive) {
+    if (st506->lcyl > 1023) {
         st506_error(st506, NSC);
         readdataerror(st506);
         return 1;
     }
-    if (st506->lhead >= st506->hpc[drive])
-    {
+
+    if (st506->lhead >= st506->hpc[drive]) {
         st506_error(st506, IPH);
         readdataerror(st506);
         return 1;
     }
-    if (st506->lsect >= st506->spt[drive])
-    {
+
+    if (st506->lsect >= st506->spt[drive]) {
         st506_error(st506, TOV);
         readdataerror(st506);
         return 1;
     }
+
     return 0;
 }
 
 
 int st506writes=0;
 void st506_writel(st506_t *st506, uint32_t a, uint32_t v);
-void st506_writeb(st506_t *st506, uint32_t a, uint8_t v)
-{
+
+void st506_writeb(st506_t *st506, uint32_t a, uint8_t v) {
     st506_writel(st506, a, v);
 }
 
@@ -689,40 +688,34 @@ static void st506_callback(void *p)
     }
 }
 
-static void st506_internal_irq_raise(st506_t *st506)
-{
+static void st506_internal_irq_raise(st506_t *st506) {
     ioc_irqb(IOC_IRQB_ST506);
 }
-static void st506_internal_irq_clear(st506_t *st506)
-{
+
+static void st506_internal_irq_clear(st506_t *st506) {
     ioc_irqbc(IOC_IRQB_ST506);
 }
 
-void st506_internal_init(void)
-{
+void st506_internal_init(void) {
     st506_init(&internal_st506, hd_fn[0], hd_spt[0], hd_hpc[0], hd_fn[1], hd_spt[1], hd_hpc[1], st506_internal_irq_raise, st506_internal_irq_clear, NULL);
 }
 
-void st506_internal_close(void)
-{
+void st506_internal_close(void) {
     st506_close(&internal_st506);
 }
 
-uint8_t st506_internal_readb(uint32_t addr)
-{
+uint8_t st506_internal_readb(uint32_t addr) {
     return st506_readb(&internal_st506, addr);
 }
 
-uint32_t st506_internal_readl(uint32_t addr)
-{
+uint32_t st506_internal_readl(uint32_t addr) {
     return st506_readl(&internal_st506, addr);
 }
 
-void st506_internal_writeb(uint32_t addr, uint8_t val)
-{
+void st506_internal_writeb(uint32_t addr, uint8_t val) {
     return st506_writeb(&internal_st506, addr, val);
 }
-void st506_internal_writel(uint32_t addr, uint32_t val)
-{
+
+void st506_internal_writel(uint32_t addr, uint32_t val) {
     return st506_writel(&internal_st506, addr, val);
 }

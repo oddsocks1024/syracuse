@@ -1,5 +1,6 @@
 /*
-  DS2401 unique ID emulation*/
+    DS2401 unique ID emulation
+*/
 #include <string.h>
 #include "arc.h"
 #include "config.h"
@@ -25,16 +26,16 @@ static struct
 {
         int old_val;
         uint64_t old_tsc;
-        
+
         int rx_val;
-        
+
         int state;
         int state_pos;
-        
+
         uint8_t command;
-        
+
         uint64_t id;
-        
+
         emu_timer_t timer;
 } ds2401;
 
@@ -64,16 +65,16 @@ static void ds2401_callback(void *p);
 void ds2401_init(void)
 {
         uint8_t crc;
-        
+
         memset(&ds2401, 0, sizeof(ds2401));
 
         ds2401.rx_val = 1;
         timer_add(&ds2401.timer, ds2401_callback, NULL, 0);
-        
+
         ds2401.id = 0x01ull;
         ds2401.id |= ((uint64_t)unique_id << 8);
        // ds2401.id |= (0x123456789abcull << 8);
-        
+
         crc = 0;
         crc = crc_table[crc ^ (ds2401.id & 0xff)];
         crc = crc_table[crc ^ ((ds2401.id >> 8) & 0xff)];
@@ -128,7 +129,7 @@ void ds2401_write(int val)
 #endif
                         }
                         break;
-                        
+
                         case STATE_READ_ROM:
 //                        rpclog("DS2401 shift bit %i %i  %016llx\n", ds2401.state_pos, (ds2401.id & (1ull << ds2401.state_pos)) ? 1 : 0, ds2401.id);
                         if (ds2401.id & (1ull << ds2401.state_pos))
@@ -141,7 +142,7 @@ void ds2401_write(int val)
                 }
 //                uint32_t remaining_us = timer_get_remaining_us(&ds2401.timer);
 //                uint32_t pulse_length = 1000 - remaining_us;
-                
+
 //                rpclog("ds2401 pulse: %u us\n", pulse_length);
         }
         ds2401.old_val = val;
@@ -156,7 +157,7 @@ int ds2401_read(void)
 static void ds2401_callback(void *p)
 {
 //        rpclog("ds2401_callback: state=%i\n", ds2401.state);
-        
+
         switch (ds2401.state)
         {
                 case STATE_PRESENCE_DELAY:
@@ -171,7 +172,7 @@ static void ds2401_callback(void *p)
                 ds2401.state_pos = 0;
                 ds2401.command = 0;
                 break;
-                
+
                 case STATE_READ_ROM:
                 ds2401.rx_val = 1;
                 ds2401.state_pos++;

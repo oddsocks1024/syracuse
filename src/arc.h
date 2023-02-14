@@ -1,5 +1,6 @@
-/* Main header file */
-
+/*
+    Main header file
+*/
 #define VERSION_STRING "v2.2"
 
 #include <stdio.h>

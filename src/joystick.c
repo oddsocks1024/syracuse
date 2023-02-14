@@ -1,5 +1,6 @@
 /*
-  Joystick subsystem*/
+    Joystick subsystem
+*/
 #include <stdlib.h>
 #include <string.h>
 #include "arc.h"
@@ -45,7 +46,7 @@ const int joystick_get_max_joysticks(int joystick)
 {
         return joystick_list[joystick]->max_joysticks;
 }
-        
+
 const int joystick_get_axis_count(int joystick)
 {
         return joystick_list[joystick]->axis_count;
@@ -79,7 +80,7 @@ const char *joystick_get_pov_name(int joystick, int id)
 int joystick_get_type(char *config_name)
 {
         int c = 0;
-        
+
         while (joystick_list[c])
         {
                 if (!strcmp(config_name, joystick_list[c]->config_name))
@@ -148,7 +149,7 @@ static const joystick_if_t joystick_serial_port =
 uint8_t joystick_rtfm_read(uint32_t a)
 {
         uint8_t temp = 0xff;
-        
+
         switch (a & 0xc)
         {
                 case 4:

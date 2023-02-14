@@ -1,5 +1,6 @@
 /*
-  APD disc image support*/
+    APD disc image support
+*/
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -50,9 +51,9 @@ void apd_load(int drive, char *fn)
 {
         int c;
         int pos = 8 + (166 * 12);
-        
+
         rpclog("apd_load\n");
-        
+
         writeprot[drive] = fwriteprot[drive] = 1;
         apd[drive].f = gzopen(fn, "rb");
         if (!apd[drive].f)
@@ -144,9 +145,9 @@ void apd_seek(int drive, int track)
                 track = 0;
         if (track >= apd[drive].lasttrack)
                 track = apd[drive].lasttrack - 1;
-        
+
         track <<= 1;
-        
+
         if (apd[drive].header.track[track].len)
         {
                 gzseek(apd[drive].f, apd[drive].header.track[track].pos, SEEK_SET);
@@ -162,7 +163,7 @@ void apd_seek(int drive, int track)
         }
         else
                 memset(mfm->track_data[1], 0, mfm->track_len[1]);
-                        
+
 
         mfm->track_len[0] = apd[drive].header.track[track].len;
         mfm->track_len[1] = apd[drive].header.track[track + 1].len;

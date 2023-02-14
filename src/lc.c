@@ -1,6 +1,8 @@
-/*Much of this is guesswork. Acorn didn't publically document the LC ASIC in any
-  real detail, so this is based on what information is present in the A4 TERM and
-  RO 3.71 source*/
+/*
+    Much of this is guesswork. Acorn didn't publically document the LC ASIC in any
+    real detail, so this is based on what information is present in the A4 TERM and
+    RO 3.71 source
+*/
 #include "arc.h"
 #include "config.h"
 #include "ioeb.h"

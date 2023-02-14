@@ -1,5 +1,6 @@
 /*
-  1770 FDC emulation*/
+    1770 FDC emulation
+*/
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -58,7 +59,7 @@ void wd1770_reset()
                 fdc_getdata        = wd1770_getdata;
                 fdc_sectorid       = NULL;
                 fdc_indexpulse     = wd1770_fdc_indexpulse;
-                
+
                 disc_set_density(0);
         }
 //        motorspin = 45000;
@@ -100,10 +101,10 @@ void wd1770_write(uint16_t addr, uint8_t val)
                 case 0x0:
                 if (wd1770.status & 1 && (val >> 4) != 0xD) { rpclog("Command rejected\n"); return; }
 //                rpclog("FDC command %02X %i %i %i\n",val,wd1770.curside,wd1770.track,wd1770.sector);
-                
+
 //                if (val == 0x8C && wd1770.curside == 1 && wd1770.track == 0 && wd1770.sector == 3)
 //                   output = 1;
-                
+
                 wd1770.command = val;
                 if ((val >> 4) != 0xD)/* && !(val&8)) */wd1770_spinup();
                 switch (val >> 4)
@@ -112,12 +113,12 @@ void wd1770_write(uint16_t addr, uint8_t val)
                         wd1770.status = 0x80 | 0x21 | track0;
                         disc_seek(curdrive, 0);
                         break;
-                        
+
                         case 0x1: /*Seek*/
                         wd1770.status = 0x80 | 0x21 | track0;
                         disc_seek(curdrive, wd1770.data);
                         break;
-                        
+
                         case 0x2:
                         case 0x3: /*Step*/
                         wd1770.status = 0x80 | 0x21 | track0;
@@ -187,7 +188,7 @@ void wd1770_write(uint16_t addr, uint8_t val)
                         wd1770.status = 0x80 | 0x1;
                         disc_format(curdrive, wd1770.track, wd1770.curside, wd1770.density);
                         break;
-                        
+
                         default:
 //                                rpclog("Bad 1770 command %02X\n",val);
                         timer_disable(&fdc_timer);

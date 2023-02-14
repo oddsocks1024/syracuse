@@ -1,14 +1,13 @@
-/**/
+/*
+    ZIDEFS compatible IDE podule
 
-/*ZIDEFS compatible IDE podule
+    ZIDEFS claims to be compatible with 'ICS compatible' IDE interfaces, but it
+    doesn't match the currently emulated ideA podule.
 
-  ZIDEFS claims to be compatible with 'ICS compatible' IDE interfaces, but it
-  doesn't match the currently emulated ideA podule.
-
-  IOC Address map :
-  0000-1fff : ROM
-  2000 : ROM page register
-  3000-301f : IDE registers
+    IOC Address map :
+    0000-1fff : ROM
+    2000 : ROM page register
+    3000-301f : IDE registers
 */
 #include <stdio.h>
 #include <stdlib.h>

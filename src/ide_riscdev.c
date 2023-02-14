@@ -1,12 +1,11 @@
-/**/
+/*
+    RISC Developments IDE Controller
 
-/*RISC Developments IDE Controller
-
-  IOC Address map :
-  0000-1fff : ROM
-  2000 : ROM page register
-  2400 : Unknown register, possibly IRQ enable?
-  2800-281f : IDE registers
+    IOC Address map :
+    0000-1fff : ROM
+    2000 : ROM page register
+    2400 : Unknown register, possibly IRQ enable?
+    2800-281f : IDE registers
 */
 #include <stdio.h>
 #include <stdlib.h>

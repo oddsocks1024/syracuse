@@ -1,5 +1,6 @@
 /*
-  Sound emulation*/
+    Sound emulation
+*/
 #include <math.h>
 #include <string.h>
 #include "arc.h"
@@ -170,7 +171,7 @@ void sound_set_clock(int clock_mhz)
 //        rpclog("  SAMP_INC=%08x  sample_16_time=%016llx  sound_timer_base_period=%016llx\n", SAMP_INC, sample_16_time, sound_timer_base_period);
 
         iir_gen_coefficients(clock_mhz, filter_freqs[sound_filter], ACoef, BCoef);
-        
+
         sound_clock_mhz = clock_mhz;
 }
 
@@ -264,7 +265,7 @@ static signed short convbyte(uint8_t v)
 void sound_init(void)
 {
         int c;
-        
+
         for (c = 0; c < 256; c++)
                 log_to_lin[c] = convbyte(c);
 
@@ -272,7 +273,7 @@ void sound_init(void)
         timer_add(&sound_timer_100ms, pollsound_100ms, NULL, 1);
         sound_first_poll = 1;
         SAMP_INC = ((int)((1000000.0 / 48000.0) * 16384.0));
-        
+
         samp_rp = 0xff000000;
         samp_wp = 0;
         samp_fp = 0;

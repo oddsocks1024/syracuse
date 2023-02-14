@@ -1,5 +1,6 @@
 /*
-  Hard disc configuration dialogue*/
+    Hard disc configuration dialogue
+*/
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP

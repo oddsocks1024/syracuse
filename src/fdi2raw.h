@@ -5,7 +5,6 @@
 #define uae_u16 uint16_t
 #define uae_u32 uint32_t
 
-//#include "types.h"
 #include <stdio.h>
 typedef struct fdi FDI;
 
@@ -14,9 +13,7 @@ extern "C" {
 #endif
 
 extern int fdi2raw_loadtrack (FDI*, uae_u16 *mfmbuf, uae_u16 *tracktiming, int track, int *tracklength, int *indexoffset, int *multirev, int mfm);
-
 extern int fdi2raw_loadrevolution (FDI*, uae_u16 *mfmbuf, uae_u16 *tracktiming, int track, int *tracklength, int mfm);
-
 extern FDI *fdi2raw_header(FILE *f);
 extern void fdi2raw_header_free (FDI *);
 extern int fdi2raw_get_last_track(FDI *);

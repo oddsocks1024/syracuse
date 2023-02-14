@@ -1,5 +1,5 @@
 /*
- * 'Flexible' ROM loader
+    Flexible ROM loader
 */
 #include <dirent.h>
 #include <stdio.h>
@@ -99,8 +99,8 @@ int ucase(char c)
 int loadrom() {
     FILE *f;
     int file=0;
-    int c,d,e;
-    int len,pos=0;
+    int c, d, e;
+    int len, pos=0;
     char fn[512];
     char s[512];
     char *ext;

@@ -1,6 +1,7 @@
 /*
-  wxApp implementation
-  Menus are also handled here*/
+    wxApp implementation
+    Menus are also handled here
+*/
 #include <sstream>
 #include <SDL2/SDL.h>
 

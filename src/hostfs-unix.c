@@ -2,11 +2,9 @@
 #include <errno.h>
 #include <stdio.h>
 #include <string.h>
-
 #include <utime.h>
 #include <sys/stat.h>
 #include <sys/statvfs.h>
-
 #include "arc.h"
 #include "hostfs.h"
 #include "hostfs_internal.h"

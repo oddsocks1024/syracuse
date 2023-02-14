@@ -1,5 +1,6 @@
 /*
-  Podule configuration subsystem*/
+    Podule configuration subsystem
+*/
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP

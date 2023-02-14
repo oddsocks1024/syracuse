@@ -1,15 +1,14 @@
-/**/
+/*
+    ICS A3000 IDE Interface v5
 
-/*ICS A3000 IDE Interface v5
+    IOC Address map :
+    0000-1fff : ROM (read)
+                ROM bank (write)
 
-  IOC Address map :
-  0000-1fff : ROM (read)
-              ROM bank (write)
-
-  MEMC Address map :
-  2000-21ff, A2 low : IDE registers - bits 6-8 = register index
-             A2 high : high byte latch
-  2380 : IDE alternate status
+    MEMC Address map :
+    2000-21ff, A2 low : IDE registers - bits 6-8 = register index
+                A2 high : high byte latch
+    2380 : IDE alternate status
 */
 #include <stdio.h>
 #include <stdlib.h>

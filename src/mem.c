@@ -1,5 +1,6 @@
 /*
-  Memory read/write functions*/
+    Memory read/write functions
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -93,7 +94,7 @@ void mem_setromspeed(int n, int s)
 
         mem_romspeed_n = n;
         mem_romspeed_s = s;
-        
+
 /*        if (cp15_cacheon)
         {
                 n -= (n >> 1);
@@ -107,7 +108,7 @@ void mem_setromspeed(int n, int s)
                 mem_speed[c][0] = s * mem_spd_multi;
                 mem_speed[c][1] = n * mem_spd_multi;
         }
-        
+
         rpclog("mem_setromspeed %i %i\n", n, s);
 }
 
@@ -281,7 +282,7 @@ uint8_t readmemfb(uint32_t a)
                                 if ((a&~0x1F)==0x33C0000) return readeterna(a);
                         }*/
                         return podule_read_b((a & 0xC000) >> 14, a & 0x3FFF);
-                        case 5: 
+                        case 5:
                         if (fdctype == FDC_82C711) /*IOEB*/
                         {
                                 return ioeb_read(a);
@@ -744,4 +745,4 @@ void writememfl(uint32_t a,uint32_t v)
 //        rpclog("Dat abort writel %07X %07X\n",a,PC);
 /*        sprintf(err2,"Bad write long %06X %03X %04X %08X\n",a,a>>15,a&0x7FFF,v);*/
 }
-       
+

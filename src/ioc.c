@@ -1,5 +1,6 @@
 /*
-  IOC emulation*/
+    IOC emulation
+*/
 #include <stdio.h>
 #include "arc.h"
 #include "cmos.h"
@@ -29,7 +30,7 @@ void ioc_updateirqs()
                         ioc.irqb |= IOC_IRQB_DISC_CHANGED;
 //                        if (ioc.mskb&0x10) rpclog("Disc change interrupt\n");
                 }
-                else                      
+                else
                         ioc.irqb &= ~IOC_IRQB_DISC_CHANGED;
         }
         if ((ioc.mska&(ioc.irqa|0x80))||(ioc.mskb&ioc.irqb))   irq|=1;
@@ -54,9 +55,9 @@ static void load_timer(int timer_nr)
 static uint16_t read_timer(int timer_nr)
 {
         uint64_t remaining = timer_get_remaining_u64(&ioc.timers[timer_nr]);
-        
+
         remaining = (remaining * 2) / TIMER_USEC;
-        
+
         return remaining & 0xffff;
 }
 
@@ -68,40 +69,40 @@ void ioc_write(uint32_t addr, uint32_t v)
 //        if ((addr & 0x7c) >= 0x10 && (addr & 0x7c) < 0x40) rpclog("ioc_write %04X %02X %07X\n", addr, v, PC);
         switch (addr & 0x7C)
         {
-                case 0x00: 
+                case 0x00:
                 i2c_change(v & 2, v & 1);
                 if (fdctype == FDC_82C711)
                         ds2401_write(v & 8);
-                ioc.ctrl = v & 0xFC; 
+                ioc.ctrl = v & 0xFC;
                 return;
-                case 0x04: 
+                case 0x04:
                 ioc_irqbc(IOC_IRQB_KEYBOARD_TX);
                 keyboard_write(v);
                 return;
-                case 0x14: 
-                ioc.irqa &= ~v; 
-                ioc_updateirqs(); 
+                case 0x14:
+                ioc.irqa &= ~v;
+                ioc_updateirqs();
                 return;
-                case 0x18: 
-                ioc.mska = v; 
-                ioc_updateirqs(); 
+                case 0x18:
+                ioc.mska = v;
+                ioc_updateirqs();
                 return;
                 case 0x24: /*????*/
-                return; 
-                case 0x28: 
-                ioc.mskb = v; 
-                ioc_updateirqs(); 
+                return;
+                case 0x28:
+                ioc.mskb = v;
+                ioc_updateirqs();
                 return;
                 case 0x34: /*????*/
                 return;
-                case 0x38: 
-                ioc.mskf = v; 
-                ioc_fiq(0); 
+                case 0x38:
+                ioc.mskf = v;
+                ioc_fiq(0);
                 return;
-                case 0x40: 
+                case 0x40:
                 ioc.timerl[0] = (ioc.timerl[0] & 0xff00) | v;
                 return;
-                case 0x44: 
+                case 0x44:
                 ioc.timerl[0] = (ioc.timerl[0] & 0x00ff) | (v << 8);
                 return;
                 case 0x48:
@@ -112,10 +113,10 @@ void ioc_write(uint32_t addr, uint32_t v)
                 ioc.timerr[0] = read_timer(0);
 //                rpclog("T0 read  = %08X %i\n", ioc.timerc[0], ioc.timerr[0]);
                 return;
-                case 0x50: 
+                case 0x50:
                 ioc.timerl[1] = (ioc.timerl[1] & 0xff00) | v;
                 return;
-                case 0x54: 
+                case 0x54:
                 ioc.timerl[1] = (ioc.timerl[1] & 0x00ff) | (v << 8);
                 return;
                 case 0x58:
@@ -124,11 +125,11 @@ void ioc_write(uint32_t addr, uint32_t v)
                 case 0x5C:
                 ioc.timerr[1] = read_timer(1);
                 return;
-                case 0x60: 
-                ioc.timerl[2] = (ioc.timerl[2] & 0xff00) | v; 
+                case 0x60:
+                ioc.timerl[2] = (ioc.timerl[2] & 0xff00) | v;
                 return;
-                case 0x64: 
-                ioc.timerl[2] = (ioc.timerl[2] & 0x00ff) | (v << 8); 
+                case 0x64:
+                ioc.timerl[2] = (ioc.timerl[2] & 0x00ff) | (v << 8);
                 return;
                 case 0x68:
                 load_timer(2);
@@ -137,10 +138,10 @@ void ioc_write(uint32_t addr, uint32_t v)
                 ioc.timerr[2] = read_timer(2);
                 return;
                 case 0x70:
-                ioc.timerl[3] = (ioc.timerl[3] & 0xff00) | v; 
+                ioc.timerl[3] = (ioc.timerl[3] & 0xff00) | v;
                 return;
-                case 0x74: 
-                ioc.timerl[3] = (ioc.timerl[3] & 0x00ff) | (v << 8); 
+                case 0x74:
+                ioc.timerl[3] = (ioc.timerl[3] & 0x00ff) | (v << 8);
                 return;
                 case 0x78:
                 load_timer(3);
@@ -160,7 +161,7 @@ uint8_t ioc_read(uint32_t addr)
 //        if ((addr & 0x7c) >= 0x10 && (addr & 0x7c) < 0x40) rpclog("ioc_read %08X %07X\n", addr, PC);
         switch (addr & 0x7C)
         {
-                case 0x00: 
+                case 0x00:
                 temp = ((i2c_clock) ? 2 : 0) | ((i2c_data) ? 1 : 0) | flyback;
                 if (fdctype == FDC_82C711)
                 {
@@ -182,45 +183,45 @@ uint8_t ioc_read(uint32_t addr)
                                 temp |= 0x40;
                 }
                 return temp;
-                case 0x04: 
+                case 0x04:
                 ioc_irqbc(IOC_IRQB_KEYBOARD_RX);
                 temp = keyboard_read();
                 LOG_KB_MOUSE("keyboard_read %02X\n", temp);
                 return temp;
-                case 0x10: 
-                temp = ioc.irqa; 
+                case 0x10:
+                temp = ioc.irqa;
                 return temp;
-                case 0x14: 
+                case 0x14:
                 return (ioc.irqa | 0x80) & ioc.mska;
                 case 0x18:
                 return ioc.mska;
                 case 0x20:
                 return ioc.irqb;
-                case 0x24: 
+                case 0x24:
                 return ioc.irqb & ioc.mskb;
-                case 0x28: 
+                case 0x28:
                 return ioc.mskb;
-                case 0x30: 
+                case 0x30:
                 return ioc.fiq;
-                case 0x34: 
+                case 0x34:
                 return ioc.fiq & ioc.mskf;
-                case 0x38: 
+                case 0x38:
                 return ioc.mskf;
-                case 0x40: 
+                case 0x40:
                 return ioc.timerr[0];
-                case 0x44: 
+                case 0x44:
                 return ioc.timerr[0] >> 8;
-                case 0x50: 
+                case 0x50:
                 return ioc.timerr[1];
-                case 0x54: 
+                case 0x54:
                 return ioc.timerr[1] >> 8;
-                case 0x60: 
+                case 0x60:
                 return ioc.timerr[2];
-                case 0x64: 
+                case 0x64:
                 return ioc.timerr[2] >> 8;
-                case 0x70: 
+                case 0x70:
                 return ioc.timerr[3];
-                case 0x74: 
+                case 0x74:
                 return ioc.timerr[3] >> 8;
         }
         return 0;
@@ -269,10 +270,10 @@ void ioc_irqbc(uint8_t v)
 static void ioc_timer_callback(void *p)
 {
         int timer_nr = (int)p;
-        
+
         if (timer_nr < 2)
                 ioc_irqa(timer_nr ? IOC_IRQA_TIMER_1 : IOC_IRQA_TIMER_0);
-        
+
         if (ioc.timerl[timer_nr])
                 timer_advance_u64(&ioc.timers[timer_nr], ((ioc.timerl[timer_nr] + 1) * TIMER_USEC) / 2);
         else

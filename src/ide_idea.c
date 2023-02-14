@@ -1,15 +1,14 @@
-/**/
+/*
+    ICS ideA Hard Disc Interface
 
-/*ICS ideA Hard Disc Interface
+    IOC Address map :
+    0000-1fff : ROM
+    0000 : ROM page register
 
-  IOC Address map :
-  0000-1fff : ROM
-  0000 : ROM page register
-
-  MEMC address map :
-  1004 : read from, result discarded. Interrupt clear maybe?
-  2000-21ff : IDE registers - bits 6-8 = register index
-  2380 : IDE alternate status
+    MEMC address map :
+    1004 : read from, result discarded. Interrupt clear maybe?
+    2000-21ff : IDE registers - bits 6-8 = register index
+    2380 : IDE alternate status
 */
 #include <stdio.h>
 #include <stdlib.h>

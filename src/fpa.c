@@ -1,14 +1,12 @@
 /*
-  FPA emulation*/
-
+    FPA emulation
+*/
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include "arc.h"
 #include "arm.h"
 
-//#define UNDEFINED  11
-//#define undefined() exception(UNDEFINED,8,4)
 double fparegs[8] = {0.0}; /*No C variable type for 80-bit floating point, so use 64*/
 uint32_t fpsr = 0, fpcr = 0;
 int fpu_type;
@@ -99,7 +97,7 @@ double convert80to64(uint32_t *temp)
                 f64.i.h = 0x7ff00000 | (temp[0] & 0x80000000);
                 return f64.f;
         }
-        
+
         f64.i.l=temp[2]>>11;
         f64.i.l|=(temp[1]<<21);
         f64.i.h=(temp[1]&~0x80000000)>>11;
@@ -118,7 +116,7 @@ void convert64to80(uint32_t *temp, double tf)
         f64.f=tf;
         __x=f64.i.h;
         __y=f64.i.l;
-        
+
         if ((f64.i.h & ~0x80000000) == 0x7ff00000 && !f64.i.l)
         {
                 temp[0] = (f64.i.h & 0x80000000) | 0x7fff;
@@ -147,7 +145,7 @@ void convert64to80(uint32_t *temp, double tf)
 int64_t fpa_round(double b, uint32_t opcode)
 {
         int64_t a, c;
-        
+
         switch (opcode&0x60)
         {
                 case 0x00: /*Nearest*/
@@ -194,7 +192,7 @@ double fpa_dis_getrmval(int rm)
                         case 0xf: return 10.0;
                 }
         }
-        
+
         return fparegs[rm & 7];
 }
 
@@ -216,7 +214,7 @@ char *fpa_dis_getrm(int rm)
         }
         else
            sprintf(fpa_temps, "F%i", rm & 7);
-        
+
         return fpa_temps;
 }
 
@@ -241,15 +239,15 @@ void fpa_dasm(uint32_t opcode)
                                 case 0x400000: rpclog("L "); break;
                                 case 0x408000: rpclog("P "); break;
                         }
-                        
+
                         rpclog("F%i, ", FD);
-                        
+
                         if (opcode & (1 << 24))
                         {
                                 if (opcode&0x800000)
                                    rpclog("[R%i, #0x%02X]", RN, (opcode & 0xff) << 2);
                                 else
-                                   rpclog("[R%i, #-0x%02X]", RN, (opcode & 0xff) << 2);                        
+                                   rpclog("[R%i, #-0x%02X]", RN, (opcode & 0xff) << 2);
                                 if (opcode & (1 << 21))
                                    rpclog("!");
                         }
@@ -272,13 +270,13 @@ void fpa_dasm(uint32_t opcode)
                         if (opcode &   0x8000) c++;
                         if (opcode & 0x400000) c += 2;
                         rpclog("LFM  F%i, %i, ", FD, c);
-                        
+
                         if (opcode & (1 << 24))
                         {
                                 if (opcode&0x800000)
                                    rpclog("[R%i, #0x%02X]", RN, (opcode & 0xff) << 2);
                                 else
-                                   rpclog("[R%i, #-0x%02X]", RN, (opcode & 0xff) << 2);                        
+                                   rpclog("[R%i, #-0x%02X]", RN, (opcode & 0xff) << 2);
                                 if (opcode & (1 << 21))
                                    rpclog("!");
                         }
@@ -299,13 +297,13 @@ void fpa_dasm(uint32_t opcode)
                         if (opcode &   0x8000) c++;
                         if (opcode & 0x400000) c += 2;
                         rpclog("SFM  F%i, %i, ", FD, c);
-                        
+
                         if (opcode & (1 << 24))
                         {
                                 if (opcode&0x800000)
                                    rpclog("[R%i, #0x%02X]", RN, (opcode & 0xff) << 2);
                                 else
-                                   rpclog("[R%i, #-0x%02X]", RN, (opcode & 0xff) << 2);                        
+                                   rpclog("[R%i, #-0x%02X]", RN, (opcode & 0xff) << 2);
                                 if (opcode & (1 << 21))
                                    rpclog("!");
                         }
@@ -319,12 +317,12 @@ void fpa_dasm(uint32_t opcode)
                         rpclog("\n");
                 }
                 break;
-                
-                case 0xe: 
+
+                case 0xe:
                 if (opcode & 0x100)
                 {
                         if (((opcode >> 8) & 0xf) != 1)
-                           rpclog("Malformed ");                           
+                           rpclog("Malformed ");
                         if (opcode & 0x10)
                         {
                                 if (RD == 15 && opcode & (1 << 20))
@@ -772,18 +770,18 @@ int fpaopcode(uint32_t opcode)
                                 {
                                         case 4: /*CMF*/
                                         case 6: /*CMFE*/
-                                        if (opcode & 8) 
+                                        if (opcode & 8)
                                                 tempf = fconstants[opcode & 7];
-                                        else          
+                                        else
                                                 tempf = fparegs[opcode & 7];
                                         setsubf(fparegs[FN], tempf);
                                         arm_clock_i(5);
                                         return 0;
                                         case 5: /*CNF*/
                                         case 7: /*CNFE*/
-                                        if (opcode & 8) 
+                                        if (opcode & 8)
                                                 tempf = fconstants[opcode & 7];
-                                        else          
+                                        else
                                                 tempf = fparegs[opcode & 7];
                                         setsubf(fparegs[FN], -tempf);
                                         arm_clock_i(5);
@@ -914,7 +912,7 @@ int fpaopcode(uint32_t opcode)
                         fparegs[FD]=fmod(fparegs[FN],tempf);
                         arm_clock_i(30);
                         return 0;
-                        
+
                         case 0x008000: /*MVF*/
                         fparegs[FD]=tempf;
                         arm_clock_i(1);
@@ -938,7 +936,7 @@ int fpaopcode(uint32_t opcode)
                         fparegs[FD]=sqrt(tempf);
                         arm_clock_i(5);
                         return 0;
-                        
+
                         case 0xe08000: /*URD*/
                         fparegs[FD] = fpa_round(tempf, opcode);
                         arm_clock_i(2);

@@ -1,5 +1,6 @@
 /*
-  82c711 SuperIO emulation*/
+    82c711 SuperIO emulation
+*/
 #include "arc.h"
 #include "82c711.h"
 #include "82c711_fdc.h"
@@ -77,7 +78,7 @@ uint8_t c82c711_read(uint32_t addr)
 
         if ((addr & 0x3ff) == 0x279)
                 return printer_status_read();
-                
+
         return 0xff;
 }
 

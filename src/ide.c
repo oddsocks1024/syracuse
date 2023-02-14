@@ -1,5 +1,6 @@
 /*
-  IDE emulation*/
+    IDE emulation
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

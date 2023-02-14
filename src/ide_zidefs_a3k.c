@@ -1,12 +1,11 @@
-/**/
+/*
+    ZIDEFS compatible 8-bit IDE podule ("interface 3")
 
-/*ZIDEFS compatible 8-bit IDE podule ("interface 3")
-
-  IOC Address map :
-  0000-1fff : ROM
-  2000 : ROM page register
-  2400-241f : IDE registers
-  2800 : High byte latch
+    IOC Address map :
+    0000-1fff : ROM
+    2000 : ROM page register
+    2400-241f : IDE registers
+    2800 : High byte latch
 */
 #include <stdio.h>
 #include <stdlib.h>

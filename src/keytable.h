@@ -1,5 +1,6 @@
 /*
-  Keyboard Tables*/
+    Keyboard Tables
+*/
 
 int keytable[512][2];
 

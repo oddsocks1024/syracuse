@@ -1,6 +1,6 @@
 /*
-  MEMC1/MEMC1a emulation*/
-
+    MEMC1/MEMC1a emulation
+*/
 int flybacklines;
 #include <stdio.h>
 #include <string.h>

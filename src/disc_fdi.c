@@ -1,7 +1,7 @@
 /*
-  FDI disc image support
-  Interfaces with fdi2raw.c*/
-  
+    FDI disc image support
+    Interfaces with fdi2raw.c
+*/
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -11,14 +11,12 @@
 #include "disc_mfm_common.h"
 #include "fdi2raw.h"
 
-static struct
-{
-        mfm_t mfm;
-        FILE *f;
-        FDI *h;
-
-        int sides;
-        int lasttrack;
+static struct {
+    mfm_t mfm;
+    FILE *f;
+    FDI *h;
+    int sides;
+    int lasttrack;
 } fdi[4];
 
 static uint8_t fdi_timing[65536];

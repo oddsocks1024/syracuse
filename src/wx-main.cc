@@ -1,9 +1,7 @@
 /*
- * Arculator 2.1 by Sarah Walker
- * Syracuse 2.2 modified from Arculator by Ian Chapman
- * Main Function
+    Syracuse 2.2 modified from Arculator (by Sarah Walker) by Ian Chapman
+    Main Function
 */
-
 #include "wx-app.h"
 #include <SDL2/SDL.h>
 #include <wx/filename.h>

@@ -1,18 +1,17 @@
-/**/
+/*
+    State Machine G8/G16 Graphic Accelerator
 
-/*State Machine G8/G16 Graphic Accelerator
+    IOC Address map :
+    0000-3fff - ROM
 
-  IOC Address map :
-  0000-3fff - ROM
-
-  MEMC Address map (only low 2 bits decoded) :
-  0 - high byte latch for G332
-  4 - G332 write, register address in A13-A4
-  8 - (read) status  (write) G332 write mirror (used only for writing BOOT register?)
+    MEMC Address map (only low 2 bits decoded) :
+    0 - high byte latch for G332
+    4 - G332 write, register address in A13-A4
+    8 - (read) status  (write) G332 write mirror (used only for writing BOOT register?)
     bit 0 - IRQ status, cleared by read from 0x18?
-  c - ROM bank
+    c - ROM bank
 
-  VIDC data capture - uses supremacy bit to mark display area. Data is inverted
+    VIDC data capture - uses supremacy bit to mark display area. Data is inverted
 */
 #include <stdio.h>
 #include <stdlib.h>

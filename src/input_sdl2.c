@@ -1,6 +1,6 @@
 /*
- * SDL2 input handling
- */
+    SDL2 input handling
+*/
 #include <SDL2/SDL.h>
 #include <string.h>
 #include "arc.h"

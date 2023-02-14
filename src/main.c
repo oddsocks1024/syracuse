@@ -1,12 +1,12 @@
 /*
-  Main init/close/run functions*/
+    Main init/close/run functions
+*/
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdarg.h>
 #include <sys/time.h>
-
 #include "82c711.h"
 #include "82c711_fdc.h"
 #include "arc.h"
@@ -44,18 +44,20 @@
 #include "video.h"
 #include "video_sdl2.h"
 #include "wd1770.h"
-
 #include "hostfs.h"
 
-/*0=Arthur
-  1=RiscOS 2
-  2=RiscOS 3.1 with WD1772
-  3=RiscOS 3.1 with 82c711
-  4=MAME 'ertictac' set
-  5=MAME 'poizone' set
-  There are two RiscOS 3.1 sets as configuring for 82c711 corrupts ADFS CMOS space
-  used for WD1772 - the effect is that WD1772 will hang more often if they are the
-  same set.*/
+/*
+    0=Arthur
+    1=RiscOS 2
+    2=RiscOS 3.1 with WD1772
+    3=RiscOS 3.1 with 82c711
+    4=MAME 'ertictac' set
+    5=MAME 'poizone' set
+
+    There are two RiscOS 3.1 sets as configuring for 82c711 corrupts ADFS CMOS space
+    used for WD1772 - the effect is that WD1772 will hang more often if they are the
+    same set.
+*/
 int romset=2;
 
 void fdiclose();

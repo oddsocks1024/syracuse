@@ -1,7 +1,7 @@
 /*
-  Eterna arcade emulation
-  Not currently used*/
-
+    Eterna arcade emulation
+    Not currently used
+*/
 #include "arc.h"
 #include "ioc.h"
 #include "plat_input.h"

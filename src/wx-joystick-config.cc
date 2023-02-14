@@ -1,6 +1,7 @@
 /*
-  Joystick configuration dialogue
-  This handles configuration of host joystick -> emulated joystick mappings*/
+    Joystick configuration dialogue
+    This handles configuration of host joystick -> emulated joystick mappings
+*/
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP
@@ -24,13 +25,13 @@ class JoystickConfDialog: public wxDialog
 public:
     JoystickConfDialog(wxWindow *parent, int joy_nr, int type);
     void OnInit();
-    
+
 private:
     void OnOK(wxCommandEvent &event);
     void OnCancel(wxCommandEvent &event);
 
     void OnDevice(wxCommandEvent &event);
-    
+
     void rebuild_axis_button_selections();
         int get_axis(int id);
         int get_pov(int id);
@@ -70,7 +71,7 @@ void JoystickConfDialog::rebuild_axis_button_selections()
                         for (d = 0; d < plat_joystick_state[joy_device-1].nr_povs; d++)
                         {
                                 char s[80];
-                                
+
                                 sprintf(s, "%s (X axis)", plat_joystick_state[joy_device-1].pov[d].name);
                                 cbox->Append(s);
                                 sprintf(s, "%s (Y axis)", plat_joystick_state[joy_device-1].pov[d].name);
@@ -106,7 +107,7 @@ void JoystickConfDialog::rebuild_axis_button_selections()
         for (c = 0; c < joystick_get_pov_count(joystick_config_type)*2; c++)
         {
                 int sel = c;
-                                        
+
                 wxComboBox *cbox = (wxComboBox *)this->FindWindow(id);
                 cbox->Clear();
 
@@ -115,7 +116,7 @@ void JoystickConfDialog::rebuild_axis_button_selections()
                         for (d = 0; d < plat_joystick_state[joy_device-1].nr_povs; d++)
                         {
                                 char s[80];
-                                
+
                                 sprintf(s, "%s (X axis)", plat_joystick_state[joy_device-1].pov[d].name);
                                 cbox->Append(s);
                                 sprintf(s, "%s (Y axis)", plat_joystick_state[joy_device-1].pov[d].name);
@@ -142,7 +143,7 @@ int JoystickConfDialog::get_axis(int id)
 
         if (axis_sel < nr_axes)
                 return axis_sel;
-        
+
         axis_sel -= nr_axes;
         if (axis_sel & 1)
                 return POV_Y | (axis_sel >> 1);
@@ -163,7 +164,7 @@ int JoystickConfDialog::get_pov(int id)
                 else
                         return POV_X | (axis_sel >> 1);
         }
-        
+
         return axis_sel - nr_povs;
 }
 
@@ -269,7 +270,7 @@ void JoystickConfDialog::OnDevice(wxCommandEvent &event)
 {
         wxComboBox *cbox = dynamic_cast<wxComboBox *>(event.GetEventObject());
         joy_device = cbox->GetCurrentSelection();
-        
+
         rebuild_axis_button_selections();
 }
 

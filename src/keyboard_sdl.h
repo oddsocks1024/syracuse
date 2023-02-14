@@ -1,5 +1,4 @@
 #include <SDL2/SDL.h>
-
 #define KEY_ESC               SDL_SCANCODE_ESCAPE     /* keyboard scan codes  */
 #define KEY_1                 SDL_SCANCODE_1
 #define KEY_2                 SDL_SCANCODE_2
@@ -89,12 +88,10 @@
 #define KEY_LWIN              SDL_SCANCODE_LGUI
 #define KEY_RWIN              SDL_SCANCODE_RGUI
 #define KEY_MENU              SDL_SCANCODE_APPLICATION
-//#define KEY_PAD               100
 #define KEY_RCONTROL          SDL_SCANCODE_RCTRL
 #define KEY_ALTGR             SDL_SCANCODE_RALT
 #define KEY_SLASH2            SDL_SCANCODE_SLASH
 #define KEY_PAUSE             SDL_SCANCODE_PAUSE
-
 #define KEY_0_PAD             SDL_SCANCODE_KP_0
 #define KEY_1_PAD             SDL_SCANCODE_KP_1
 #define KEY_2_PAD             SDL_SCANCODE_KP_2

@@ -1,5 +1,6 @@
 /*
-  New hard disc dialogue*/
+    New hard disc dialogue
+*/
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP

@@ -1,8 +1,5 @@
 #include "arc.h"
 #include "bmu.h"
-
-/*BMU event triggers bit 1 in IOC IRQA*/
-
 #define BMU_VERSION           0x50
 #define BMU_TEMPERATURE       0x52
 #define BMU_CURRENT           0x54  /*units of 10.3 mA*/
@@ -25,9 +22,8 @@
 #define BMU_STATUS_BATTERY_PRESENT    (1 << 6)
 #define BMU_STATUS_CHARGER_CONNECTED  (1 << 7)
 
-static struct
-{
-        uint8_t estimate;
+static struct {
+    uint8_t estimate;
 } bmu;
 
 uint8_t bmu_read(int addr)

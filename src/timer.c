@@ -1,5 +1,6 @@
 /*
-  Timer system*/
+    Timer system
+*/
 #include <string.h>
 #include "arc.h"
 #include "timer.h"
@@ -133,7 +134,7 @@ void timer_reset()
 void timer_add(emu_timer_t *timer, void (*callback)(void *p), void *p, int start_timer)
 {
         memset(timer, 0, sizeof(emu_timer_t));
-        
+
     timer->callback = callback;
     timer->p = p;
     timer->enabled = 0;

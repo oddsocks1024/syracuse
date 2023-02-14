@@ -1,5 +1,6 @@
 /*
-   Machine configuration dialogue*/
+    Machine configuration dialogue
+*/
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP

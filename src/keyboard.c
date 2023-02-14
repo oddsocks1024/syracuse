@@ -1,5 +1,5 @@
 /*
- * Keyboard/mouse emulation
+    Keyboard/mouse emulation
  */
 #include <stdio.h>
 #include "arc.h"

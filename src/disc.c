@@ -1,21 +1,18 @@
 /*
-  Disc support*/
+Disc support
+*/
 #include <stdio.h>
 #include <string.h>
 #include "arc.h"
 #include "config.h"
-
 #include "disc.h"
-
 #include "disc_adf.h"
 #include "disc_apd.h"
 #include "disc_fdi.h"
 #include "disc_hfe.h"
 #include "disc_jfd.h"
 #include "disc_ssd.h"
-
 #include "ddnoise.h"
-
 #include "ioc.h"
 #include "timer.h"
 
@@ -110,7 +107,7 @@ void disc_load(int drive, char *fn)
         if (!f) return;
         fseek(f, -1, SEEK_END);
         size = ftell(f) + 1;
-        fclose(f);        
+        fclose(f);
         while (loaders[c].ext)
         {
                 if (!strcasecmp(p, loaders[c].ext) && (size <= loaders[c].size || loaders[c].size == -1))

@@ -1,28 +1,27 @@
-/**/
+/*
+    Computer Concepts / Wild Vision Colourcard
 
-/*Computer Concepts / Wild Vision Colourcard
-
-  IOC Address map :
-  0000-1fff : ROM (read)
-  0000 - (write)
+    IOC Address map :
+    0000-1fff : ROM (read)
+    0000 - (write)
         bit 0 - FPGA serial data
         bit 1 - FPGA serial clock
-  2000 - ROM bank register (write)
-  2000 - IRQ status (read)
+    2000 - ROM bank register (write)
+    2000 - IRQ status (read)
         bit 0 - IRQ (cleared on read?)
-  3000 - Control register
+    3000 - Control register
         bit 2 - !VIDC passthrough (?)
         bit 6 - IRQ enable (?)
         others - unknown
         Set to 41 when VIDC driving display, cc when G332 driving
 
-  MEMC Address map :
-  0000-0fff : Inmos G332/5 register write
-  2000 - High byte latch (write before writing to 0000-0fff
+    MEMC Address map :
+    0000-0fff : Inmos G332/5 register write
+    2000 - High byte latch (write before writing to 0000-0fff
 
-  VIDC data capture - starts 32 clocks (at 24 MHz) after hsync ends, terminates
+    VIDC data capture - starts 32 clocks (at 24 MHz) after hsync ends, terminates
     at start of next hsync
-  only captures when !vsync
+    only captures when !vsync
 */
 #include <stdio.h>
 #include <stdlib.h>

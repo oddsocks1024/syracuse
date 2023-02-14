@@ -1,5 +1,6 @@
 /*
-  Configuration selector dialogue*/
+    Configuration selector dialogue
+*/
 #include <wx/wxprec.h>
 
 #ifndef WX_PRECOMP

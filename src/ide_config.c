@@ -1,5 +1,6 @@
 /*
-  IDE/ST-506 configuration dialogues*/
+    IDE/ST-506 configuration dialogues
+*/
 #include <stdio.h>
 #include <stdint.h>
 #include <string.h>
@@ -134,7 +135,7 @@ static int new_drive_valid;
 static void new_drive_init(void *window_p)
 {
         char size_s[80];
-        
+
         snprintf(size_s, sizeof(size_s), "%i", 100);
         podule_callbacks->config_set_current(window_p, ID_CYLINDERS, size_s);
         snprintf(size_s, sizeof(size_s), "%i", MAX_HEADS);
@@ -256,7 +257,7 @@ static int config_new_drive(void *window_p, const struct podule_config_item_t *i
                 snprintf(temp_s, sizeof(temp_s), "%i", (new_cylinders * new_heads * new_sectors) / (1024 * 1024 / SECTOR_SIZE));
                 podule_callbacks->config_set_current(window_p, ID_SIZE, temp_s);
                 podule_callbacks->config_set_current(window_p, ID_PATH, new_fn);
-                
+
                 return 1;
 
         }
@@ -281,7 +282,7 @@ static void drive_load_open(void *window_p)
 static int drive_load_close(void *window_p)
 {
         char *temp_s;
-        
+
         temp_s = podule_callbacks->config_get_current(window_p, ID_CYLINDERS);
         new_cylinders = atoi(temp_s);
         temp_s = podule_callbacks->config_get_current(window_p, ID_HEADS);
@@ -343,7 +344,7 @@ static int config_load_drive(void *window_p, const struct podule_config_item_t *
                 FILE *f;
                 int filesize;
                 int log2secsize, density;
-                
+
 //                rpclog("Filename: %s\n", fn);
 
                 f = fopen(fn, "rb");
@@ -352,9 +353,9 @@ static int config_load_drive(void *window_p, const struct podule_config_item_t *
                 fseek(f, -1, SEEK_END);
                 filesize = ftell(f) + 1;
                 fseek(f, 0, SEEK_SET);
-                
+
 //                rpclog("filesize=%i\n", filesize);
-                
+
                 /*Try to detect drive size geometry disc record. Valid disc record
                   will have log2secsize of 8 (256 bytes per sector) or 9 (512
                   bytes per sector), density of 0, and sector and head counts
@@ -375,7 +376,7 @@ static int config_load_drive(void *window_p, const struct podule_config_item_t *
                         new_sectors = getc(f);
                         new_heads = getc(f);
                         density = getc(f);
-                        
+
                         if ((log2secsize != 8 && log2secsize != 9) || !new_sectors || !new_heads || new_sectors > 63 || new_heads > 16 || density != 0)
                         {
                                 /*Invalid geometry, assume max*/
@@ -407,11 +408,11 @@ static int config_load_drive(void *window_p, const struct podule_config_item_t *
                         snprintf(temp_s, sizeof(temp_s), "%i", (new_cylinders * new_heads * new_sectors) / (1024 * 1024 / 512));
                         podule_callbacks->config_set_current(window_p, ID_SIZE, temp_s);
                         podule_callbacks->config_set_current(window_p, ID_PATH, fn);
-                        
+
                         return 1;
                 }
         }
-        
+
         return 0;
 }
 

@@ -1,5 +1,5 @@
 /*
- * Generic SDL-based main window handling
+    Generic SDL-based main window handling
 */
 #include <sys/time.h>
 #include <stdio.h>

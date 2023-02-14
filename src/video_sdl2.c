@@ -1,6 +1,6 @@
 /*
- * SDL2 video handling
- */
+    SDL2 video handling
+*/
 #include <SDL2/SDL.h>
 #include <stdio.h>
 #include "arc.h"

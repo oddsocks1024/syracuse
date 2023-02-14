@@ -1,5 +1,6 @@
 /*
-  Inmos G332/G335 emulation*/
+    Inmos G332/G335 emulation
+*/
 #include <string.h>
 #include "arc.h"
 #include "g332.h"

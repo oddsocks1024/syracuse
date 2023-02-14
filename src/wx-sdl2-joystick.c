@@ -1,5 +1,6 @@
 /*
-  SDL2 joystick handling*/
+    SDL2 joystick handling
+*/
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
@@ -19,29 +20,29 @@ static SDL_Joystick *sdl_joy[MAX_PLAT_JOYSTICKS];
 void joystick_init()
 {
         int c;
-        
+
         joysticks_present = SDL_NumJoysticks();
 
         memset(sdl_joy, 0, sizeof(sdl_joy));
         for (c = 0; c < joysticks_present; c++)
         {
                 sdl_joy[c] = SDL_JoystickOpen(c);
-                
+
                 if (sdl_joy[c])
                 {
                         int d;
-                        
+
                         rpclog("Opened Joystick %i\n", c);
                         rpclog(" Name: %s\n", SDL_JoystickName(sdl_joy[c]));
                         rpclog(" Number of Axes: %d\n", SDL_JoystickNumAxes(sdl_joy[c]));
                         rpclog(" Number of Buttons: %d\n", SDL_JoystickNumButtons(sdl_joy[c]));
                         rpclog(" Number of Hats: %d\n", SDL_JoystickNumHats(sdl_joy[c]));
-                        
+
                         strncpy(plat_joystick_state[c].name, SDL_JoystickNameForIndex(c), 64);
                         plat_joystick_state[c].nr_axes = SDL_JoystickNumAxes(sdl_joy[c]);
                         plat_joystick_state[c].nr_buttons = SDL_JoystickNumButtons(sdl_joy[c]);
                         plat_joystick_state[c].nr_povs = SDL_JoystickNumHats(sdl_joy[c]);
-                        
+
                         for (d = 0; d < MIN(plat_joystick_state[c].nr_axes, 8); d++)
                         {
                                 sprintf(plat_joystick_state[c].axis[d].name, "Axis %i", d);
@@ -63,7 +64,7 @@ void joystick_init()
 void joystick_close()
 {
         int c;
-        
+
         for (c = 0; c < joysticks_present; c++)
         {
                 if (sdl_joy[c])
@@ -112,14 +113,14 @@ void joystick_poll_host()
         for (c = 0; c < joysticks_present; c++)
         {
                 int b;
-                
+
                 plat_joystick_state[c].a[0] = SDL_JoystickGetAxis(sdl_joy[c], 0);
                 plat_joystick_state[c].a[1] = SDL_JoystickGetAxis(sdl_joy[c], 1);
                 plat_joystick_state[c].a[2] = SDL_JoystickGetAxis(sdl_joy[c], 2);
                 plat_joystick_state[c].a[3] = SDL_JoystickGetAxis(sdl_joy[c], 3);
                 plat_joystick_state[c].a[4] = SDL_JoystickGetAxis(sdl_joy[c], 4);
                 plat_joystick_state[c].a[5] = SDL_JoystickGetAxis(sdl_joy[c], 5);
-                
+
                 for (b = 0; b < 16; b++)
                         plat_joystick_state[c].b[b] = SDL_JoystickGetButton(sdl_joy[c], b);
 
@@ -127,13 +128,13 @@ void joystick_poll_host()
                         plat_joystick_state[c].p[b] = SDL_JoystickGetHat(sdl_joy[c], b);
 //                rpclog("joystick %i - x=%i y=%i b[0]=%i b[1]=%i  %i\n", c, joystick_state[c].x, joystick_state[c].y, joystick_state[c].b[0], joystick_state[c].b[1], joysticks_present);
         }
-        
+
         for (c = 0; c < joystick_get_max_joysticks(joystick_type); c++)
         {
                 if (joystick_state[c].plat_joystick_nr)
                 {
                         int joystick_nr = joystick_state[c].plat_joystick_nr - 1;
-                        
+
                         for (d = 0; d < joystick_get_axis_count(joystick_type); d++)
                                 joystick_state[c].axis[d] = joystick_get_axis(joystick_nr, joystick_state[c].axis_mapping[d]);
                         for (d = 0; d < joystick_get_button_count(joystick_type); d++)
@@ -145,10 +146,10 @@ void joystick_poll_host()
 
                                 x = joystick_get_axis(joystick_nr, joystick_state[c].pov_mapping[d][0]);
                                 y = joystick_get_axis(joystick_nr, joystick_state[c].pov_mapping[d][1]);
-                                
+
                                 angle = (atan2((double)y, (double)x) * 360.0) / (2*M_PI);
                                 magnitude = sqrt((double)x*(double)x + (double)y*(double)y);
-                                
+
                                 if (magnitude < 16384)
                                         joystick_state[c].pov[d] = -1;
                                 else

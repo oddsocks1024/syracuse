@@ -1,5 +1,6 @@
 /*
-  Printer port subsystem*/
+    Printer port subsystem
+*/
 #include "arc.h"
 #include "config.h"
 #include "ioc.h"
@@ -30,11 +31,11 @@ static void gamespad_write(uint8_t val)
         if (!(val & 2) && gamespad.reset)
         {
                 int c;
-                
+
                 for (c = 0; c < 2; c++)
                 {
                         gamespad.data[c] = 0;
-                        
+
                         if (joystick_state[c].axis[1] < -16383)
                                 gamespad.data[c] |= 0x010;
                         if (joystick_state[c].axis[1] > 16383)
@@ -83,7 +84,7 @@ static void gamespad_write(uint8_t val)
 uint8_t gamespad_read(void)
 {
         uint8_t temp = 0x3f;
-        
+
         if (!gamespad.data_out[0])
                 temp |= 0x80;
         if (gamespad.data_out[1])
@@ -199,7 +200,7 @@ void printer_data_write(uint8_t val)
 uint8_t printer_status_read(void)
 {
         uint8_t temp = 0x3f;
-        
+
         if (printer_busy)
                 temp |= PRINTER_BUSY;
         if (printer_ack)
@@ -208,6 +209,6 @@ uint8_t printer_status_read(void)
                 temp &= ~PRINTER_IRQ;
         printer_irq_pending = 0;
 //        rpclog("Read status %02x\n", temp);
-        
+
         return temp;
 }

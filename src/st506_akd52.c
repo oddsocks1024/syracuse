@@ -1,11 +1,10 @@
-/**/
+/*
+    Acorn AKD52 Hard Disc Controller (ST-506)
 
-/*Acorn AKD52 Hard Disc Controller (ST-506)
-
-  IOC Address map :
-  0000-1fff : ROM (2k)
-  2000-2fff : HD63463 ST506 controller
-  3000-3fff : IRQ enable/status
+    IOC Address map :
+    0000-1fff : ROM (2k)
+    2000-2fff : HD63463 ST506 controller
+    3000-3fff : IRQ enable/status
         bit 0 = IRQ status mirror? Podule ROM suggests bit 3, but ADFS on
                 RISC OS 3 overrides the parameters passed to ADFS_HDC and reads
                 this bit instead

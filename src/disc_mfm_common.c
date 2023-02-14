@@ -1,4 +1,6 @@
-/*Common handling for raw FM/MFM bitstreams*/
+/*
+    Common handling for raw FM/MFM bitstreams
+*/
 #include "arc.h"
 #include "disc.h"
 #include "disc_mfm_common.h"
@@ -125,7 +127,7 @@ static uint16_t pack_4us(uint64_t in_data)
                 if (in_data & (8ull << c*4))
                         out_data |= (1 << c);
         }
-        
+
         return out_data;
 }
 

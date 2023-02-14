@@ -1,5 +1,6 @@
 /*
-  IOEB emulation*/
+    IOEB emulation
+*/
 #include <string.h>
 #include "arc.h"
 #include "config.h"
@@ -55,12 +56,12 @@ static uint8_t ioeb_joystick_read(int addr)
 uint8_t ioeb_read(uint32_t addr)
 {
         int hs;
-        
+
         switch (addr & 0xf8)
         {
                 case 0x50: /*Device ID*/
                 return 0x05; /*IOEB*/
-                
+
                 case 0x70: /*Monitor ID*/
                 if (hs_invert)
                         hs = !vidc_get_hs();
@@ -70,11 +71,11 @@ uint8_t ioeb_read(uint32_t addr)
                 if (hs)
                         return monitor_id[monitor_type].id | monitor_id[monitor_type].hs;
                 return monitor_id[monitor_type].id;
-                
+
                 case 0x78: /*Joystick (A3010)*/
                 return ioeb_joystick_read(addr);
         }
-        
+
         return 0xff;
 }
 

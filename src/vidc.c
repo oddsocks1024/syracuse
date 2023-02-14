@@ -1,5 +1,5 @@
 /*
- * VIDC10 emulation
+    VIDC10 emulation
 */
 #include <stdio.h>
 #include <stdlib.h>
