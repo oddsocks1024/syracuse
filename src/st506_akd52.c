@@ -52,7 +52,7 @@ static int akd52_init(struct podule_t *podule)
         f = fopen(fn, "rb");
         if (f)
         {
-                fread(akd52->rom, 0x800, 1, f);
+                ignore_result(fread(akd52->rom, 0x800, 1, f));
                 fclose(f);
         }
         else

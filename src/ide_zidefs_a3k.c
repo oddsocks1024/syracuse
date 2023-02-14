@@ -49,7 +49,7 @@ static int zidefs_a3k_ide_init(struct podule_t *podule)
         f = fopen(fn, "rb");
         if (f)
         {
-                fread(zidefs->rom, 0x4000, 1, f);
+                ignore_result(fread(zidefs->rom, 0x4000, 1, f));
                 fclose(f);
         }
         else

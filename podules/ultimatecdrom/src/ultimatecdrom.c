@@ -1,12 +1,13 @@
-/*HCCS Ultimate CD-ROM
+/*
+    HCCS Ultimate CD-ROM
 
-  IOC Address map :
-  0000-1fff : ROM (128k banked)
-3000 : ROM page register
-3200-323f : CD registers
-3200 - Command/Data/Status
-3220 - Flags
-3300 - ???
+    IOC Address map :
+    0000-1fff : ROM (128k banked)
+    3000 : ROM page register
+    3200-323f : CD registers
+    3200 - Command/Data/Status
+    3220 - Flags
+    3300 - ???
 */
 
 #include <stdio.h>
@@ -20,6 +21,7 @@
 #include "sound_out.h"
 #include "ultimatecdrom.h"
 #include "config.h"
+#include "arc.h"
 
 #define BOOL int
 #define APIENTRY
@@ -149,7 +151,7 @@ static int cdrom_init(struct podule_t *podule)
         return -1;
     }
 
-    fread(cdrom->rom, 0x20000, 1, f);
+    ignore_result(fread(cdrom->rom, 0x20000, 1, f));
     fclose(f);
     drive_path = podule_callbacks->config_get_string(podule, "drive_path", "");
     mitsumi_reset(&cdrom->mitsumi, drive_path);

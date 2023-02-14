@@ -192,7 +192,7 @@ int loadrom() {
         if ((pos + len) > 0x200000)
             len = 0x200000 - pos;
         if (len > 0)
-            fread(&romb[pos],len,1,f);
+            ignore_result(fread(&romb[pos],len,1,f));
         fclose(f);
         pos+=len;
         if (pos >= 0x200000)
@@ -244,7 +244,7 @@ void rom_load_5th_column(void)
     f = fopen(fn, "rb");
     if (f)
     {
-        fread(rom_5th_column, 0x20000, 1, f);
+        ignore_result(fread(rom_5th_column, 0x20000, 1, f));
         fclose(f);
     }
     else
@@ -258,6 +258,6 @@ void rom_load_arc_support_extrom(void)
 
     append_filename(fn, ARCBASEDIR, "roms/arcrom_ext", 511);
     f = fopen(fn, "rb");
-    fread(rom_arcrom, 0x10000, 1, f);
+    ignore_result(fread(rom_arcrom, 0x10000, 1, f));
     fclose(f);
 }

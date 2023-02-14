@@ -1,15 +1,15 @@
 /*
- * Acorn AKA12 User Port / MIDI Upgrade
- *
- * IOC address map :
- * 0000-1fff - ROM
- * 2000-2fff - 6522 VIA
- * PA0-PA2 - ROM bank
- * 3000-3fff - SCC2691 UART
+    Acorn AKA12 User Port / MIDI Upgrade
 
- * Expansion card header is at ROM address 0x3800 (ROM bank 7). VIA port A is set to all input on reset, which
- * results in the ROM high bits being pulled high. The loader will switch PA0-PA2 between input to read the
- * header and chunk directory, and output to read module data.
+    IOC address map :
+    0000-1fff - ROM
+    2000-2fff - 6522 VIA
+    PA0-PA2 - ROM bank
+    3000-3fff - SCC2691 UART
+
+    Expansion card header is at ROM address 0x3800 (ROM bank 7). VIA port A is set to all input on reset, which
+    results in the ROM high bits being pulled high. The loader will switch PA0-PA2 between input to read the
+    header and chunk directory, and output to read module data.
 */
 
 #include <stdio.h>
@@ -22,6 +22,7 @@
 #include "midi.h"
 #include "podule_api.h"
 #include "config.h"
+#include "arc.h"
 
 #define BOOL int
 #define APIENTRY
@@ -159,9 +160,9 @@ static int aka12_init(struct podule_t *podule) {
         return -1;
     }
 
-    fread(aka12->rom, 0x4000, 1, f);
+    ignore_result(fread(aka12->rom, 0x4000, 1, f));
     fclose(f);
-    aka12->rom_page = 7; /*Header is in last page*/
+    aka12->rom_page = 7; /* Header is in last page */
     scc2691_init(&aka12->scc2691, MIDI_UART_CLOCK, aka12_uart_irq, aka12_uart_send, aka12, aka12_log);
     aka12->midi = midi_init(aka12, aka12_midi_receive, aka12_log, podule_callbacks, podule);
     aka12->podule = podule;

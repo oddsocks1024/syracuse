@@ -11,6 +11,7 @@
 #include "sound_out.h"
 #include "wd33c93a.h"
 #include "config.h"
+#include "arc.h"
 
 #define BOOL int
 #define APIENTRY
@@ -325,8 +326,7 @@ static int aka31_init(struct podule_t *podule)
         return -1;
     }
 
-    fread(aka31->rom, 0x10000, 1, f);
-    fclose(f);
+    ignore_result(fread(aka31->rom, 0x10000, 1, f))
     aka31->page = 0;
     d71071l_init(&aka31->dma, podule);
     wd33c93a_init(&aka31->wd, podule, podule_callbacks, &aka31->dma, &aka31->bus);

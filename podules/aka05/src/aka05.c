@@ -1,14 +1,14 @@
 /*
- * Acorn AKA05 ROM Podule
- *
- * IOC address map :
- * 0000-1fff - ROM
- * 2000-2fff - latch
- * bits 0-5 : ROM A11-A16
- * bits 6-7 : ROM select 0-1
- * 3000-3fff - PAL
- * A11 : ROM select 2
- * D0 is connected to PAL, but doesn't seem to be used (software stores PC to this address)
+    Acorn AKA05 ROM Podule
+
+    IOC address map :
+    0000-1fff - ROM
+    2000-2fff - latch
+    bits 0-5 : ROM A11-A16
+    bits 6-7 : ROM select 0-1
+    3000-3fff - PAL
+    A11 : ROM select 2
+    D0 is connected to PAL, but doesn't seem to be used (software stores PC to this address)
 */
 
 #include <stdio.h>
@@ -18,6 +18,7 @@
 #include <string.h>
 #include "podule_api.h"
 #include "config.h"
+#include "arc.h"
 
 #define BOOL int
 #define APIENTRY
@@ -131,7 +132,7 @@ static int aka05_init(struct podule_t *podule)
         return -1;
     }
     aka05->roms[0] = malloc(0x4000);
-    fread(aka05->roms[0], 0x4000, 1, f);
+    ignore_result(fread(aka05->roms[0], 0x4000, 1, f));
     aka05->rom_mask[0] = 0x3fff;
     fclose(f);
 
@@ -172,7 +173,7 @@ static int aka05_init(struct podule_t *podule)
                 aka05->rom_mask[i] = mask;
                 aka05_log("rom_mask[%i]=%04x\n", i, mask);
 
-                fread(aka05->roms[i], mask+1, 1, f);
+                ignore_result(fread(aka05->roms[i], mask+1, 1, f));
                 fclose(f);
             }
         }

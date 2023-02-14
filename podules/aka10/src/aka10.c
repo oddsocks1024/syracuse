@@ -1,21 +1,21 @@
 /*
- * Acorn AKA10/15 IO/MIDI Podule
- * IOC address map :
- * 0000-1fff - ROM
- * 2000-2fff - 6522 VIA
- * PA0-PA2 - ROM bank
- *
- * MEMC address map :
- * 0000-07ff - FRED
- * 0800-0fff - JIM
- * 1000-17ff - ADC
- * 1800-1fff - 6850 UART
- *
- * Expansion card header is at ROM address 0x3800 (ROM bank 7). VIA port A is set to all input on reset, which
- * results in the ROM high bits being pulled high. The loader will switch PA0-PA2 between input to read the
- * header and chunk directory, and output to read module data.
- *
- * Only MIDI is currently implemented.
+    Acorn AKA10/15 IO/MIDI Podule
+    IOC address map :
+    0000-1fff - ROM
+    2000-2fff - 6522 VIA
+    PA0-PA2 - ROM bank
+
+    MEMC address map :
+    0000-07ff - FRED
+    0800-0fff - JIM
+    1000-17ff - ADC
+    1800-1fff - 6850 UART
+
+    Expansion card header is at ROM address 0x3800 (ROM bank 7). VIA port A is set to all input on reset, which
+    results in the ROM high bits being pulled high. The loader will switch PA0-PA2 between input to read the
+    header and chunk directory, and output to read module data.
+
+    Only MIDI is currently implemented.
 */
 
 #include <stdio.h>
@@ -27,6 +27,7 @@
 #include "midi.h"
 #include "podule_api.h"
 #include "config.h"
+#include "arc.h"
 #define BOOL int
 #define APIENTRY
 
@@ -174,7 +175,7 @@ static int aka10_init(struct podule_t *podule) {
         aka10_log("Failed to open aka10.ROM!\n");
         return -1;
     }
-    fread(aka10->rom, 0x4000, 1, f);
+    ignore_result(fread(aka10->rom, 0x4000, 1, f));
     fclose(f);
 
     aka10->rom_page = 7; /*Header is in last page*/

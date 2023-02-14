@@ -1,5 +1,6 @@
 /*
-  SSD/DSD disc handling*/
+    SSD/DSD disc handling
+*/
 #include <stdio.h>
 #include "arc.h"
 #include "disc.h"
@@ -82,13 +83,13 @@ void ssd_seek(int drive, int track)
         if (dsd[drive])
         {
                 fseek(ssd_f[drive], track * 20 * 256, SEEK_SET);
-                fread(trackinfo[drive][0],10 * 256, 1, ssd_f[drive]);
-                fread(trackinfo[drive][1],10 * 256, 1, ssd_f[drive]);
+                ignore_result(fread(trackinfo[drive][0],10 * 256, 1, ssd_f[drive]));
+                ignore_result(fread(trackinfo[drive][1],10 * 256, 1, ssd_f[drive]));
         }
         else
         {
                 fseek(ssd_f[drive], track * 10 * 256, SEEK_SET);
-                fread(trackinfo[drive][0], 10 * 256, 1, ssd_f[drive]);
+                ignore_result(fread(trackinfo[drive][0], 10 * 256, 1, ssd_f[drive]));
         }
 }
 
@@ -115,7 +116,7 @@ void ssd_readsector(int drive, int sector, int track, int side, int density)
         ssd_side   = side;
         ssd_drive  = drive;
 //        printf("Read sector %i %i %i %i\n",drive,side,track,sector);
-        
+
         if (!ssd_f[drive] || (side && !dsd[drive]) || density || track != ssd_trackc[drive])
         {
                 ssd_notfound = 500;
@@ -134,7 +135,7 @@ void ssd_writesector(int drive, int sector, int track, int side, int density)
         ssd_side   = side;
         ssd_drive  = drive;
 //        printf("Write sector %i %i %i %i\n",drive,side,track,sector);
-        
+
         if (!ssd_f[drive] || (side && !dsd[drive]) || density || track != ssd_trackc[drive])
         {
                 ssd_notfound=500;
@@ -190,7 +191,7 @@ void ssd_poll()
         ssd_time++;
         if (ssd_time < 2) return;
         ssd_time = 0;
-        
+
         if (ssd_pause)
         {
                 ssd_pause--;

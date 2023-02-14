@@ -1,17 +1,17 @@
 /*
-  Oak 16 Bit SCSI Interface
+    Oak 16 Bit SCSI Interface
 
-  This information is somewhat preliminary
+    This information is somewhat preliminary
 
-  IOC address map:
+    IOC address map:
     0000-3fff - ROM
 
-  MEMC address map (known addresses):
+    MEMC address map (known addresses):
     00-1f - NCR5380
     20    - NCR5380 byte data read, with ACK
     40    - Read status in high byte
-    	bit 8 - DRQ
-    	bit 9 - BUS_MSG | BUS_CD ?
+        bit 8 - DRQ
+        bit 9 - BUS_MSG | BUS_CD ?
     220   - NCR5830 word data read, with ACK
     240   - Read status in high byte
 
@@ -25,10 +25,10 @@
     A11 - EEPROM data write?
 
 
-  Reads from MEMC space also write to ROM banking latch. A9 and above.
+    Reads from MEMC space also write to ROM banking latch. A9 and above.
 
-  NCR5380 SCSI
-  93C06 EEPROM
+    NCR5380 SCSI
+    93C06 EEPROM
 */
 
 #include <stdio.h>
@@ -45,6 +45,7 @@
 #include "sound_out.h"
 #include "scsi.h"
 #include "config.h"
+#include "arc.h"
 
 #define BOOL int
 #define APIENTRY
@@ -348,7 +349,7 @@ static int oak_scsi_init(struct podule_t *podule)
         return -1;
     }
 
-    fread(oak_scsi->rom, 0x10000, 1, f);
+    ignore_result(fread(oak_scsi->rom, 0x10000, 1, f));
     fclose(f);
     // FIXME
     printf("DEBUG: Oak scsi needs to be in CMOS directory\n");
@@ -356,7 +357,7 @@ static int oak_scsi_init(struct podule_t *podule)
     f = fopen(rom_fn, "rb");
 
     if (f) {
-        fread(oak_scsi->eeprom.buffer, 32, 1, f);
+        ignore_result(fread(oak_scsi->eeprom.buffer, 32, 1, f));
         fclose(f);
     }
     else

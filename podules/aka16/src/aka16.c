@@ -1,10 +1,10 @@
 /*
- * Acorn AKA16 MIDI Podule
- *
- * IOC address map :
- * 0000-1fff - ROM
- * 2000-2fff - SCC2691 UART
- * 3000-3fff - ROM banking
+    Acorn AKA16 MIDI Podule
+
+    IOC address map :
+    0000-1fff - ROM
+    2000-2fff - SCC2691 UART
+    3000-3fff - ROM banking
 */
 
 #include <stdio.h>
@@ -16,6 +16,7 @@
 #include "midi.h"
 #include "podule_api.h"
 #include "config.h"
+#include "arc.h"
 
 #define BOOL int
 #define APIENTRY
@@ -142,7 +143,7 @@ static int aka16_init(struct podule_t *podule) {
         return -1;
     }
 
-    fread(aka16->rom, 0x4000, 1, f);
+    ignore_result(fread(aka16->rom, 0x4000, 1, f));
     fclose(f);
     scc2691_init(&aka16->scc2691, MIDI_UART_CLOCK, aka16_uart_irq, aka16_uart_send, aka16, aka16_log);
     aka16->midi = midi_init(aka16, aka16_midi_receive, aka16_log, podule_callbacks, podule);

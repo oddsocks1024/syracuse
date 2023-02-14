@@ -1,5 +1,6 @@
 /*
-  ADFS disc support (really all double-density formats)*/
+    ADFS disc support (really all double-density formats)
+*/
 #include <stdio.h>
 #include <string.h>
 #include "arc.h"
@@ -10,7 +11,7 @@ static struct
 {
         FILE *f;
         uint8_t track_data[2][20*1024];
-        
+
         int dblside;
         int sectors, size, track;
         int dblstep;
@@ -102,23 +103,23 @@ void adf_seek(int drive, int track)
         if (adf[drive].dblside)
         {
                 fseek(adf[drive].f, track * adf[drive].sectors * adf[drive].size * 2, SEEK_SET);
-                fread(adf[drive].track_data[0], adf[drive].sectors * adf[drive].size, 1, adf[drive].f);
-                fread(adf[drive].track_data[1], adf[drive].sectors * adf[drive].size, 1, adf[drive].f);
+                ignore_result(fread(adf[drive].track_data[0], adf[drive].sectors * adf[drive].size, 1, adf[drive].f));
+                ignore_result(fread(adf[drive].track_data[1], adf[drive].sectors * adf[drive].size, 1, adf[drive].f));
         }
         else
         {
                 fseek(adf[drive].f, track * adf[drive].sectors * adf[drive].size, SEEK_SET);
-                fread(adf[drive].track_data[0], adf[drive].sectors * adf[drive].size, 1, adf[drive].f);
+                ignore_result(fread(adf[drive].track_data[0], adf[drive].sectors * adf[drive].size, 1, adf[drive].f));
         }
 }
 void adf_writeback(int drive, int track)
 {
         if (!adf[drive].f)
                 return;
-                
+
         if (adf[drive].dblstep)
                 track /= 2;
-                
+
         if (adf[drive].dblside)
         {
                 fseek(adf[drive].f, track * adf[drive].sectors * adf[drive].size * 2, SEEK_SET);
@@ -135,7 +136,7 @@ void adf_writeback(int drive, int track)
 void adf_readsector(int drive, int sector, int track, int side, int density)
 {
         int sector_nr = sector + adf[drive].sectors * (track * (adf[drive].dblside ? 2 : 1) + (side ? 1 : 0));
-        
+
         adf_sector = sector;
         adf_track  = track;
         adf_side   = side;
@@ -212,7 +213,7 @@ void adf_format(int drive, int track, int side, int density)
 {
         if (adf[drive].dblstep)
                 track /= 2;
-                
+
         adf_drive = drive;
         adf_track = track;
         adf_side  = side;
@@ -243,7 +244,7 @@ void adf_poll()
                 adf_index = 6250;
                 fdc_indexpulse();
         }
-        
+
         if (adf_pause)
         {
                 adf_pause--;

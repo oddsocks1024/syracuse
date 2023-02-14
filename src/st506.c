@@ -1,6 +1,7 @@
 /*
-   ST-506 hard disc controller emulation
-   This is used by both the built-in 4x0 interface, and the AKD52 podule*/
+    ST-506 hard disc controller emulation
+    This is used by both the built-in 4x0 interface, and the AKD52 podule
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include "arc.h"
@@ -493,6 +494,7 @@ static void st506_callback(void *p)
                         st506->lhead = 0;
                         st506->lcyl++;
 #ifndef RELEASE_BUILD
+                        // FIXME - Some software attempts to write beyond this
                         if (st506->lcyl > 1023)
                             fatal("Hit limit\n");
 #endif
@@ -501,7 +503,7 @@ static void st506_callback(void *p)
                 //                        rpclog("Reading from pos %08X - %i sectors left\n",ftell(st506->hdfile[st506->drive]),st506->oplen);
                 st506->oplen--;
                 //                        rpclog("Read ST506buffer from %08X\n",ftell(hdfile));
-                fread(st506->buffer+16, 256, 1, st506->hdfile[st506->drive]);
+                ignore_result(fread(st506->buffer+16, 256, 1, st506->hdfile[st506->drive]));
                 //                        if ((ftell(hdfile)-256)==0x2048C00) dumpst506buffer();
                 for (c = 16; c < 272; c += 2)
                 {

@@ -2015,12 +2015,12 @@ FDI *fdi2raw_header(FILE *f)
 
     debuglog ("ALLOC: memory allocated %d\n", fdi_allocated);
     fdi = (FDI *)fdi_malloc(sizeof(FDI));
-    memset (fdi, 0, sizeof (FDI));
+    memset(fdi, 0, sizeof (FDI));
     fdi->file = f;
     oldseek = ftell (fdi->file);
-    fseek (fdi->file, 0, SEEK_SET);
-    fread (fdi->header, 2048, 1, fdi->file);
-    fseek (fdi->file, oldseek, SEEK_SET);
+    fseek(fdi->file, 0, SEEK_SET);
+    ignore_result(fread(fdi->header, 2048, 1, fdi->file));
+    fseek(fdi->file, oldseek, SEEK_SET);
     if (memcmp (fdiid, fdi->header, strlen ((char *)fdiid)) ) {
         fdi_free(fdi);
         return NULL;
@@ -2118,7 +2118,7 @@ int fdi2raw_loadtrack (FDI *fdi, uae_u16 *mfmbuf, uae_u16 *tracktiming, int trac
     fdi->err = 0;
     fdi->track_src_len = fdi->track_offsets[track + 1] - fdi->track_offsets[track];
     fseek (fdi->file, fdi->track_offsets[track], SEEK_SET);
-    fread (fdi->track_src_buffer, fdi->track_src_len, 1, fdi->file);
+    ignore_result(fread(fdi->track_src_buffer, fdi->track_src_len, 1, fdi->file));
     memset (fdi->track_dst_buffer, 0, MAX_DST_BUFFER);
     fdi->track_dst_buffer_timing[0] = 0;
 

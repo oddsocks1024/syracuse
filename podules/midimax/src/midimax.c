@@ -8,6 +8,7 @@
 #include "midi.h"
 #include "podule_api.h"
 #include "config.h"
+#include "arc.h"
 
 #define BOOL int
 #define APIENTRY
@@ -133,7 +134,7 @@ static int midimax_init(struct podule_t *podule) {
         return -1;
     }
 
-    fread(midimax->rom, 0x8000, 1, f);
+    ignore_result(fread(midimax->rom, 0x8000, 1, f));
     fclose(f);
     n16550_init(&midimax->n16550, MIDI_UART_CLOCK, midimax_uart_irq, midimax_uart_send, midimax, midimax_log);
     midimax->midi = midi_init(midimax, midimax_midi_receive, midimax_log, podule_callbacks, podule);

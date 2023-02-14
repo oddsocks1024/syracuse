@@ -81,7 +81,7 @@ void cmos_load() {
     cmosf = fopen(fn, "rb");
 
     if (cmosf) {
-        fread(cmos.ram, 256, 1, cmosf);
+        ignore_result(fread(cmos.ram, 256, 1, cmosf));
         fclose(cmosf);
         LOG_CMOS("Read CMOS contents from %s\n", fn);
     }
@@ -92,7 +92,7 @@ void cmos_load() {
         cmosf = fopen(fn, "rb");
 
         if (cmosf) {
-            fread(cmos.ram, 256, 1, cmosf);
+            ignore_result(fread(cmos.ram, 256, 1, cmosf));
             fclose(cmosf);
         }
         else {

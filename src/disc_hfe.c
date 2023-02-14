@@ -1,5 +1,6 @@
 /*
-  HFE disc image support*/
+    HFE disc image support
+*/
 
 #include <stdio.h>
 #include <stdint.h>
@@ -60,16 +61,16 @@ static int hfe_load_header(hfe_t *hfe)
 {
         hfe_header_t *header = &hfe->header;
 
-        fread(header->signature, 8, 1, hfe->f);
+        ignore_result(fread(header->signature, 8, 1, hfe->f));
         header->revision = getc(hfe->f);
         header->nr_of_tracks = getc(hfe->f);
         header->nr_of_sides = getc(hfe->f);
         header->track_encoding = getc(hfe->f);
-        fread(&header->bitrate, 2, 1, hfe->f);
-        fread(&header->floppy_rpm, 2, 1, hfe->f);
+        ignore_result(fread(&header->bitrate, 2, 1, hfe->f));
+        ignore_result(fread(&header->floppy_rpm, 2, 1, hfe->f));
         header->floppy_interface_mode = getc(hfe->f);
         header->dnu = getc(hfe->f);
-        fread(&header->track_list_offset, 2, 1, hfe->f);
+        ignore_result(fread(&header->track_list_offset, 2, 1, hfe->f));
         header->write_allowed = getc(hfe->f);
         header->single_step = getc(hfe->f);
         header->track0s0_altencoding = getc(hfe->f);
@@ -92,7 +93,7 @@ static int hfe_load_header(hfe_t *hfe)
 //        rpclog("  track_list_offset: %i\n", header->track_list_offset);
         hfe->tracks = malloc(header->nr_of_tracks * header->nr_of_sides * sizeof(hfe_track_t));
         fseek(hfe->f, header->track_list_offset * 0x200, SEEK_SET);
-        fread(hfe->tracks, header->nr_of_tracks * header->nr_of_sides * sizeof(hfe_track_t), 1, hfe->f);
+        ignore_result(fread(hfe->tracks, header->nr_of_tracks * header->nr_of_sides * sizeof(hfe_track_t), 1, hfe->f));
 
         return 0;
 }
@@ -259,8 +260,8 @@ void hfe_seek(int drive, int track)
 //        rpclog("  start=%06x\n", ftell(hfe[drive].f));
         for (c = 0; c < (hfe[drive].tracks[track].track_len/2); c += 0x100)
         {
-                fread(&mfm->track_data[0][c], 256, 1, hfe[drive].f);
-                fread(&mfm->track_data[1][c], 256, 1, hfe[drive].f);
+                ignore_result(fread(&mfm->track_data[0][c], 256, 1, hfe[drive].f));
+                ignore_result(fread(&mfm->track_data[1][c], 256, 1, hfe[drive].f));
         }
 //        rpclog("  end=%06x\n", ftell(hfe[drive].f));
         mfm->track_index[0] = 0;

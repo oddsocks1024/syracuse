@@ -1,31 +1,31 @@
 /*
- * Lark memory map :
- *
- * IOC:
- * 0000        : XC3030 FPGA (write)
- *               bit 0 - DIN
- *               bit 1 - CCLK
- *               bit 2 - INIT?  bits 2 & 3 may be reversed
- *               bit 3 - RESET?
- * 0000 - 1fff : banked ROM (read)
- * 2000        : ROM page register
- * 3000        : FPGA?
- *       3000 read : IRQ status (/clear?)
- *               bit 0 - IRQ master
- *               bit 1 - AD1848 IRQ
- *               bit 2 - 16550 IRQ
- *               bit 6 - output FIFO half empty
- *               bit 7 - ~input FIFO half full
- *       3000 write :
- *               bit 3 - enable output FIFO
- *               bit 4 - enable input FIFO?
- *               bit 7 - reset?
- * 3400        : 16550 serial
- * 3c00 - 3c0f : AD1848 CODEC
- *
- * MEMC:
- * 0000 : Write to output FIFO
- * 0000 : Read from input FIFO
+    Lark memory map :
+
+    IOC:
+    0000        : XC3030 FPGA (write)
+                bit 0 - DIN
+                bit 1 - CCLK
+                bit 2 - INIT?  bits 2 & 3 may be reversed
+                bit 3 - RESET?
+    0000 - 1fff : banked ROM (read)
+    2000        : ROM page register
+    3000        : FPGA?
+        3000 read : IRQ status (/clear?)
+                bit 0 - IRQ master
+                bit 1 - AD1848 IRQ
+                bit 2 - 16550 IRQ
+                bit 6 - output FIFO half empty
+                bit 7 - ~input FIFO half full
+        3000 write :
+                bit 3 - enable output FIFO
+                bit 4 - enable input FIFO?
+                bit 7 - reset?
+    3400        : 16550 serial
+    3c00 - 3c0f : AD1848 CODEC
+
+    MEMC:
+    0000 : Write to output FIFO
+    0000 : Read from input FIFO
 */
 /*
 Basic design :
@@ -65,6 +65,7 @@ MIDI podules.
 #include "sound_in.h"
 #include "sound_out.h"
 #include "config.h"
+#include "arc.h"
 
 #define BOOL int
 #define APIENTRY
@@ -344,7 +345,7 @@ static int lark_init(struct podule_t *podule)
         return -1;
     }
 
-    fread(lark->rom, 0x20000, 1, f);
+    ignore_result(fread(lark->rom, 0x20000, 1, f));
     fclose(f);
     lark->irqstat = 0x80;
     ad1848_init(&lark->ad1848, lark, lark_dma_read, lark_dma_write);

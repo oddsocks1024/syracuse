@@ -850,7 +850,7 @@ hostfs_getbytes(ARMul_State *state)
 
   fseek(f, (long) state->Reg[4], SEEK_SET);
 
-  fread(buffer, 1, state->Reg[3], f);
+  ignore_result(fread(buffer, 1, state->Reg[3], f));
 
   for (i = 0; i < state->Reg[3]; i++) {
     ARMul_StoreByte(state, ptr++, buffer[i]);

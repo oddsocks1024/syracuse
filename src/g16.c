@@ -67,7 +67,7 @@ static int g16_init(struct podule_t *podule)
         f = fopen(fn, "rb");
         if (f)
         {
-                fread(g16->rom, 0x10000, 1, f);
+                ignore_result(fread(g16->rom, 0x10000, 1, f));
                 fclose(f);
         }
         else

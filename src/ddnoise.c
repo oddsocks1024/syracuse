@@ -1,5 +1,6 @@
 /*
-   Disc drive noise*/
+    Disc drive noise
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -54,8 +55,8 @@ static SAMPLE *load_wav(char *path, const char *fn)
         return NULL;
     }
 
-    /*Read initial chunk*/
-    fread(&chunk, sizeof(chunk_t), 1, f);
+    /* Read initial chunk */
+    ignore_result(fread(&chunk, sizeof(chunk_t), 1, f));
     if (chunk.id[0] != 'R' || chunk.id[1] != 'I' || chunk.id[2] != 'F' || chunk.id[3] != 'F')
     {
         rpclog("%s is not a RIFF file %c %c %c %c\n", path_fn,
@@ -64,7 +65,7 @@ static SAMPLE *load_wav(char *path, const char *fn)
         return NULL;
     }
 
-    fread(wave_id, sizeof(wave_id), 1, f);
+    ignore_result(fread(wave_id, sizeof(wave_id), 1, f));
     if (wave_id[0] != 'W' || wave_id[1] != 'A' || wave_id[2] != 'V' || wave_id[3] != 'E')
     {
         rpclog("%s is not a RIFF WAVE file %c %c %c %c\n", path_fn,
@@ -76,11 +77,11 @@ static SAMPLE *load_wav(char *path, const char *fn)
     /*Search for WAVE chunk*/
     while (!feof(f))
     {
-        fread(&chunk, sizeof(chunk_t), 1, f);
+        ignore_result(fread(&chunk, sizeof(chunk_t), 1, f));
         if (chunk.id[0] == 'f' && chunk.id[1] == 'm' && chunk.id[2] == 't' && chunk.id[3] == ' ')
         {
             //                        rpclog("Found fmt chunk\n");
-            fread(&fmt, sizeof(fmt_t), 1, f);
+            ignore_result(fread(&fmt, sizeof(fmt_t), 1, f));
             if (fmt.wFormatTag != 1) /*Only support PCM*/
             {
                 rpclog("%s is not a PCM WAVE file\n", path_fn);
@@ -117,7 +118,7 @@ static SAMPLE *load_wav(char *path, const char *fn)
                     {
                         int16_t samples[2];
 
-                        fread(samples, sizeof(samples), 1, f);
+                        ignore_result(fread(samples, sizeof(samples), 1, f));
                         s->data[c] = (samples[0] + samples[1]) / 2;
                     }
                 }
@@ -126,7 +127,7 @@ static SAMPLE *load_wav(char *path, const char *fn)
                     //                                        rpclog("16-bit, mono\n");
                     s->len = chunk.size / 2;
                     s->data = malloc(s->len*2);
-                    fread(s->data, chunk.size, 1, f);
+                    ignore_result(fread(s->data, chunk.size, 1, f));
                 }
             }
             else /*8 bits per sample, need to upconvert*/
@@ -143,7 +144,7 @@ static SAMPLE *load_wav(char *path, const char *fn)
                     {
                         uint8_t samples[2];
 
-                        fread(samples, sizeof(samples), 1, f);
+                        ignore_result(fread(samples, sizeof(samples), 1, f));
                         s->data[c] = ((int16_t)(samples[0] ^ 0x80) + (int16_t)(samples[1] ^ 0x80)) * 128;
                     }
                 }

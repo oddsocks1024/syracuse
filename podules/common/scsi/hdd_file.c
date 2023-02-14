@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "hdd_file.h"
+#include "arc.h"
 
 #ifdef __APPLE__
 #define fopen64 fopen
@@ -66,7 +67,7 @@ int hdd_read_sectors(hdd_file_t *hdd, int offset, int nr_sectors, void *buffer)
         addr = (uint64_t)offset * 512;
 
         fseeko64(hdd->f, addr, SEEK_SET);
-        fread(buffer, transfer_sectors*512, 1, hdd->f);
+        ignore_result(fread(buffer, transfer_sectors*512, 1, hdd->f));
 
         if (nr_sectors != transfer_sectors)
                 return 1;
