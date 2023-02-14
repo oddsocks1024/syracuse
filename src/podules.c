@@ -44,10 +44,11 @@ static const podule_header_t *(*internal_podules[])(const podule_callbacks_t *ca
 #define NR_INTERNAL_PODULES (sizeof(internal_podules) / sizeof(internal_podules[0]))
 static int nr_podules = 0;
 
-/*Podules -
-  0 is reserved for extension ROMs
-  1 is for additional IDE interface
-  2-3 are free
+/*
+    Podules
+    0 is reserved for extension ROMs
+    1 is for additional IDE interface
+    2-3 are free
 */
 
 static podule_internal_state_t podules[4];
@@ -65,27 +66,24 @@ void podule_add(const podule_header_t *header) {
     if (!last_entry) {
         podule_list_head = current;
     }
-    else while (last_entry)
-    {
-        printf("DEBUG NAME: %s\n", header->name);
-        if (strcasecmp(header->name, last_entry->header->name) < 0)
-        {
+    else while (last_entry) {
+
+        if (strcasecmp(header->name, last_entry->header->name) < 0) {
+
             current->next = last_entry;
-            if (prev_entry)
-            {
-                /*Insert before last_entry*/
+
+            if (prev_entry) {
+                /* Insert before last_entry */
                 prev_entry->next = current;
             }
-            else
-            {
-                /*Insert as head of list*/
+            else {
+                /* Insert as head of list */
                 podule_list_head = current;
             }
             break;
         }
 
-        if (!last_entry->next)
-        {
+        if (!last_entry->next) {
             /*Insert at end of list*/
             last_entry->next = current;
             break;
