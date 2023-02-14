@@ -18,6 +18,7 @@
 #include "sound.h"
 #include "timer.h"
 #include "vidc.h"
+#include "config.h"
 
 uint32_t armregs[16];
 
