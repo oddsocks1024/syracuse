@@ -14,7 +14,7 @@
 #define APIENTRY
 
 static const podule_callbacks_t *podule_callbacks;
-char podule_path[PATH_MAX];
+char podule_path[PATH_MAX + 1];
 
 #define MIDI_UART_CLOCK 2000000 //(31250Hz * 4 * 16)
 
@@ -121,7 +121,7 @@ static void midimax_midi_receive(void *p, uint8_t val)
 
 static int midimax_init(struct podule_t *podule) {
     FILE *f;
-    char rom_fn[PATH_MAX];
+    char rom_fn[PATH_MAX + 1];
 
     midimax_t *midimax = malloc(sizeof(midimax_t));
     memset(midimax, 0, sizeof(midimax_t));

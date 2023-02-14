@@ -71,7 +71,7 @@ extern __declspec(dllexport) const podule_header_t *podule_probe(const podule_ca
 #endif
 
 const podule_callbacks_t *podule_callbacks;
-char podule_path[PATH_MAX];
+char podule_path[PATH_MAX + 1];
 
 typedef struct pccard_t
 {

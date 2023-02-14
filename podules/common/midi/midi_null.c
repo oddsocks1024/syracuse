@@ -17,7 +17,7 @@ void *midi_init(void *p, void (*receive)(void *p, uint8_t val), void (*log)(cons
 
         midi = malloc(sizeof(midi_t));
         memset(midi, 0, sizeof(midi_t));
-        
+
         midi->p = p;
 
         return midi;

@@ -51,7 +51,7 @@
 #define APIENTRY
 
 const podule_callbacks_t *podule_callbacks;
-char podule_path[PATH_MAX];
+char podule_path[PATH_MAX + 1];
 void oak_scsi_update_ints(podule_t *p);
 
 typedef struct oak_scsi_t
@@ -336,7 +336,7 @@ static void oak_scsi_reset(struct podule_t *podule) {
 static int oak_scsi_init(struct podule_t *podule)
 {
     FILE *f;
-    char rom_fn[PATH_MAX];
+    char rom_fn[PATH_MAX + 1];
 
     oak_scsi_t *oak_scsi = malloc(sizeof(oak_scsi_t));
     memset(oak_scsi, 0, sizeof(oak_scsi_t));
@@ -376,7 +376,7 @@ static int oak_scsi_init(struct podule_t *podule)
 
 
 static void oak_scsi_write_eeprom(oak_scsi_t *oak_scsi) {
-    char fn[PATH_MAX];
+    char fn[PATH_MAX + 1];
     FILE *f;
 
     oak_scsi->eeprom.dirty = 0;

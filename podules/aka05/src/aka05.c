@@ -24,7 +24,7 @@
 #define APIENTRY
 
 static const podule_callbacks_t *podule_callbacks;
-char podule_path[PATH_MAX];
+char podule_path[PATH_MAX + 1];
 
 #ifdef DEBUG_LOG
 static FILE *aka05_logf;
@@ -60,7 +60,6 @@ typedef struct aka05_t
 static uint8_t aka05_read_b(struct podule_t *podule, podule_io_type type, uint32_t addr)
 {
     aka05_t *aka05 = podule->p;
-    uint8_t temp = 0xff;
 
     if (type != PODULE_IO_TYPE_IOC)
         return 0xff;
@@ -222,7 +221,7 @@ enum {
 
 /* File selector for the roms of the aka05 file selector */
 static int config_load_rom(void *window_p, const struct podule_config_item_t *item, void *new_data) {
-    char fn[PATH_MAX];
+    char fn[PATH_MAX + 1];
 
     if (!podule_callbacks->config_file_selector(window_p, "Please select a ROM image", NULL, NULL, NULL, "ROM files|*.rom;*.ROM;*.bin;*.BIN|All Files|*", fn, sizeof(fn), CONFIG_FILESEL_LOAD)) {
         int fn_id = item->id - 1;

@@ -44,7 +44,8 @@ int loadertictac()
         for (d=0;d<4;d++) fclose(f[d]);
         addr+=0x40000;
     }
-    chdir(olddir);
+
+    ignore_result(chdir(olddir));
     return 0;
 }
 
@@ -84,7 +85,8 @@ int loadpoizone()
         for (d=0;d<4;d++) fclose(f[d]);
         addr+=0x40000;
     }
-    chdir(olddir);
+
+    ignore_result(chdir(olddir));
     return 0;
 }
 
@@ -96,11 +98,9 @@ int ucase(char c)
 
 int loadrom() {
     FILE *f;
-    int finished=0;
     int file=0;
     int c,d,e;
     int len,pos=0;
-    int find_file;
     char fn[512];
     char s[512];
     char *ext;
@@ -110,11 +110,11 @@ int loadrom() {
     uint8_t *romb = (uint8_t *)rom;
 
     if (firstromload) {
-        getcwd(olddir,511);
-        firstromload=0;
+        ignore_result(getcwd(olddir, 511));
+        firstromload = 0;
     }
     else {
-        chdir(olddir);
+        ignore_result(chdir(olddir));
     }
 
     snprintf(s, sizeof(s), "%s/roms/%s", ARCBASEDIR, config_get_romset_name(romset));
@@ -158,13 +158,13 @@ int loadrom() {
         (void)closedir(dirp);
     }
 
-    if (file==0)
-    {
-        chdir(olddir);
+    if (file == 0) {
+        ignore_result(chdir(olddir));
         //                rpclog("No files found!\n");
         return -1;
     }
-    for (c=0;c<file;c++)
+
+    for (c = 0; c < file; c++)
     {
         for (d=0;d<file;d++)
         {
@@ -198,7 +198,8 @@ int loadrom() {
         if (pos >= 0x200000)
             break;
     }
-    chdir(olddir);
+
+    ignore_result(chdir(olddir));
     //        rpclog("Successfully loaded!\n");
     return 0;
 }

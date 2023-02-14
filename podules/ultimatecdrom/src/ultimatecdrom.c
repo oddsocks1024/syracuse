@@ -28,7 +28,7 @@
 
 
 static const podule_callbacks_t *podule_callbacks;
-char podule_path[PATH_MAX];
+char podule_path[PATH_MAX + 1];
 
 static FILE *cdlogf;
 
@@ -77,7 +77,6 @@ typedef struct cdrom_t
 static uint8_t cdrom_read_b(struct podule_t *podule, podule_io_type type, uint32_t addr)
 {
     cdrom_t *cdrom = podule->p;
-    uint8_t temp = 0xff;
 
     if (type != PODULE_IO_TYPE_IOC)
         return 0xff; /*Only IOC accesses supported*/
@@ -137,7 +136,7 @@ static int cdrom_run(struct podule_t *podule, int timeslice_us)
 static int cdrom_init(struct podule_t *podule)
 {
     FILE *f;
-    char rom_fn[PATH_MAX];
+    char rom_fn[PATH_MAX + 1];
     const char *drive_path;
 
     cdrom_t *cdrom = malloc(sizeof(cdrom_t));
@@ -203,15 +202,10 @@ static const podule_header_t cdrom_podule_header =
     .config = &cdrom_config
 };
 
-const podule_header_t *podule_probe(const podule_callbacks_t *callbacks, char *path)
-{
-    char dev_name[256];
-
+const podule_header_t *podule_probe(const podule_callbacks_t *callbacks, char *path) {
     podule_callbacks = callbacks;
     strcpy(podule_path, path);
-
     cdrom_config.items[0].selection = cdrom_devices_config();
-
     return &cdrom_podule_header;
 }
 

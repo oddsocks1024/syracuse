@@ -39,7 +39,7 @@ typedef struct fmt_t
 
 static SAMPLE *load_wav(char *path, const char *fn)
 {
-    char path_fn[PATH_MAX];
+    char path_fn[PATH_MAX + 1];
     SAMPLE *s;
     chunk_t chunk;
     fmt_t fmt;

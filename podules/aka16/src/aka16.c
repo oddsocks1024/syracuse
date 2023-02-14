@@ -23,7 +23,7 @@
 
 
 static const podule_callbacks_t *podule_callbacks;
-char podule_path[PATH_MAX];
+char podule_path[PATH_MAX + 1];
 
 #define MIDI_UART_CLOCK 2000000 //(31250Hz * 4 * 16)
 
@@ -60,7 +60,6 @@ typedef struct aka16_t
 static uint8_t aka16_read_b(struct podule_t *podule, podule_io_type type, uint32_t addr)
 {
     aka16_t *aka16 = podule->p;
-    uint8_t temp = 0xff;
 
     if (type != PODULE_IO_TYPE_IOC)
         return 0xff;
@@ -130,7 +129,7 @@ static void aka16_midi_receive(void *p, uint8_t val)
 
 static int aka16_init(struct podule_t *podule) {
     FILE *f;
-    char rom_fn[PATH_MAX];
+    char rom_fn[PATH_MAX + 1];
 
     aka16_t *aka16 = malloc(sizeof(aka16_t));
     memset(aka16, 0, sizeof(aka16_t));

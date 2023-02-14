@@ -17,7 +17,7 @@
 #define APIENTRY
 
 const podule_callbacks_t *podule_callbacks;
-char podule_path[PATH_MAX];
+char podule_path[PATH_MAX + 1];
 
 void aka31_update_ints(podule_t *p);
 
@@ -313,7 +313,7 @@ static void aka31_reset(struct podule_t *podule)
 static int aka31_init(struct podule_t *podule)
 {
     FILE *f;
-    char rom_fn[PATH_MAX];
+    char rom_fn[PATH_MAX + 1];
 
     aka31_t *aka31 = malloc(sizeof(aka31_t));
     memset(aka31, 0, sizeof(aka31_t));

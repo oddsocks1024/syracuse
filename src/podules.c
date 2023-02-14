@@ -166,37 +166,28 @@ const podule_header_t *podule_find(const char *short_name)
     return NULL;
 }
 
-void podules_init(void)
-{
+void podules_init(void) {
     int c;
-
     podules_close();
 
-    for (c = 0; c < 4; c++)
-    {
-        printf("DEBUG Init Podules %s\n", podule_names[c]);
+    for (c = 0; c < 4; c++) {
         const podule_header_t *header = podule_find(podule_names[c]);
-
         memset(&podules[c], 0, sizeof(podule_internal_state_t));
 
-        if (header)
-        {
+        if (header) {
             podules[c].podule.header = header;
             podule_functions[c] = &header->functions;
 
-            if (podule_functions[c]->init)
-            {
+            if (podule_functions[c]->init) {
                 int ret = podule_functions[c]->init(&podules[c].podule);
 
-                if (ret)
-                {
-                    /*Podule init failed, clear structs*/
+                if (ret) {
+                    /* Podule init failed, clear structs */
                     rpclog("Failed to init podule %i : %s\n", c, header->short_name);
                     podules[c].podule.header = NULL;
                     podule_functions[c] = NULL;
                 }
-                else
-                {
+                else {
                     timer_add(&podules[c].timer, podule_run_timer, (void *)c, 1);
                     podules[c].last_callback_tsc = tsc;
                 }
@@ -205,15 +196,14 @@ void podules_init(void)
     }
 }
 
-void podules_reset(void)
-{
+void podules_reset(void) {
     int c;
 
-    for (c = 0; c < 4; c++)
-    {
+    for (c = 0; c < 4; c++) {
         if (podule_functions[c] && podule_functions[c]->reset)
             podule_functions[c]->reset(&podules[c].podule);
     }
+
     backplane_mask = 0xf; /*All IRQs enabled*/
 }
 

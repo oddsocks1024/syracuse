@@ -27,7 +27,7 @@
 
 #include <dirent.h>
 #ifdef _MSC_VER
-#define PATH_MAX 1024
+#define PATH_MAX + 1 1024
 #else
 #include <unistd.h>
 #endif
@@ -537,7 +537,7 @@ hostfs_path_scan(const char *host_dir_path,
   }
 
   while ((entry = readdir(d)) != NULL) {
-    char entry_path[PATH_MAX], ro_leaf[PATH_MAX];
+    char entry_path[PATH_MAX + 1], ro_leaf[PATH_MAX + 1];
 
     /* Ignore the current directory and it's parent */
     if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0) {
@@ -590,7 +590,7 @@ hostfs_path_process(const char *ro_path,
                     char *host_pathname,
                     risc_os_object_info *object_info)
 {
-  char component_name[PATH_MAX]; /* working Host component */
+  char component_name[PATH_MAX + 1]; /* working Host component */
   char *component;
 
   assert(ro_path);
@@ -662,7 +662,7 @@ hostfs_path_process(const char *ro_path,
       if (component_name[0] != '\0') {
         /* only if not first dot, i.e. "$." */
 
-        char host_name[PATH_MAX];
+        char host_name[PATH_MAX + 1];
 
         *component = '\0'; /* add terminator */
 
@@ -700,7 +700,7 @@ hostfs_path_process(const char *ro_path,
   if (component_name[0] != '\0') {
     /* only if not first dot, i.e. "$." */
 
-    char host_name[PATH_MAX];
+    char host_name[PATH_MAX + 1];
 
     *component = '\0'; /* add terminator */
 
@@ -745,7 +745,7 @@ hostfs_open_allocate_index(void)
 static void
 hostfs_open(ARMul_State *state)
 {
-  char ro_path[PATH_MAX], host_pathname[PATH_MAX];
+  char ro_path[PATH_MAX + 1], host_pathname[PATH_MAX + 1];
   risc_os_object_info object_info;
   unsigned idx;
 
@@ -1051,8 +1051,8 @@ static void
 hostfs_write_file(ARMul_State *state, bool with_data)
 {
   const unsigned BUFSIZE = MINIMUM_BUFFER_SIZE;
-  char ro_path[PATH_MAX];
-  char host_pathname[PATH_MAX], new_pathname[PATH_MAX];
+  char ro_path[PATH_MAX + 1];
+  char host_pathname[PATH_MAX + 1], new_pathname[PATH_MAX + 1];
   ARMword length, ptr;
   risc_os_object_info object_info;
   FILE *f;
@@ -1165,7 +1165,7 @@ hostfs_file_0_save_file(ARMul_State *state)
 static void
 hostfs_file_1_write_cat_info(ARMul_State *state)
 {
-  char ro_path[PATH_MAX], host_pathname[PATH_MAX];
+  char ro_path[PATH_MAX + 1], host_pathname[PATH_MAX + 1];
   risc_os_object_info object_info;
 
   assert(state);
@@ -1194,7 +1194,7 @@ hostfs_file_1_write_cat_info(ARMul_State *state)
   case OBJECT_TYPE_FILE:
     dbug_hostfs("\thost_pathname = \"%s\"\n", host_pathname);
     {
-      char new_pathname[PATH_MAX];
+      char new_pathname[PATH_MAX + 1];
 
       path_construct(host_pathname, ro_path,
                      new_pathname, sizeof(new_pathname),
@@ -1224,7 +1224,7 @@ hostfs_file_1_write_cat_info(ARMul_State *state)
 static void
 hostfs_file_5_read_cat_info(ARMul_State *state)
 {
-  char ro_path[PATH_MAX], host_pathname[PATH_MAX];
+  char ro_path[PATH_MAX + 1], host_pathname[PATH_MAX + 1];
   risc_os_object_info object_info;
 
   assert(state);
@@ -1252,7 +1252,7 @@ hostfs_file_5_read_cat_info(ARMul_State *state)
 static void
 hostfs_file_6_delete(ARMul_State *state)
 {
-  char ro_path[PATH_MAX], host_pathname[PATH_MAX];
+  char ro_path[PATH_MAX + 1], host_pathname[PATH_MAX + 1];
   risc_os_object_info object_info;
 
   assert(state);
@@ -1324,8 +1324,8 @@ hostfs_file_7_create_file(ARMul_State *state)
 static void
 hostfs_file_8_create_dir(ARMul_State *state)
 {
-  char ro_path[PATH_MAX];
-  char host_pathname[PATH_MAX];
+  char ro_path[PATH_MAX + 1];
+  char host_pathname[PATH_MAX + 1];
   risc_os_object_info object_info;
   enum FILECORE_ERROR error_detail;
 
@@ -1407,7 +1407,7 @@ static void
 hostfs_file_255_load_file(ARMul_State *state)
 {
   const unsigned BUFSIZE = MINIMUM_BUFFER_SIZE;
-  char ro_path[PATH_MAX], host_pathname[PATH_MAX];
+  char ro_path[PATH_MAX + 1], host_pathname[PATH_MAX + 1];
   risc_os_object_info object_info;
   FILE *f;
   size_t bytes_read;
@@ -1493,8 +1493,8 @@ hostfs_file(ARMul_State *state)
 static void
 hostfs_func_0_chdir(ARMul_State *state)
 {
-  char ro_path[PATH_MAX];
-  char host_path[PATH_MAX];
+  char ro_path[PATH_MAX + 1];
+  char host_path[PATH_MAX + 1];
 
   assert(state);
 
@@ -1510,10 +1510,10 @@ hostfs_func_0_chdir(ARMul_State *state)
 static void
 hostfs_func_8_rename(ARMul_State *state)
 {
-  char ro_path1[PATH_MAX], host_pathname1[PATH_MAX];
-  char ro_path2[PATH_MAX], host_pathname2[PATH_MAX];
+  char ro_path1[PATH_MAX + 1], host_pathname1[PATH_MAX + 1];
+  char ro_path2[PATH_MAX + 1], host_pathname2[PATH_MAX + 1];
   risc_os_object_info object_info1, object_info2;
-  char new_pathname[PATH_MAX];
+  char new_pathname[PATH_MAX + 1];
   enum FILECORE_ERROR error_detail;
 
   assert(state);
@@ -1647,7 +1647,7 @@ hostfs_cache_dir(const char *directory_name)
   assert(d); /* FIXME */
 
   while ((entry = readdir(d)) != NULL) {
-    char entry_path[PATH_MAX], ro_leaf[PATH_MAX];
+    char entry_path[PATH_MAX + 1], ro_leaf[PATH_MAX + 1];
     unsigned string_space;
 
     /* Ignore the current directory and it's parent */
@@ -1723,8 +1723,8 @@ hostfs_cache_dir(const char *directory_name)
 static void
 hostfs_read_dir(ARMul_State *state, bool with_info, bool with_timestamp)
 {
-  static char cached_directory[PATH_MAX] = { '\0' }; /* Directory stored in the cache */
-  char ro_path[PATH_MAX], host_pathname[PATH_MAX];
+  static char cached_directory[PATH_MAX + 1] = { '\0' }; /* Directory stored in the cache */
+  char ro_path[PATH_MAX + 1], host_pathname[PATH_MAX + 1];
   risc_os_object_info object_info;
 
   assert(state);

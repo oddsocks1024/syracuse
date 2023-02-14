@@ -47,7 +47,7 @@ void opendlls(void) {
     while (((dp = readdir(dirp)) != NULL)) {
         const podule_header_t *(*podule_probe)(const podule_callbacks_t *callbacks, char *path);
         const podule_header_t *header;
-        char so_fn[PATH_MAX], so_name[NAME_MAX];
+        char so_fn[PATH_MAX + 1], so_name[NAME_MAX];
 
         dll_t *dll = malloc(sizeof(dll_t));
         memset(dll, 0, sizeof(dll_t));

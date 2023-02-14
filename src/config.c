@@ -1,5 +1,6 @@
 /*
-   Configuration system*/
+    Configuration system
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -234,12 +235,11 @@ void config_load(int is_global, char *fn)
         return;
     }
 
-    while (1)
-    {
+    while (1) {
         int c;
         char buffer[256];
 
-        fgets(buffer, 255, f);
+        ignore_result(fgets(buffer, 255, f));
         if (feof(f)) break;
 
         c = 0;

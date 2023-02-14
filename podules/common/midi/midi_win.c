@@ -16,7 +16,7 @@ typedef struct midi_t
         HMIDIIN in_device;
 
         void (*receive)(void *p, uint8_t val);
-        
+
         void *p;
 } midi_t;
 
@@ -35,10 +35,10 @@ void *midi_init(void *p, void (*receive)(void *p, uint8_t val), void (*log)(cons
         int c;
         const char *device;
         int midi_in_dev_nr, midi_out_dev_nr;
-        
+
         midi = malloc(sizeof(midi_t));
         memset(midi, 0, sizeof(midi_t));
-        
+
         device = podule_callbacks->config_get_string(podule, "midi_in_device", "0");
         sscanf(device, "%i", &midi_in_dev_nr);
 	if (log)
@@ -50,7 +50,7 @@ void *midi_init(void *p, void (*receive)(void *p, uint8_t val), void (*log)(cons
 
         midi->p = p;
         midi->receive = receive;
-        
+
         if (log)
                 log("num_out_devs=%i\n", midiOutGetNumDevs());
         for (c = 0; c < midiOutGetNumDevs(); c++)
@@ -96,14 +96,14 @@ void *midi_init(void *p, void (*receive)(void *p, uint8_t val), void (*log)(cons
                 }
         }
         midiInStart(midi->in_device);
-        
+
         return midi;
 }
 
 void midi_close(void *p)
 {
         midi_t *midi = p;
-        
+
         if (midi->in_device != NULL)
         {
                 midiInReset(midi->in_device);
@@ -145,9 +145,9 @@ static void CALLBACK midi_in_callback(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstan
         int length;
         MIDIHDR *hdr;
         int c;
-        
+
 //        lark_log("midi_in_callback %i\n", wMsg);
-        
+
         switch (wMsg)
         {
                 case MIM_DATA:
@@ -163,7 +163,7 @@ static void CALLBACK midi_in_callback(HMIDIIN hMidiIn, UINT wMsg, DWORD dwInstan
                 if (length >= 3)
                         midi->receive(midi->p, (dwParam1 >> 16) & 0xFF);
                 break;
-                
+
                 case MIM_LONGDATA:
                 hdr = (MIDIHDR *)dwParam1;
                 for (c = 0; c < hdr->dwBytesRecorded; c++)
@@ -179,22 +179,22 @@ static void midi_send(midi_t *midi)
         hdr.lpData = (LPSTR)midi->buffer;
         hdr.dwBufferLength = midi->pos;
         hdr.dwFlags = 0;
-        
+
 /*        pclog("Sending sysex : ");
         for (c = 0; c < midi_pos; c++)
                 pclog("%02x ", midi_sysex_data[c]);
         pclog("\n");*/
-        
+
         midiOutPrepareHeader(midi->out_device, &hdr, sizeof(MIDIHDR));
         midiOutLongMsg(midi->out_device, &hdr, sizeof(MIDIHDR));
-        
+
         midi->insysex = 0;
 }
 
 void midi_write(void *p, uint8_t val)
 {
         midi_t *midi = p;
-        
+
 //        lark_log("midi_write: val=%02x\n", val);
         if ((val & 0x80) && !(val == 0xf7 && midi->insysex))
         {
@@ -213,7 +213,7 @@ void midi_write(void *p, uint8_t val)
                         midi_send(midi);
                 return;
         }
-                        
+
         if (midi->len)
         {
                 if (midi->pos > midi->len)
@@ -222,7 +222,7 @@ void midi_write(void *p, uint8_t val)
                     midi->pos = 2;
                     midi->buffer[1] = val;
                 }
-            
+
                 if (midi->pos == midi->len)
                         midi_send(midi);
         }
@@ -264,13 +264,13 @@ podule_config_selection_t *midi_in_devices_config(void)
         podule_config_selection_t *sel_p = sel;
         char *midi_dev_text = malloc(65536);
         int c;
-        
+
         strcpy(midi_dev_text, "None");
         sel_p->description = midi_dev_text;
         sel_p->value = -1;
         sel_p++;
         midi_dev_text += strlen(midi_dev_text)+1;
-                
+
         for (c = 0; c < nr_devs; c++)
         {
                 midi_in_get_dev_name(c, midi_dev_text);
