@@ -47,8 +47,7 @@ void opendlls(void) {
     while (((dp = readdir(dirp)) != NULL)) {
         const podule_header_t *(*podule_probe)(const podule_callbacks_t *callbacks, char *path);
         const podule_header_t *header;
-        char so_fn[FILE_PATH_LEN], so_name[FILE_PATH_LEN], delme[512];
-
+        char so_fn[PATH_MAX], so_name[NAME_MAX];
 
         dll_t *dll = malloc(sizeof(dll_t));
         memset(dll, 0, sizeof(dll_t));
@@ -58,13 +57,9 @@ void opendlls(void) {
             continue;
         }
 
-        sprintf(so_name, "%s.so", dp->d_name);
-        printf("DEBUG: SONAME 1 is %s\n", so_name);
+        sprintf(so_name, "/%s.so", dp->d_name);
         append_filename(so_fn, PODULELIBDIR, dp->d_name, sizeof(so_fn));
-        printf("DEBUG: inter %s\n", delme);
-        printf("DEBUG: SOFILENAME 1 is %s\n", so_fn);
         append_filename(so_fn, so_fn, so_name, sizeof(so_fn));
-        printf("DEBUG: SOFILENAME 2 is %s\n", so_fn);
         dll->lib = dlopen(so_fn, RTLD_NOW);
 
         if (dll->lib == NULL) {

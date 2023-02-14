@@ -1,20 +1,12 @@
-This directory needs to contain the RiscOS ROMs. They can be called anything, and in any
-number of files. They will be loaded in alphabetical order.This directory needs to contain the RiscOS ROMs. They can be called anything, and in any
-number of files. They will be loaded in alphabetical order.This directory contains the ROM for the Acorn AKD52 Hard Disc Podule. It is
-called 'akd52' and is 2kB long.This directory contains the ROM for the ZIDEFS IDE Controller. It is
-called 'zidefsrom' and is 8kB long.This directory contains the ROM for the ZIDEFS 8-bit IDE Controller. It is
-called 'ZIDEFSROM' and is a maximum of 16kB long.This directory contains the ROM for the Computer Concepts Colour Card. It is
-called 'cc.bin' and is 128kB long.This directory contains the ROM for the ICS A3000 IDE Interface v5. It is
-called 'ICS 93 A3IN 3V5 3V06 - 256.BIN' and is 32kB long.This directory contains the ROM for the State Machine G16 Graphic Accelerator.
-It is called 'g16.rom' and is 64kB long.This directory contains the ROM for the RISC Developments IDE Controller. It is
-called 'riscdev' and is 32kB long.This directory contains the ROM for the ICS ideA Hard Disc Interface. It is
-called 'idea' and is 32kB long.This directory needs to contain the RiscOS ROMs. They can be called anything, and in any
-number of files. They will be loaded in alphabetical order.This directory needs to contain the RiscOS ROMs. They can be called anything, and in any
-number of files. They will be loaded in alphabetical order.This directory needs to contain the RiscOS ROMs. They can be called anything, and in any
-number of files. They will be loaded in alphabetical order.This directory needs to contain the RiscOS ROMs. They can be called anything, and in any
-number of files. They will be loaded in alphabetical order.This directory needs to contain the RiscOS ROMs. They can be called anything, and in any
-number of files. They will be loaded in alphabetical order.This directory needs to contain the RiscOS ROMs. They can be called anything, and in any
-number of files. They will be loaded in alphabetical order.This directory needs to contain the RiscOS ROMs. They can be called anything, and in any
-number of files. They will be loaded in alphabetical order.This directory needs to contain the RiscOS ROMs. They can be called anything, and in any
-number of files. They will be loaded in alphabetical order.This directory needs to contain the RiscOS ROMs. They can be called anything, and in any
-number of files. They will be loaded in alphabetical order.
+ICS ideA Hard Disc Interface (idea)
+-----------------------------------
+32KB
+
+
+
+
+
+
+
+
+

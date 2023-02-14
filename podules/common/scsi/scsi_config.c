@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "podule_api.h"
 #include "cdrom.h"
+#include "config.h"
 
 enum
 {
@@ -83,7 +84,7 @@ static int changed_size(void *window_p, const struct podule_config_item_t *item,
 
 int change_path(void *window_p, const struct podule_config_item_t *item, void *new_data)
 {
-        char fn[256];
+        char fn[NAME_MAX];
 
         if (!podule_callbacks->config_file_selector(window_p, "Please enter a file name",
                         NULL, NULL, NULL, "HDF files (*.hdf)|*.hdf", fn, sizeof(fn), CONFIG_FILESEL_SAVE))
@@ -96,7 +97,7 @@ int change_path(void *window_p, const struct podule_config_item_t *item, void *n
 }
 
 static int new_blocks;
-static char new_fn[256];
+static char new_fn[NAME_MAX];
 static int new_drive_valid;
 
 static void new_drive_init(void *window_p)

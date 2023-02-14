@@ -11,7 +11,7 @@
 #include "config.h"
 #include "timer.h"
 
-char cmosdir[FILE_PATH_LEN];
+char cmosdir[PATH_MAX];
 int cmos_changed = 0;
 int i2c_clock = 1, i2c_data = 1;
 
@@ -71,8 +71,8 @@ static void cmos_get_time();
  * CMOS. Then this written out to the machine specific CMOS
 */
 void cmos_load() {
-    char fn[FILE_PATH_LEN];
-    char cmos_name[FILE_PATH_LEN];
+    char fn[PATH_MAX];
+    char cmos_name[PATH_MAX];
     FILE *cmosf;
 
     LOG_CMOS("Read cmos %i\n", romset);
@@ -105,8 +105,8 @@ void cmos_load() {
 
 
 void cmos_save() {
-    char fn[FILE_PATH_LEN];
-    char cmos_name[FILE_PATH_LEN];
+    char fn[PATH_MAX];
+    char cmos_name[PATH_MAX];
     FILE *cmosf;
 
     LOG_CMOS("Writing CMOS %i\n", romset);

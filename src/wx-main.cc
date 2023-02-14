@@ -18,10 +18,10 @@ extern "C" {
     #include "soundopenal.h"
 }
 
-extern char cmosdir[FILE_PATH_LEN];
+extern char cmosdir[PATH_MAX];
 
 int main(int argc, char **argv) {
-    char configdir_loc[FILE_PATH_LEN];
+    char configdir_loc[PATH_MAX];
     struct stat st = {0};
     XInitThreads();
     al_init_main(0, NULL);

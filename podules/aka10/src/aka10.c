@@ -32,7 +32,7 @@
 
 
 static const podule_callbacks_t *podule_callbacks;
-char podule_path[FILE_PATH_LEN];
+char podule_path[PATH_MAX];
 #define MIDI_UART_CLOCK 2000000 //(31250Hz * 4 * 16)
 
 #ifdef DEBUG_LOG

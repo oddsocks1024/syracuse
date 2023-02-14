@@ -1,3 +1,6 @@
+#include <limits.h>
+
+
 // FIXME These need to be able to be passed into the build
 #define GLOBAL_CMOS_DIR "/usr/share/syracuse/cmos/"
 #define GLOBAL_CFG_FILENAME ".syracuse.cfg"
@@ -6,12 +9,12 @@
 #define PODULELIBDIR "/usr/lib64/syracuse/"
 #define PODULEROMDIR "/usr/share/syracuse/roms/podules/"
 #define ARCLOG "/tmp/syracuse-log.txt"
+#define CPUREGDUMP "/tmp/modules.dmp"
 #define HOSTFSDIR "/tmp/"
 #define DOES_NOT_EXIST -1
 #define DEBUG_LOG 1
 
-#define FILE_PATH_LEN 512
-#define PODULE_LONG_NAME_LEN 256
+#define PODULE_LONG_NAME_LEN 255
 #define PODULE_SHORT_NAME_LEN 16
 
 #define AKA05LOG "/tmp/aka05-log.txt"

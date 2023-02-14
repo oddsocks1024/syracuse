@@ -1,8 +1,8 @@
 /*
-   Podule subsystem*/
+    Podule subsystem
+*/
 #include <stdlib.h>
 #include <string.h>
-
 #include "arc.h"
 #include "colourcard.h"
 #include "config.h"
@@ -20,16 +20,14 @@
 static uint8_t backplane_mask;
 static void podule_run_timer(void *p);
 
-typedef struct podule_list
-{
+typedef struct podule_list {
     const podule_header_t *header;
     struct podule_list *next;
 } podule_list;
 
 static podule_list *podule_list_head = NULL;
 
-static const podule_header_t *(*internal_podules[])(const podule_callbacks_t *callbacks, char *path) =
-{
+static const podule_header_t *(*internal_podules[])(const podule_callbacks_t *callbacks, char *path) = {
     /*16-bit podules*/
     akd52_probe,
     colourcard_probe,
@@ -49,13 +47,14 @@ static int nr_podules = 0;
 /*Podules -
   0 is reserved for extension ROMs
   1 is for additional IDE interface
-  2-3 are free*/
+  2-3 are free
+*/
+
 static podule_internal_state_t podules[4];
 static const podule_functions_t *podule_functions[4];
 char podule_names[4][16];
 
-void podule_add(const podule_header_t *header)
-{
+void podule_add(const podule_header_t *header) {
     podule_list *current = malloc(sizeof(podule_list));
     podule_list *last_entry = podule_list_head;
     podule_list *prev_entry = NULL;
@@ -63,10 +62,12 @@ void podule_add(const podule_header_t *header)
     current->header = header;
     current->next = NULL;
 
-    if (!last_entry)
+    if (!last_entry) {
         podule_list_head = current;
+    }
     else while (last_entry)
     {
+        printf("DEBUG NAME: %s\n", header->name);
         if (strcasecmp(header->name, last_entry->header->name) < 0)
         {
             current->next = last_entry;
@@ -105,8 +106,9 @@ void podule_build_list(void)
     {
         const podule_header_t *header = internal_podules[c](&podule_callbacks_def, PODULELIBDIR);
 
-        if (header)
+        if (header) {
             podule_add(header);
+        }
     }
 }
 
@@ -267,6 +269,7 @@ void podule_set_irq(podule_t *podule, int state)
     internal->irq = state;
     rethinkpoduleints();
 }
+
 void podule_set_fiq(podule_t *podule, int state)
 {
     podule_internal_state_t *internal = container_of(podule, podule_internal_state_t, podule);

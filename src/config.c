@@ -40,8 +40,12 @@ void get_config_dir_loc(char *s) {
 }
 
 void append_filename(char *dest, const char *s1, const char *s2, int size) {
-    printf("DEBUG Append Filename Called: %s%s\n", s1, s2);
-    sprintf(dest, "%s/%s", s1, s2);
+    printf("DEBUG (append_filename) s1 is %s\n", s1);
+    printf("DEBUG (append_filename) s2 is %s\n", s2);
+    //sprintf(dest, "%s%s", s1, s2);
+    strcpy(dest, s1);
+    strcat(dest, s2);
+    printf("DEBUG (append_filename) dest is now %s\n", dest);
 }
 
 void append_slash(char *s, int size)

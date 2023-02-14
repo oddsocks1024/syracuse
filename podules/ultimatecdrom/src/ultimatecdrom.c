@@ -26,7 +26,7 @@
 
 
 static const podule_callbacks_t *podule_callbacks;
-char podule_path[512];
+char podule_path[PATH_MAX];
 
 static FILE *cdlogf;
 
@@ -45,8 +45,8 @@ void cdlog(const char *format, ...)
     fflush(cdlogf);
 #endif
 }
-void cdfatal(const char *format, ...)
-{
+
+void cdfatal(const char *format, ...) {
     char buf[1024];
     //return;
     if (!cdlogf)
@@ -135,7 +135,7 @@ static int cdrom_run(struct podule_t *podule, int timeslice_us)
 static int cdrom_init(struct podule_t *podule)
 {
     FILE *f;
-    char rom_fn[FILE_PATH_LEN];
+    char rom_fn[PATH_MAX];
     const char *drive_path;
 
     cdrom_t *cdrom = malloc(sizeof(cdrom_t));

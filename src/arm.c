@@ -51,7 +51,7 @@ int prefabort, prefabort_next;
 
   Synchronising to MCLK costs 1F + 2L cycles - presumably 1F for cache lookup,
   2L for sync.
-  
+
   During a cache fetch, ARM3 will be clocked once the request word has been
   fetched. It will continue to be clocked for successive S or I cycles.
 */
@@ -96,7 +96,7 @@ static void run_dma(int update_tsc)
         {
                 uint64_t min_timer = refresh_ts;
                 int dma_source = DMA_REFRESH;
-                
+
                 if (memc_dma_sound_req && TIMER_VAL_LESS_THAN_VAL_64(memc_dma_sound_req_ts, min_timer))
                 {
                         min_timer = memc_dma_sound_req_ts;
@@ -178,7 +178,7 @@ static void sync_to_mclk(void)
                 tsc += sync_cycles; /*Now synchronised to MCLK*/
                 tsc += mem_spd_multi; /*Synchronising takes another L cycle according to the ARM3 datasheet*/
         }
-        
+
         if (TIMER_VAL_LESS_THAN_VAL(timer_target, tsc >> 32))
             timer_process();
 
@@ -253,7 +253,7 @@ static void cache_line_fill(uint32_t addr, int byte_offset, int bit_offset)
         sync_to_mclk();
 
         mem_available_ts = tsc + mem_speed[(addr >> 12) & 0x3fff][1] + 3*mem_speed[(addr >> 12) & 0x3fff][0];
-        
+
         /*ARM3 will start to clock the CPU again once the requested word has been
           read. So only 'charge' the emulated CPU up to that point, and promote
           subsequent cycles to memory cycles until the line fill has completed*/
@@ -270,7 +270,7 @@ static void cache_line_fill(uint32_t addr, int byte_offset, int bit_offset)
         }
         pending_reads = 3 - ((addr & 0xc) >> 2);
         cache_fill_addr = addr & ~0xf;
-        
+
         if (!((arm3_slot ^ (arm3_slot >> 1)) & 1))
             arm3_slot |= 0x40;
         arm3_slot >>= 1;
@@ -292,7 +292,7 @@ void cache_read_timing(uint32_t addr, int is_n_cycle, int is_merged_fetch)
     int byte_offset = ((addr & 0x3ffffff) >> (4+3));
 
         addr &= 0x3ffffff;
-        
+
   //      if (output) rpclog("Read %c-cycle %07x\n", is_n_cycle?'N':'S', addr);
         if (is_n_cycle)
         {
@@ -316,7 +316,7 @@ void cache_read_timing(uint32_t addr, int is_n_cycle, int is_merged_fetch)
                         /*Always start N-cycle synced to FCLK - this is required for
                           cache lookup*/
                         sync_to_fclk();
-                        
+
                 if (arm3_cache[byte_offset] & (1 << bit_offset))
                 {
                                 cache_was_on = 1;
@@ -412,9 +412,9 @@ void cache_flush()
             {
                 int bit_offset = (arm3_cache_tag[set][slot] >> 4) & 7;
                 int byte_offset = (arm3_cache_tag[set][slot] >> (4+3));
-                
+
                 arm3_cache[byte_offset] &= ~(1 << bit_offset);
-                
+
                 arm3_cache_tag[set][arm3_slot] = TAG_INVALID;
             }
         }
@@ -449,7 +449,7 @@ void cache_write_timing(uint32_t addr, int is_n_cycle)
 
     if (arm3cp.disrupt & (1 << (addr >> 21)))
         cache_flush();
-        
+
     if (is_n_cycle)
     {
 //                rpclog("Write N-cycle %08x\n", addr);
@@ -694,7 +694,7 @@ void resetarm()
 
         memset(arm3_cache, 0, sizeof(arm3_cache));
         memset(arm3_cache_tag, TAG_INVALID, sizeof(arm3_cache_tag));
-        
+
         ins = 0;
     tsc = 0;
     mem_available_ts = 0;
@@ -715,10 +715,10 @@ void dumpregs()
 
         if (indumpregs) return;
         indumpregs=1;
-        
+
         memmode=2;
-        
-        f=fopen("modules.dmp","wb");
+
+        f=fopen(CPUREGDUMP,"wb");
         for (c=0x0000;c<0x100000;c+=4)
         {
                 l=readmeml(c+0x1800000);
@@ -895,7 +895,7 @@ static inline uint32_t shift_long_noflags(uint32_t opcode)
         int shiftamount=(opcode>>7)&31;
         uint32_t temp;
         int cflag=CFSET;
-        
+
         if (!(opcode&0xFF0)) return armregs[RM];
         if (opcode&0x10)
         {
@@ -940,7 +940,7 @@ static inline uint32_t shift_long_noflags(uint32_t opcode)
 static inline uint32_t rotate(uint32_t data)
 {
         uint32_t rotval;
-        
+
         rotval=rotatelookup[data&4095];
         if (data&0x100000 && data&0xF00)
         {
@@ -958,7 +958,7 @@ static inline uint32_t shift_mem(uint32_t opcode)
         int shiftamount=(opcode>>7)&31;
         uint32_t temp;
         int cflag=CFSET;
-        
+
         if (!(opcode&0xFF0)) return armregs[RM];
 #ifndef RELEASE_BUILD
         if (opcode&0x10)
@@ -1021,7 +1021,7 @@ int ldrlookup[4]={0,8,16,24};
 void refillpipeline()
 {
         uint32_t templ,templ2,addr = (PC-4) & 0x3fffffc;
-        
+
         prefabort_next = 0;
 //        if ((armregs[15]&0x3FFFFFC)==8) rpclog("illegal instruction %08X at %07X\n",opcode,opc);
         readmemfff(addr,opcode2);
@@ -1062,7 +1062,7 @@ static void opMUL(uint32_t rn)
         while (((rs || carry) && shift < 32) || !cycle_nr)
         {
                 int m = rs & 3;
-                
+
                 if (!carry)
                 {
                         switch (m)
@@ -1111,7 +1111,7 @@ static void opMUL(uint32_t rn)
                                 break;
                         }
                 }
-                
+
                 rs >>= 2;
                 shift += 2;
 
@@ -1126,7 +1126,7 @@ static void opMUL(uint32_t rn)
         else
         {
                 int c;
-                
+
                 /*1 (early) merged fetch, cycle_nr-1 N-cycles*/
                 merge_timing(PC+4);
                 for (c = 0; c < cycle_nr-1; c++)
@@ -1188,7 +1188,7 @@ void execarm(int cycles_to_execute)
         int cyc; /*Number of clock ticks executed in the last loop*/
 
         int clock_ticks_executed = 0;
-        
+
         LOG_EVENT_LOOP("execarm(%d) total_cycles=%i\n", cycles_to_execute, total_cycles);
 
         total_cycles += (uint64_t)cycles_to_execute << 32;
@@ -1227,7 +1227,7 @@ void execarm(int cycles_to_execute)
                 if (flaglookup[opcode >> 28][armregs[15] >> 28] && !prefabort)
                 {
                         int first_access;
-                
+
                         switch ((opcode >> 20) & 0xFF)
                         {
                                 case 0x00: /*AND reg*/
@@ -1390,7 +1390,7 @@ void execarm(int cycles_to_execute)
                                         armregs[RD] = GETADDR(RN) + templ;
                                 }
                                 break;
-                        
+
                                 case 0x0A: /*ADC reg*/
                                 if (RD == 15)
                                 {
@@ -1500,7 +1500,7 @@ void execarm(int cycles_to_execute)
                                 else
                                         EXCEPTION_UNDEFINED();
                                 break;
-                                
+
                                 case 0x11: /*TST reg*/
                                 if (RD == 15)
                                 {
@@ -1523,7 +1523,7 @@ void execarm(int cycles_to_execute)
 
                                 case 0x12:
                                 break;
-                                
+
                                 case 0x13: /*TEQ reg*/
                                 if (RD == 15)
                                 {
@@ -1543,7 +1543,7 @@ void execarm(int cycles_to_execute)
                                         setzn(GETADDR(RN) ^ shift(opcode));
                                 }
                                 break;
-                                
+
                                 case 0x14: /*SWPB*/
                                 if ((opcode & 0xf0) != 0x90)
                                     break;
@@ -2285,7 +2285,7 @@ void execarm(int cycles_to_execute)
                                         armregs[RN] -= addr2;
                                 promote_fetch_to_n = PROMOTE_NOMERGE;
                                 break;
-                                
+
                                 case 0x74: case 0x76: case 0x7c: case 0x7e: /*STRB Rd,[Rn,offset]*/
                                 if (opcode & 0x10) /*Shift by register*/
                                 {
@@ -2396,7 +2396,7 @@ void execarm(int cycles_to_execute)
                                 mask <<= 1; \
                         } \
                         mask <<= 1; c++;
-                        
+
 #define STMall()        for (; c < 16; c++) \
                         { \
                                 if (opcode & mask) \
@@ -2553,7 +2553,7 @@ void execarm(int cycles_to_execute)
                                 STMallS();
                                 promote_fetch_to_n = PROMOTE_NOMERGE;
                                 break;
-                                
+
                                 case 0x81: /*LDMDA*/
                                 case 0x83: /*LDMDA !*/
                                 case 0x91: /*LDMDB*/
@@ -2652,7 +2652,7 @@ void execarm(int cycles_to_execute)
                                 else
                                         EXCEPTION_UNDEFINED();
                                 break;
-                                
+
                                 case 0xC0: case 0xC1: case 0xC2: case 0xC3: /*Co-pro*/
                                 case 0xC4: case 0xC5: case 0xC6: case 0xC7:
                                 case 0xC8: case 0xC9: case 0xCA: case 0xCB:
@@ -2699,7 +2699,7 @@ void execarm(int cycles_to_execute)
                                    rpclog("ADFS_DiscOp %08X %08X %08X %08X  %07X\n",armregs[1],armregs[2],armregs[3],armregs[4],PC);
                                 if ((opcode&0x4FFFF) == 0x40540)
                                    rpclog("FileCore_DiscOp %08X %08X %08X %08X  %07X\n",armregs[1],armregs[2],armregs[3],armregs[4],PC);*/
-                                if ((opcode & 0xdffff) == ARCEM_SWI_HOSTFS) 
+                                if ((opcode & 0xdffff) == ARCEM_SWI_HOSTFS)
                                 {
                                 ARMul_State state;
 
