@@ -21,24 +21,27 @@
 #include "sound_out.h"
 #include "ultimatecdrom.h"
 #include "config.h"
+#include "master-cfg-file.h"
 #include "arc.h"
 
 #define BOOL int
 #define APIENTRY
-
+#define ULTIMATECDROMLOG LOGDIR "ultimate_cdrom.log"
 
 static const podule_callbacks_t *podule_callbacks;
 char podule_path[PATH_MAX];
-
 static FILE *cdlogf;
 
-void cdlog(const char *format, ...)
-{
+void cdlog(const char *format, ...) {
 #ifdef DEBUG_LOG
     char buf[1024];
+    char logfile[PATH_MAX];
+    get_config_dir_loc(logfile);
+    strncat(logfile, ULTIMATECDROMLOG, sizeof(logfile) - strlen(logfile));
 
     if (!cdlogf)
-        cdlogf = fopen(ULTIMATECDROMLOG,"wt");
+        cdlogf = fopen(logfile,"wt");
+
     va_list ap;
     va_start(ap, format);
     vsprintf(buf, format, ap);
@@ -50,9 +53,13 @@ void cdlog(const char *format, ...)
 
 void cdfatal(const char *format, ...) {
     char buf[1024];
-    //return;
+    char logfile[PATH_MAX];
+    get_config_dir_loc(logfile);
+    strncat(logfile, ULTIMATECDROMLOG, sizeof(logfile) - strlen(logfile));
+
     if (!cdlogf)
-        cdlogf = fopen(ULTIMATECDROMLOG,"wt");
+        cdlogf = fopen(logfile,"wt");
+
     va_list ap;
     va_start(ap, format);
     vsprintf(buf, format, ap);
@@ -62,27 +69,21 @@ void cdfatal(const char *format, ...) {
     exit(-1);
 }
 
-typedef struct cdrom_t
-{
+typedef struct cdrom_t {
     uint8_t rom[0x20000];
     int rom_page;
-
     int audio_poll_count;
-
     mitsumi_t mitsumi;
-
     void *sound_out;
 } cdrom_t;
 
-static uint8_t cdrom_read_b(struct podule_t *podule, podule_io_type type, uint32_t addr)
-{
+static uint8_t cdrom_read_b(struct podule_t *podule, podule_io_type type, uint32_t addr) {
     cdrom_t *cdrom = podule->p;
 
     if (type != PODULE_IO_TYPE_IOC)
         return 0xff; /*Only IOC accesses supported*/
 
-    switch (addr&0x3000)
-    {
+    switch (addr&0x3000) {
         case 0x0000: case 0x1000:
             return cdrom->rom[((cdrom->rom_page * 2048) + ((addr & 0x1fff) >> 2)) & 0x1ffff];
 
@@ -95,15 +96,13 @@ static uint8_t cdrom_read_b(struct podule_t *podule, podule_io_type type, uint32
     return 0xff;
 }
 
-static void cdrom_write_b(struct podule_t *podule, podule_io_type type, uint32_t addr, uint8_t val)
-{
+static void cdrom_write_b(struct podule_t *podule, podule_io_type type, uint32_t addr, uint8_t val) {
     cdrom_t *cdrom = podule->p;
 
     if (type != PODULE_IO_TYPE_IOC)
         return; /*Only IOC accesses supported*/
 
-    switch (addr & 0x3f00)
-    {
+    switch (addr & 0x3f00) {
         case 0x3000:
             cdrom->rom_page = val;
             return;
@@ -113,17 +112,13 @@ static void cdrom_write_b(struct podule_t *podule, podule_io_type type, uint32_t
     }
 }
 
-static int cdrom_run(struct podule_t *podule, int timeslice_us)
-{
+static int cdrom_run(struct podule_t *podule, int timeslice_us) {
     cdrom_t *cdrom = podule->p;
-
     mitsumi_poll(&cdrom->mitsumi);
-
     cdrom->audio_poll_count++;
-    if (cdrom->audio_poll_count >= 100)
-    {
-        int16_t audio_buffer[(44100*2)/10];
 
+    if (cdrom->audio_poll_count >= 100) {
+        int16_t audio_buffer[(44100*2)/10];
         cdrom->audio_poll_count = 0;
         memset(audio_buffer, 0, sizeof(audio_buffer));
         ioctl_audio_callback(audio_buffer, (44100*2)/10);
@@ -133,8 +128,7 @@ static int cdrom_run(struct podule_t *podule, int timeslice_us)
     return 1000; /*1ms*/
 }
 
-static int cdrom_init(struct podule_t *podule)
-{
+static int cdrom_init(struct podule_t *podule) {
     FILE *f;
     char rom_fn[PATH_MAX];
     const char *drive_path;
@@ -142,11 +136,11 @@ static int cdrom_init(struct podule_t *podule)
     cdrom_t *cdrom = malloc(sizeof(cdrom_t));
     memset(cdrom, 0, sizeof(cdrom_t));
     sprintf(rom_fn, "%s%sultimatecdrom.rom", PODULEROMDIR, "ultimatecdrom/");
-    cdlog("Ultimate CD-ROM ROM %s\n", rom_fn);
+    cdlog("Loading the Ultimate CD-ROM ROM %s\n", rom_fn);
     f = fopen(rom_fn, "rb");
 
     if (!f) {
-        cdlog("Failed to open ULTIMATECDROM.ROM!\n");
+        cdlog("Failed to load the Ultimate CD-ROM ROM\n");
         return -1;
     }
 
@@ -159,16 +153,13 @@ static int cdrom_init(struct podule_t *podule)
     return 0;
 }
 
-static void cdrom_close(struct podule_t *podule)
-{
+static void cdrom_close(struct podule_t *podule) {
     cdrom_t *cdrom = podule->p;
-
     sound_out_close(cdrom->sound_out);
     free(cdrom);
 }
 
-static podule_config_t cdrom_config =
-{
+static podule_config_t cdrom_config = {
     .items =
     {
         {
@@ -184,9 +175,7 @@ static podule_config_t cdrom_config =
     }
 };
 
-
-static const podule_header_t cdrom_podule_header =
-{
+static const podule_header_t cdrom_podule_header = {
     .version = PODULE_API_VERSION,
     .flags = PODULE_FLAGS_UNIQUE,
     .short_name = "ultimatecdrom",
@@ -208,4 +197,3 @@ const podule_header_t *podule_probe(const podule_callbacks_t *callbacks, char *p
     cdrom_config.items[0].selection = cdrom_devices_config();
     return &cdrom_podule_header;
 }
-

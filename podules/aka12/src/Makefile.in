@@ -14,8 +14,6 @@
 
 @SET_MAKE@
 
-# Makefile.am for AKA12
-
 
 VPATH = @srcdir@
 am__is_gnu_make = { \
@@ -93,11 +91,7 @@ build_triplet = @build@
 host_triplet = @host@
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_1 = $(noinst_SCRIPTS)
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_2 = ../aka12.so
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_3 = $(noinst_SCRIPTS)
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_4 = ../aka12.dylib
-@BUILD_PODULES_TRUE@@OS_WINDOWS_TRUE@am__append_5 = ../../common/midi/midi_win.c
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_6 = ../../common/midi/midi_alsa.c
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_7 = ../../common/midi/midi_null.c
+@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_3 = ../../common/midi/midi_alsa.c
 subdir = podules/aka12/src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -138,16 +132,14 @@ am__installdirs = "$(DESTDIR)$(libdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libaka12_la_DEPENDENCIES =
 am__libaka12_la_SOURCES_DIST = ../../common/uart/scc2691.c aka12.c \
-	../../common/midi/midi_win.c ../../common/midi/midi_alsa.c \
-	../../common/midi/midi_null.c
+	../../../src/master-cfg-file.c ../../common/midi/midi_alsa.c
 am__dirstamp = $(am__leading_dot)dirstamp
-@BUILD_PODULES_TRUE@@OS_WINDOWS_TRUE@am__objects_1 = ../../common/midi/libaka12_la-midi_win.lo
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__objects_2 = ../../common/midi/libaka12_la-midi_alsa.lo
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__objects_3 = ../../common/midi/libaka12_la-midi_null.lo
+@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__objects_1 = ../../common/midi/libaka12_la-midi_alsa.lo
 @BUILD_PODULES_TRUE@am_libaka12_la_OBJECTS =  \
 @BUILD_PODULES_TRUE@	../../common/uart/libaka12_la-scc2691.lo \
-@BUILD_PODULES_TRUE@	libaka12_la-aka12.lo $(am__objects_1) \
-@BUILD_PODULES_TRUE@	$(am__objects_2) $(am__objects_3)
+@BUILD_PODULES_TRUE@	libaka12_la-aka12.lo \
+@BUILD_PODULES_TRUE@	../../../src/libaka12_la-master-cfg-file.lo \
+@BUILD_PODULES_TRUE@	$(am__objects_1)
 libaka12_la_OBJECTS = $(am_libaka12_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -174,9 +166,8 @@ DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade =  \
+	../../../src/$(DEPDIR)/libaka12_la-master-cfg-file.Plo \
 	../../common/midi/$(DEPDIR)/libaka12_la-midi_alsa.Plo \
-	../../common/midi/$(DEPDIR)/libaka12_la-midi_null.Plo \
-	../../common/midi/$(DEPDIR)/libaka12_la-midi_win.Plo \
 	../../common/uart/$(DEPDIR)/libaka12_la-scc2691.Plo \
 	./$(DEPDIR)/libaka12_la-aka12.Plo
 am__mv = mv -f
@@ -368,13 +359,15 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+
+# Makefile.am for AKA12
 AUTOMAKE_OPTIONS = subdir-objects
 @BUILD_PODULES_TRUE@lib_LTLIBRARIES = libaka12.la
-@BUILD_PODULES_TRUE@noinst_SCRIPTS = $(am__append_2) $(am__append_4)
-@BUILD_PODULES_TRUE@CLEANFILES = $(am__append_1) $(am__append_3)
+@BUILD_PODULES_TRUE@noinst_SCRIPTS = $(am__append_2)
+@BUILD_PODULES_TRUE@CLEANFILES = $(am__append_1)
 @BUILD_PODULES_TRUE@libaka12_la_SOURCES = ../../common/uart/scc2691.c \
-@BUILD_PODULES_TRUE@	aka12.c $(am__append_5) $(am__append_6) \
-@BUILD_PODULES_TRUE@	$(am__append_7)
+@BUILD_PODULES_TRUE@	aka12.c ../../../src/master-cfg-file.c \
+@BUILD_PODULES_TRUE@	$(am__append_3)
 @BUILD_PODULES_TRUE@libaka12_la_CFLAGS = -I../../../src -I../../common/midi -I../../common/uart
 @BUILD_PODULES_TRUE@libaka12_la_LIBADD = @LIBS@
 all: all-am
@@ -454,19 +447,22 @@ clean-libLTLIBRARIES:
 ../../common/uart/libaka12_la-scc2691.lo:  \
 	../../common/uart/$(am__dirstamp) \
 	../../common/uart/$(DEPDIR)/$(am__dirstamp)
+../../../src/$(am__dirstamp):
+	@$(MKDIR_P) ../../../src
+	@: > ../../../src/$(am__dirstamp)
+../../../src/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) ../../../src/$(DEPDIR)
+	@: > ../../../src/$(DEPDIR)/$(am__dirstamp)
+../../../src/libaka12_la-master-cfg-file.lo:  \
+	../../../src/$(am__dirstamp) \
+	../../../src/$(DEPDIR)/$(am__dirstamp)
 ../../common/midi/$(am__dirstamp):
 	@$(MKDIR_P) ../../common/midi
 	@: > ../../common/midi/$(am__dirstamp)
 ../../common/midi/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) ../../common/midi/$(DEPDIR)
 	@: > ../../common/midi/$(DEPDIR)/$(am__dirstamp)
-../../common/midi/libaka12_la-midi_win.lo:  \
-	../../common/midi/$(am__dirstamp) \
-	../../common/midi/$(DEPDIR)/$(am__dirstamp)
 ../../common/midi/libaka12_la-midi_alsa.lo:  \
-	../../common/midi/$(am__dirstamp) \
-	../../common/midi/$(DEPDIR)/$(am__dirstamp)
-../../common/midi/libaka12_la-midi_null.lo:  \
 	../../common/midi/$(am__dirstamp) \
 	../../common/midi/$(DEPDIR)/$(am__dirstamp)
 
@@ -475,6 +471,8 @@ libaka12.la: $(libaka12_la_OBJECTS) $(libaka12_la_DEPENDENCIES) $(EXTRA_libaka12
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f ../../../src/*.$(OBJEXT)
+	-rm -f ../../../src/*.lo
 	-rm -f ../../common/midi/*.$(OBJEXT)
 	-rm -f ../../common/midi/*.lo
 	-rm -f ../../common/uart/*.$(OBJEXT)
@@ -483,9 +481,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@../../../src/$(DEPDIR)/libaka12_la-master-cfg-file.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@../../common/midi/$(DEPDIR)/libaka12_la-midi_alsa.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/midi/$(DEPDIR)/libaka12_la-midi_null.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/midi/$(DEPDIR)/libaka12_la-midi_win.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@../../common/uart/$(DEPDIR)/libaka12_la-scc2691.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaka12_la-aka12.Plo@am__quote@ # am--include-marker
 
@@ -533,12 +530,12 @@ libaka12_la-aka12.lo: aka12.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka12_la_CFLAGS) $(CFLAGS) -c -o libaka12_la-aka12.lo `test -f 'aka12.c' || echo '$(srcdir)/'`aka12.c
 
-../../common/midi/libaka12_la-midi_win.lo: ../../common/midi/midi_win.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka12_la_CFLAGS) $(CFLAGS) -MT ../../common/midi/libaka12_la-midi_win.lo -MD -MP -MF ../../common/midi/$(DEPDIR)/libaka12_la-midi_win.Tpo -c -o ../../common/midi/libaka12_la-midi_win.lo `test -f '../../common/midi/midi_win.c' || echo '$(srcdir)/'`../../common/midi/midi_win.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/midi/$(DEPDIR)/libaka12_la-midi_win.Tpo ../../common/midi/$(DEPDIR)/libaka12_la-midi_win.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/midi/midi_win.c' object='../../common/midi/libaka12_la-midi_win.lo' libtool=yes @AMDEPBACKSLASH@
+../../../src/libaka12_la-master-cfg-file.lo: ../../../src/master-cfg-file.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka12_la_CFLAGS) $(CFLAGS) -MT ../../../src/libaka12_la-master-cfg-file.lo -MD -MP -MF ../../../src/$(DEPDIR)/libaka12_la-master-cfg-file.Tpo -c -o ../../../src/libaka12_la-master-cfg-file.lo `test -f '../../../src/master-cfg-file.c' || echo '$(srcdir)/'`../../../src/master-cfg-file.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../../src/$(DEPDIR)/libaka12_la-master-cfg-file.Tpo ../../../src/$(DEPDIR)/libaka12_la-master-cfg-file.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../../src/master-cfg-file.c' object='../../../src/libaka12_la-master-cfg-file.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka12_la_CFLAGS) $(CFLAGS) -c -o ../../common/midi/libaka12_la-midi_win.lo `test -f '../../common/midi/midi_win.c' || echo '$(srcdir)/'`../../common/midi/midi_win.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka12_la_CFLAGS) $(CFLAGS) -c -o ../../../src/libaka12_la-master-cfg-file.lo `test -f '../../../src/master-cfg-file.c' || echo '$(srcdir)/'`../../../src/master-cfg-file.c
 
 ../../common/midi/libaka12_la-midi_alsa.lo: ../../common/midi/midi_alsa.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka12_la_CFLAGS) $(CFLAGS) -MT ../../common/midi/libaka12_la-midi_alsa.lo -MD -MP -MF ../../common/midi/$(DEPDIR)/libaka12_la-midi_alsa.Tpo -c -o ../../common/midi/libaka12_la-midi_alsa.lo `test -f '../../common/midi/midi_alsa.c' || echo '$(srcdir)/'`../../common/midi/midi_alsa.c
@@ -547,18 +544,12 @@ libaka12_la-aka12.lo: aka12.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka12_la_CFLAGS) $(CFLAGS) -c -o ../../common/midi/libaka12_la-midi_alsa.lo `test -f '../../common/midi/midi_alsa.c' || echo '$(srcdir)/'`../../common/midi/midi_alsa.c
 
-../../common/midi/libaka12_la-midi_null.lo: ../../common/midi/midi_null.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka12_la_CFLAGS) $(CFLAGS) -MT ../../common/midi/libaka12_la-midi_null.lo -MD -MP -MF ../../common/midi/$(DEPDIR)/libaka12_la-midi_null.Tpo -c -o ../../common/midi/libaka12_la-midi_null.lo `test -f '../../common/midi/midi_null.c' || echo '$(srcdir)/'`../../common/midi/midi_null.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/midi/$(DEPDIR)/libaka12_la-midi_null.Tpo ../../common/midi/$(DEPDIR)/libaka12_la-midi_null.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/midi/midi_null.c' object='../../common/midi/libaka12_la-midi_null.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka12_la_CFLAGS) $(CFLAGS) -c -o ../../common/midi/libaka12_la-midi_null.lo `test -f '../../common/midi/midi_null.c' || echo '$(srcdir)/'`../../common/midi/midi_null.c
-
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
+	-rm -rf ../../../src/.libs ../../../src/_libs
 	-rm -rf ../../common/midi/.libs ../../common/midi/_libs
 	-rm -rf ../../common/uart/.libs ../../common/uart/_libs
 
@@ -680,6 +671,8 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f ../../../src/$(DEPDIR)/$(am__dirstamp)
+	-rm -f ../../../src/$(am__dirstamp)
 	-rm -f ../../common/midi/$(DEPDIR)/$(am__dirstamp)
 	-rm -f ../../common/midi/$(am__dirstamp)
 	-rm -f ../../common/uart/$(DEPDIR)/$(am__dirstamp)
@@ -694,9 +687,8 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ../../common/midi/$(DEPDIR)/libaka12_la-midi_alsa.Plo
-	-rm -f ../../common/midi/$(DEPDIR)/libaka12_la-midi_null.Plo
-	-rm -f ../../common/midi/$(DEPDIR)/libaka12_la-midi_win.Plo
+		-rm -f ../../../src/$(DEPDIR)/libaka12_la-master-cfg-file.Plo
+	-rm -f ../../common/midi/$(DEPDIR)/libaka12_la-midi_alsa.Plo
 	-rm -f ../../common/uart/$(DEPDIR)/libaka12_la-scc2691.Plo
 	-rm -f ./$(DEPDIR)/libaka12_la-aka12.Plo
 	-rm -f Makefile
@@ -744,9 +736,8 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ../../common/midi/$(DEPDIR)/libaka12_la-midi_alsa.Plo
-	-rm -f ../../common/midi/$(DEPDIR)/libaka12_la-midi_null.Plo
-	-rm -f ../../common/midi/$(DEPDIR)/libaka12_la-midi_win.Plo
+		-rm -f ../../../src/$(DEPDIR)/libaka12_la-master-cfg-file.Plo
+	-rm -f ../../common/midi/$(DEPDIR)/libaka12_la-midi_alsa.Plo
 	-rm -f ../../common/uart/$(DEPDIR)/libaka12_la-scc2691.Plo
 	-rm -f ./$(DEPDIR)/libaka12_la-aka12.Plo
 	-rm -f Makefile
@@ -787,10 +778,8 @@ uninstall-am: uninstall-libLTLIBRARIES
 
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@../aka12.so: libaka12.la
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@	cp .libs/libaka12.so ../aka12.so
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@../aka12.dylib: libaka12.la
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@	cp .libs/libaka12.dylib ../aka12.dylib
 
-@BUILD_PODULES_TRUE@amrefresh:	
+@BUILD_PODULES_TRUE@amrefresh:
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

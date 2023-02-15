@@ -3,33 +3,24 @@
 #include "aka31.h"
 #include "d71071l.h"
 #include "wd33c93a.h"
-
 #include "scsi.h"
 #include "scsi_hd.h"
 
 #define POLL_TIME_US 100
 #define MAX_BYTES_TRANSFERRED_PER_POLL 500
-
-
-
 #define AUX_STATUS_DBR 0x01 /*Data Buffer Ready*/
 #define AUX_STATUS_PE  0x02 /*Parity Error*/
 #define AUX_STATUS_CIP 0x10 /*Command In Progress*/
 #define AUX_STATUS_BSY 0x20 /*Busy*/
 #define AUX_STATUS_LCI 0x40 /*Last Command Ignored*/
 #define AUX_STATUS_INT 0x80 /*Interrupt Pending*/
-
 #define CMD_RESET                   0x00
 #define CMD_SEL_W_ATN_AND_TRANSFER  0x08
 #define CMD_SEL_WO_ATN_AND_TRANSFER 0x09
 #define CMD_TRANSFER_INFO           0x20
-
 #define CMD_MASK 0x7f
-
 #define CMD_SBT 0x80
-
 #define OWNID_EAF 0x08
-
 #define REG_OWNID     0x00
 #define REG_CDB_SIZE  0x00
 #define REG_CTRL      0x01
@@ -41,93 +32,76 @@
 #define REG_STATUS    0x17
 #define REG_CMD       0x18
 #define REG_DATA      0x19
-
 #define DMA_MODE(x) ((x >> 5) & 7)
-
 #define DMA_MODE_PIO 0
 
-
-
-void wd33c93a_init(wd33c93a_t *wd, podule_t *podule, const podule_callbacks_t *podule_callbacks, d71071l_t *dma, struct scsi_bus_t *bus)
-{
-        memset(wd, 0, sizeof(wd33c93a_t));
-        wd->podule = podule;
-        wd->dma = dma;
-        wd->bus = bus;
-        scsi_bus_init(wd->bus, podule, podule_callbacks);
+void wd33c93a_init(wd33c93a_t *wd, podule_t *podule, const podule_callbacks_t *podule_callbacks, d71071l_t *dma, struct scsi_bus_t *bus) {
+    memset(wd, 0, sizeof(wd33c93a_t));
+    wd->podule = podule;
+    wd->dma = dma;
+    wd->bus = bus;
+    scsi_bus_init(wd->bus, podule, podule_callbacks);
 }
 
-void wd33c93a_close(wd33c93a_t *wd)
-{
-        scsi_bus_close(wd->bus);
+void wd33c93a_close(wd33c93a_t *wd) {
+    scsi_bus_close(wd->bus);
 }
 
-int scsi_add_data(wd33c93a_t *wd, uint8_t val)
-{
-        if (wd->command & CMD_SBT)
-                wd->fifo[(wd->fifo_write++) % 12] = val;
-        else
-        {
-                if (dma_write(wd->dma, 0, val))
-                {
-//                        aka31_log("No data\n");
-                        return -1;
-                }
+int scsi_add_data(wd33c93a_t *wd, uint8_t val) {
+    if (wd->command & CMD_SBT)
+        wd->fifo[(wd->fifo_write++) % 12] = val;
+    else {
+        if (dma_write(wd->dma, 0, val)) {
+            //aka31_log("No data\n");
+            return -1;
         }
-        return 0;
+    }
+
+    return 0;
 }
 
-int scsi_get_data(wd33c93a_t *wd)
-{
-        int val = dma_read(wd->dma, 0);
+int scsi_get_data(wd33c93a_t *wd) {
+    int val = dma_read(wd->dma, 0);
 
-        if (val == -1)
-                return -1;
+    if (val == -1)
+            return -1;
 
-        return val;
+    return val;
 }
 
-void scsi_send_complete(void *controller_p)
-{
-        wd33c93a_t *wd = controller_p;
-
-        wd->status = 0x16;
-        wd->aux_status = AUX_STATUS_INT;
-        aka31_sbic_int(wd->podule);
+void scsi_send_complete(void *controller_p) {
+    wd33c93a_t *wd = controller_p;
+    wd->status = 0x16;
+    wd->aux_status = AUX_STATUS_INT;
+    aka31_sbic_int(wd->podule);
 }
 
-void scsi_illegal_field(void *controller_p)
-{
-        wd33c93a_t *wd = controller_p;
-
-        wd->status = 0x4b;
-        wd->aux_status = AUX_STATUS_INT;
-        aka31_sbic_int(wd->podule);
-        wd->info = 2;
+void scsi_illegal_field(void *controller_p) {
+    wd33c93a_t *wd = controller_p;
+    wd->status = 0x4b;
+    wd->aux_status = AUX_STATUS_INT;
+    aka31_sbic_int(wd->podule);
+    wd->info = 2;
 }
 
-void scsi_select_failed(wd33c93a_t *wd)
-{
-        wd->aux_status = AUX_STATUS_INT;
-        wd->status = 0x42; /*Timeout during Select*/
-        wd->command_phase = 0;
-        aka31_sbic_int(wd->podule);
+void scsi_select_failed(wd33c93a_t *wd) {
+    wd->aux_status = AUX_STATUS_INT;
+    wd->status = 0x42; /* Timeout during Select */
+    wd->command_phase = 0;
+    aka31_sbic_int(wd->podule);
 }
 
-void scsi_set_phase(void *controller_p, uint8_t phase)
-{
-        wd33c93a_t *wd = controller_p;
-
-        wd->command_phase = phase;
+void scsi_set_phase(void *controller_p, uint8_t phase) {
+    wd33c93a_t *wd = controller_p;
+    wd->command_phase = phase;
 }
 
-void scsi_set_irq(void *controller_p, uint8_t status)
-{
-        wd33c93a_t *wd = controller_p;
-//        aka31_log("scsi_set_irq: %02x\n", status);
-        wd->status = status;
-        wd->aux_status = AUX_STATUS_INT;
-        aka31_sbic_int(wd->podule);
+void scsi_set_irq(void *controller_p, uint8_t status) {
+    wd33c93a_t *wd = controller_p;
+    //aka31_log("scsi_set_irq: %02x\n", status);
+    wd->status = status;
+    wd->aux_status = AUX_STATUS_INT;
+    aka31_sbic_int(wd->podule);
 }
 
 void wd33c93a_reset(wd33c93a_t *wd)

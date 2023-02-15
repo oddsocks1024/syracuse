@@ -7,26 +7,29 @@
 #include "16550.h"
 #include "midi.h"
 #include "podule_api.h"
+#include "master-cfg-file.h"
 #include "config.h"
 #include "arc.h"
 
 #define BOOL int
 #define APIENTRY
+#define MIDI_UART_CLOCK 2000000 //(31250Hz * 4 * 16)
+#define MIDIMAXLOG LOGDIR "midimax.log"
 
 static const podule_callbacks_t *podule_callbacks;
 char podule_path[PATH_MAX];
-
-#define MIDI_UART_CLOCK 2000000 //(31250Hz * 4 * 16)
-
-#ifdef DEBUG_LOG
 static FILE *midimax_logf;
-#endif
 
-void midimax_log(const char *format, ...)
-{
+void midimax_log(const char *format, ...) {
 #ifdef DEBUG_LOG
     char buf[1024];
-    if (!midimax_logf) midimax_logf=fopen(MIDIMAXLOG,"wt");
+    char logfile[PATH_MAX];
+    get_config_dir_loc(logfile);
+    strncat(logfile, MIDIMAXLOG, sizeof(logfile) - strlen(logfile));
+
+    if (!midimax_logf)
+        midimax_logf=fopen(logfile,"wt");
+
     va_list ap;
     va_start(ap, format);
     vsprintf(buf, format, ap);
@@ -36,22 +39,17 @@ void midimax_log(const char *format, ...)
 #endif
 }
 
-typedef struct midimax_t
-{
+typedef struct midimax_t {
     uint8_t rom[0x8000];
     int rom_page;
-
     int tx_irq_pending;
     uint8_t intena, intstat;
-
     n16550_t n16550;
-
     podule_t *podule;
     void *midi;
 } midimax_t;
 
-static uint8_t midimax_read_b(struct podule_t *podule, podule_io_type type, uint32_t addr)
-{
+static uint8_t midimax_read_b(struct podule_t *podule, podule_io_type type, uint32_t addr) {
     midimax_t *midimax = podule->p;
     uint8_t temp = 0xff;
 
@@ -69,15 +67,13 @@ static uint8_t midimax_read_b(struct podule_t *podule, podule_io_type type, uint
     return 0xFF;
 }
 
-static void midimax_write_b(struct podule_t *podule, podule_io_type type, uint32_t addr, uint8_t val)
-{
+static void midimax_write_b(struct podule_t *podule, podule_io_type type, uint32_t addr, uint8_t val) {
     midimax_t *midimax = podule->p;
 
     if (type != PODULE_IO_TYPE_IOC)
         return;
 
-    switch (addr & 0x3000)
-    {
+    switch (addr & 0x3000) {
         case 0x2000:
             midimax->rom_page = val;
             return;
@@ -87,34 +83,25 @@ static void midimax_write_b(struct podule_t *podule, podule_io_type type, uint32
     }
 }
 
-static int midimax_run(struct podule_t *podule, int timeslice_us)
-{
+static int midimax_run(struct podule_t *podule, int timeslice_us) {
     midimax_t *midimax = podule->p;
-
     n16550_run(&midimax->n16550, timeslice_us);
-
     return 256; /*256us = 1 byte at 31250 baud*/
 }
 
-static void midimax_uart_irq(void *p, int state)
-{
+static void midimax_uart_irq(void *p, int state) {
     midimax_t *midimax = p;
     podule_t *podule = midimax->podule;
-
     podule_callbacks->set_irq(podule, state);
 }
 
-static void midimax_uart_send(void *p, uint8_t val)
-{
+static void midimax_uart_send(void *p, uint8_t val) {
     struct midimax_t *midimax = p;
-
     midi_write(midimax->midi, val);
 }
 
-static void midimax_midi_receive(void *p, uint8_t val)
-{
+static void midimax_midi_receive(void *p, uint8_t val) {
     struct midimax_t *midimax = p;
-
     n16550_receive(&midimax->n16550, val);
 }
 
@@ -126,11 +113,11 @@ static int midimax_init(struct podule_t *podule) {
     midimax_t *midimax = malloc(sizeof(midimax_t));
     memset(midimax, 0, sizeof(midimax_t));
     sprintf(rom_fn, "%s%smidimax.rom", PODULEROMDIR, "midimax/");
-    midimax_log("MIDIMAX ROM %s\n", rom_fn);
+    midimax_log("Loading the MIDIMax ROM %s\n", rom_fn);
     f = fopen(rom_fn, "rb");
 
     if (!f) {
-        midimax_log("Failed to open MIDIMAX.ROM!\n");
+        midimax_log("Failed to load the MIDIMax\n");
         return -1;
     }
 
@@ -143,17 +130,13 @@ static int midimax_init(struct podule_t *podule) {
     return 0;
 }
 
-static void midimax_close(struct podule_t *podule)
-{
+static void midimax_close(struct podule_t *podule) {
     midimax_t *midimax = podule->p;
-
     midi_close(midimax->midi);
-
     free(midimax);
 }
 
-static podule_config_t midimax_config =
-{
+static podule_config_t midimax_config = {
     .items =
     {
         {
@@ -176,8 +159,7 @@ static podule_config_t midimax_config =
     }
 };
 
-static const podule_header_t midimax_podule_header =
-{
+static const podule_header_t midimax_podule_header = {
     .version = PODULE_API_VERSION,
     .flags = PODULE_FLAGS_UNIQUE,
     .short_name = "midimax",
@@ -193,11 +175,9 @@ static const podule_header_t midimax_podule_header =
     .config = &midimax_config
 };
 
-const podule_header_t *podule_probe(const podule_callbacks_t *callbacks, char *path)
-{
+const podule_header_t *podule_probe(const podule_callbacks_t *callbacks, char *path) {
     podule_callbacks = callbacks;
     strcpy(podule_path, path);
-
     midimax_config.items[0].selection = midi_out_devices_config();
     midimax_config.items[1].selection = midi_in_devices_config();
 

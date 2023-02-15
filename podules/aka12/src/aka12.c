@@ -21,6 +21,7 @@
 #include "midi.h"
 #include "podule_api.h"
 #include "config.h"
+#include "master-cfg-file.h"
 #include "arc.h"
 
 #define BOOL int

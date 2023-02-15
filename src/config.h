@@ -19,12 +19,6 @@
 #define PODULE_LONG_NAME_LEN 255
 #define PODULE_SHORT_NAME_LEN 16
 
-#define AKA16LOG "/tmp/aka16-log.txt"
-#define LARKLOG "/tmp/lark-log.txt"
-#define MIDIMAXLOG "/tmp/midimax-log.txt"
-#define OAKSCSILOG "/tmp/oakscsi-log.txt"
-#define ULTIMATECDROMLOG "/tmp/ultimatecdrom-log.txt"
-
 enum {
     FDC_WD1770,
     FDC_82C711,

@@ -14,8 +14,6 @@
 
 @SET_MAKE@
 
-# Makefile.am for Ultimate CD-ROM
-
 
 VPATH = @srcdir@
 am__is_gnu_make = { \
@@ -93,11 +91,7 @@ build_triplet = @build@
 host_triplet = @host@
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_1 = $(noinst_SCRIPTS)
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_2 = ../ultimatecdrom.so
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_3 = $(noinst_SCRIPTS)
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_4 = ../ultimatecdrom.dylib
-@BUILD_PODULES_TRUE@@OS_WINDOWS_TRUE@am__append_5 = ../../common/cdrom/cdrom-windows-ioctl.c
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_6 = ../../common/cdrom/cdrom-linux-ioctl.c
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_7 = ../../common/cdrom/cdrom-osx-ioctl.c
+@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_3 = ../../common/cdrom/cdrom-linux-ioctl.c
 subdir = podules/ultimatecdrom/src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -139,19 +133,16 @@ LTLIBRARIES = $(lib_LTLIBRARIES)
 libultimatecdrom_la_DEPENDENCIES =
 am__libultimatecdrom_la_SOURCES_DIST = mitsumi.c ultimatecdrom.c \
 	../../common/sound/sound_openal.c \
-	../../common/cdrom/cdrom-windows-ioctl.c \
-	../../common/cdrom/cdrom-linux-ioctl.c \
-	../../common/cdrom/cdrom-osx-ioctl.c
+	../../../src/master-cfg-file.c \
+	../../common/cdrom/cdrom-linux-ioctl.c
 am__dirstamp = $(am__leading_dot)dirstamp
-@BUILD_PODULES_TRUE@@OS_WINDOWS_TRUE@am__objects_1 = ../../common/cdrom/libultimatecdrom_la-cdrom-windows-ioctl.lo
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__objects_2 = ../../common/cdrom/libultimatecdrom_la-cdrom-linux-ioctl.lo
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__objects_3 = ../../common/cdrom/libultimatecdrom_la-cdrom-osx-ioctl.lo
+@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__objects_1 = ../../common/cdrom/libultimatecdrom_la-cdrom-linux-ioctl.lo
 @BUILD_PODULES_TRUE@am_libultimatecdrom_la_OBJECTS =  \
 @BUILD_PODULES_TRUE@	libultimatecdrom_la-mitsumi.lo \
 @BUILD_PODULES_TRUE@	libultimatecdrom_la-ultimatecdrom.lo \
 @BUILD_PODULES_TRUE@	../../common/sound/libultimatecdrom_la-sound_openal.lo \
-@BUILD_PODULES_TRUE@	$(am__objects_1) $(am__objects_2) \
-@BUILD_PODULES_TRUE@	$(am__objects_3)
+@BUILD_PODULES_TRUE@	../../../src/libultimatecdrom_la-master-cfg-file.lo \
+@BUILD_PODULES_TRUE@	$(am__objects_1)
 libultimatecdrom_la_OBJECTS = $(am_libultimatecdrom_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -178,9 +169,8 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-linux-ioctl.Plo \
-	../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-osx-ioctl.Plo \
-	../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-windows-ioctl.Plo \
+am__depfiles_remade = ../../../src/$(DEPDIR)/libultimatecdrom_la-master-cfg-file.Plo \
+	../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-linux-ioctl.Plo \
 	../../common/sound/$(DEPDIR)/libultimatecdrom_la-sound_openal.Plo \
 	./$(DEPDIR)/libultimatecdrom_la-mitsumi.Plo \
 	./$(DEPDIR)/libultimatecdrom_la-ultimatecdrom.Plo
@@ -373,17 +363,19 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+
+# Makefile.am for Ultimate CD-ROM
 AUTOMAKE_OPTIONS = subdir-objects
 @BUILD_PODULES_TRUE@lib_LTLIBRARIES = libultimatecdrom.la
-@BUILD_PODULES_TRUE@noinst_SCRIPTS = $(am__append_2) $(am__append_4)
-@BUILD_PODULES_TRUE@CLEANFILES = $(am__append_1) $(am__append_3)
+@BUILD_PODULES_TRUE@noinst_SCRIPTS = $(am__append_2)
+@BUILD_PODULES_TRUE@CLEANFILES = $(am__append_1)
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@AM_CFLAGS = ${CFLAGS} -c -Wall \
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@	-Werror -fpic
 @BUILD_PODULES_TRUE@libultimatecdrom_la_SOURCES = mitsumi.c \
 @BUILD_PODULES_TRUE@	ultimatecdrom.c \
 @BUILD_PODULES_TRUE@	../../common/sound/sound_openal.c \
-@BUILD_PODULES_TRUE@	$(am__append_5) $(am__append_6) \
-@BUILD_PODULES_TRUE@	$(am__append_7)
+@BUILD_PODULES_TRUE@	../../../src/master-cfg-file.c \
+@BUILD_PODULES_TRUE@	$(am__append_3)
 @BUILD_PODULES_TRUE@libultimatecdrom_la_CFLAGS = -I../../../src -I../../common/cdrom -I../../common/sound
 @BUILD_PODULES_TRUE@libultimatecdrom_la_LIBADD = @LIBS@
 all: all-am
@@ -463,19 +455,22 @@ clean-libLTLIBRARIES:
 ../../common/sound/libultimatecdrom_la-sound_openal.lo:  \
 	../../common/sound/$(am__dirstamp) \
 	../../common/sound/$(DEPDIR)/$(am__dirstamp)
+../../../src/$(am__dirstamp):
+	@$(MKDIR_P) ../../../src
+	@: > ../../../src/$(am__dirstamp)
+../../../src/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) ../../../src/$(DEPDIR)
+	@: > ../../../src/$(DEPDIR)/$(am__dirstamp)
+../../../src/libultimatecdrom_la-master-cfg-file.lo:  \
+	../../../src/$(am__dirstamp) \
+	../../../src/$(DEPDIR)/$(am__dirstamp)
 ../../common/cdrom/$(am__dirstamp):
 	@$(MKDIR_P) ../../common/cdrom
 	@: > ../../common/cdrom/$(am__dirstamp)
 ../../common/cdrom/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) ../../common/cdrom/$(DEPDIR)
 	@: > ../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
-../../common/cdrom/libultimatecdrom_la-cdrom-windows-ioctl.lo:  \
-	../../common/cdrom/$(am__dirstamp) \
-	../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
 ../../common/cdrom/libultimatecdrom_la-cdrom-linux-ioctl.lo:  \
-	../../common/cdrom/$(am__dirstamp) \
-	../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
-../../common/cdrom/libultimatecdrom_la-cdrom-osx-ioctl.lo:  \
 	../../common/cdrom/$(am__dirstamp) \
 	../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
 
@@ -484,6 +479,8 @@ libultimatecdrom.la: $(libultimatecdrom_la_OBJECTS) $(libultimatecdrom_la_DEPEND
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f ../../../src/*.$(OBJEXT)
+	-rm -f ../../../src/*.lo
 	-rm -f ../../common/cdrom/*.$(OBJEXT)
 	-rm -f ../../common/cdrom/*.lo
 	-rm -f ../../common/sound/*.$(OBJEXT)
@@ -492,9 +489,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@../../../src/$(DEPDIR)/libultimatecdrom_la-master-cfg-file.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-linux-ioctl.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-osx-ioctl.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-windows-ioctl.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@../../common/sound/$(DEPDIR)/libultimatecdrom_la-sound_openal.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libultimatecdrom_la-mitsumi.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libultimatecdrom_la-ultimatecdrom.Plo@am__quote@ # am--include-marker
@@ -550,12 +546,12 @@ libultimatecdrom_la-ultimatecdrom.lo: ultimatecdrom.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -c -o ../../common/sound/libultimatecdrom_la-sound_openal.lo `test -f '../../common/sound/sound_openal.c' || echo '$(srcdir)/'`../../common/sound/sound_openal.c
 
-../../common/cdrom/libultimatecdrom_la-cdrom-windows-ioctl.lo: ../../common/cdrom/cdrom-windows-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -MT ../../common/cdrom/libultimatecdrom_la-cdrom-windows-ioctl.lo -MD -MP -MF ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-windows-ioctl.Tpo -c -o ../../common/cdrom/libultimatecdrom_la-cdrom-windows-ioctl.lo `test -f '../../common/cdrom/cdrom-windows-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-windows-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-windows-ioctl.Tpo ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-windows-ioctl.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/cdrom/cdrom-windows-ioctl.c' object='../../common/cdrom/libultimatecdrom_la-cdrom-windows-ioctl.lo' libtool=yes @AMDEPBACKSLASH@
+../../../src/libultimatecdrom_la-master-cfg-file.lo: ../../../src/master-cfg-file.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -MT ../../../src/libultimatecdrom_la-master-cfg-file.lo -MD -MP -MF ../../../src/$(DEPDIR)/libultimatecdrom_la-master-cfg-file.Tpo -c -o ../../../src/libultimatecdrom_la-master-cfg-file.lo `test -f '../../../src/master-cfg-file.c' || echo '$(srcdir)/'`../../../src/master-cfg-file.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../../src/$(DEPDIR)/libultimatecdrom_la-master-cfg-file.Tpo ../../../src/$(DEPDIR)/libultimatecdrom_la-master-cfg-file.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../../src/master-cfg-file.c' object='../../../src/libultimatecdrom_la-master-cfg-file.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -c -o ../../common/cdrom/libultimatecdrom_la-cdrom-windows-ioctl.lo `test -f '../../common/cdrom/cdrom-windows-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-windows-ioctl.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -c -o ../../../src/libultimatecdrom_la-master-cfg-file.lo `test -f '../../../src/master-cfg-file.c' || echo '$(srcdir)/'`../../../src/master-cfg-file.c
 
 ../../common/cdrom/libultimatecdrom_la-cdrom-linux-ioctl.lo: ../../common/cdrom/cdrom-linux-ioctl.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -MT ../../common/cdrom/libultimatecdrom_la-cdrom-linux-ioctl.lo -MD -MP -MF ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-linux-ioctl.Tpo -c -o ../../common/cdrom/libultimatecdrom_la-cdrom-linux-ioctl.lo `test -f '../../common/cdrom/cdrom-linux-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-linux-ioctl.c
@@ -564,18 +560,12 @@ libultimatecdrom_la-ultimatecdrom.lo: ultimatecdrom.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -c -o ../../common/cdrom/libultimatecdrom_la-cdrom-linux-ioctl.lo `test -f '../../common/cdrom/cdrom-linux-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-linux-ioctl.c
 
-../../common/cdrom/libultimatecdrom_la-cdrom-osx-ioctl.lo: ../../common/cdrom/cdrom-osx-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -MT ../../common/cdrom/libultimatecdrom_la-cdrom-osx-ioctl.lo -MD -MP -MF ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-osx-ioctl.Tpo -c -o ../../common/cdrom/libultimatecdrom_la-cdrom-osx-ioctl.lo `test -f '../../common/cdrom/cdrom-osx-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-osx-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-osx-ioctl.Tpo ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-osx-ioctl.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/cdrom/cdrom-osx-ioctl.c' object='../../common/cdrom/libultimatecdrom_la-cdrom-osx-ioctl.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libultimatecdrom_la_CFLAGS) $(CFLAGS) -c -o ../../common/cdrom/libultimatecdrom_la-cdrom-osx-ioctl.lo `test -f '../../common/cdrom/cdrom-osx-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-osx-ioctl.c
-
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
+	-rm -rf ../../../src/.libs ../../../src/_libs
 	-rm -rf ../../common/cdrom/.libs ../../common/cdrom/_libs
 	-rm -rf ../../common/sound/.libs ../../common/sound/_libs
 
@@ -697,6 +687,8 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f ../../../src/$(DEPDIR)/$(am__dirstamp)
+	-rm -f ../../../src/$(am__dirstamp)
 	-rm -f ../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
 	-rm -f ../../common/cdrom/$(am__dirstamp)
 	-rm -f ../../common/sound/$(DEPDIR)/$(am__dirstamp)
@@ -711,9 +703,8 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-linux-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-osx-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-windows-ioctl.Plo
+		-rm -f ../../../src/$(DEPDIR)/libultimatecdrom_la-master-cfg-file.Plo
+	-rm -f ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-linux-ioctl.Plo
 	-rm -f ../../common/sound/$(DEPDIR)/libultimatecdrom_la-sound_openal.Plo
 	-rm -f ./$(DEPDIR)/libultimatecdrom_la-mitsumi.Plo
 	-rm -f ./$(DEPDIR)/libultimatecdrom_la-ultimatecdrom.Plo
@@ -762,9 +753,8 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-linux-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-osx-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-windows-ioctl.Plo
+		-rm -f ../../../src/$(DEPDIR)/libultimatecdrom_la-master-cfg-file.Plo
+	-rm -f ../../common/cdrom/$(DEPDIR)/libultimatecdrom_la-cdrom-linux-ioctl.Plo
 	-rm -f ../../common/sound/$(DEPDIR)/libultimatecdrom_la-sound_openal.Plo
 	-rm -f ./$(DEPDIR)/libultimatecdrom_la-mitsumi.Plo
 	-rm -f ./$(DEPDIR)/libultimatecdrom_la-ultimatecdrom.Plo
@@ -806,8 +796,6 @@ uninstall-am: uninstall-libLTLIBRARIES
 
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@../ultimatecdrom.so: libultimatecdrom.la
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@	cp .libs/libultimatecdrom.so ../ultimatecdrom.so
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@../ultimatecdrom.dylib: libultimatecdrom.la
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@	cp .libs/libultimatecdrom.dylib ../ultimatecdrom.dylib
 
 @BUILD_PODULES_TRUE@amrefresh:
 

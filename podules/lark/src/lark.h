@@ -18,14 +18,10 @@ void lark_log(const char *format, ...);
 struct lark_t;
 void lark_set_irq(struct lark_t *lark, uint8_t irq);
 void lark_clear_irq(struct lark_t *lark, uint8_t irq);
-
 void lark_midi_send(struct lark_t *lark, uint8_t val);
-
 void lark_sound_in_start(struct lark_t *lark);
 void lark_sound_in_stop(struct lark_t *lark);
-
 void lark_sound_out_buffer(struct lark_t *lark, void *buffer, int samples);
-
 int wss_irq();
 
 #endif /* _DLL_H_ */

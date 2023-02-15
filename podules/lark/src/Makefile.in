@@ -14,8 +14,6 @@
 
 @SET_MAKE@
 
-# Makefile.am for Lark
-
 
 VPATH = @srcdir@
 am__is_gnu_make = { \
@@ -93,11 +91,7 @@ build_triplet = @build@
 host_triplet = @host@
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_1 = $(noinst_SCRIPTS)
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_2 = ../lark.so
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_3 = $(noinst_SCRIPTS)
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_4 = ../lark.dylib
-@BUILD_PODULES_TRUE@@OS_WINDOWS_TRUE@am__append_5 = ../../common/midi/midi_win.c ../../common/sound/sound_wavein.c ../../common/sound/sound_openal.c
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_6 = ../../common/midi/midi_alsa.c ../../common/sound/sound_alsain.c ../../common/sound/sound_openal.c
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_7 = ../../common/midi/midi_null.c ../../common/sound/sound_in_null.c ../../common/sound/sound_openal.c
+@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_3 = ../../common/midi/midi_alsa.c ../../common/sound/sound_alsain.c ../../common/sound/sound_openal.c
 subdir = podules/lark/src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -138,28 +132,20 @@ am__installdirs = "$(DESTDIR)$(libdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 liblark_la_DEPENDENCIES =
 am__liblark_la_SOURCES_DIST = ../../common/uart/16550.c ad1848.c \
-	am7202a.c lark.c ../../common/midi/midi_win.c \
-	../../common/sound/sound_wavein.c \
-	../../common/sound/sound_openal.c \
+	am7202a.c lark.c ../../../src/master-cfg-file.c \
 	../../common/midi/midi_alsa.c \
 	../../common/sound/sound_alsain.c \
-	../../common/midi/midi_null.c \
-	../../common/sound/sound_in_null.c
+	../../common/sound/sound_openal.c
 am__dirstamp = $(am__leading_dot)dirstamp
-@BUILD_PODULES_TRUE@@OS_WINDOWS_TRUE@am__objects_1 = ../../common/midi/liblark_la-midi_win.lo \
-@BUILD_PODULES_TRUE@@OS_WINDOWS_TRUE@	../../common/sound/liblark_la-sound_wavein.lo \
-@BUILD_PODULES_TRUE@@OS_WINDOWS_TRUE@	../../common/sound/liblark_la-sound_openal.lo
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__objects_2 = ../../common/midi/liblark_la-midi_alsa.lo \
+@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__objects_1 = ../../common/midi/liblark_la-midi_alsa.lo \
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@	../../common/sound/liblark_la-sound_alsain.lo \
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@	../../common/sound/liblark_la-sound_openal.lo
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__objects_3 = ../../common/midi/liblark_la-midi_null.lo \
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@	../../common/sound/liblark_la-sound_in_null.lo \
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@	../../common/sound/liblark_la-sound_openal.lo
 @BUILD_PODULES_TRUE@am_liblark_la_OBJECTS =  \
 @BUILD_PODULES_TRUE@	../../common/uart/liblark_la-16550.lo \
 @BUILD_PODULES_TRUE@	liblark_la-ad1848.lo liblark_la-am7202a.lo \
-@BUILD_PODULES_TRUE@	liblark_la-lark.lo $(am__objects_1) \
-@BUILD_PODULES_TRUE@	$(am__objects_2) $(am__objects_3)
+@BUILD_PODULES_TRUE@	liblark_la-lark.lo \
+@BUILD_PODULES_TRUE@	../../../src/liblark_la-master-cfg-file.lo \
+@BUILD_PODULES_TRUE@	$(am__objects_1)
 liblark_la_OBJECTS = $(am_liblark_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -186,13 +172,10 @@ DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade =  \
+	../../../src/$(DEPDIR)/liblark_la-master-cfg-file.Plo \
 	../../common/midi/$(DEPDIR)/liblark_la-midi_alsa.Plo \
-	../../common/midi/$(DEPDIR)/liblark_la-midi_null.Plo \
-	../../common/midi/$(DEPDIR)/liblark_la-midi_win.Plo \
 	../../common/sound/$(DEPDIR)/liblark_la-sound_alsain.Plo \
-	../../common/sound/$(DEPDIR)/liblark_la-sound_in_null.Plo \
 	../../common/sound/$(DEPDIR)/liblark_la-sound_openal.Plo \
-	../../common/sound/$(DEPDIR)/liblark_la-sound_wavein.Plo \
 	../../common/uart/$(DEPDIR)/liblark_la-16550.Plo \
 	./$(DEPDIR)/liblark_la-ad1848.Plo \
 	./$(DEPDIR)/liblark_la-am7202a.Plo \
@@ -386,13 +369,16 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+
+# Makefile.am for Lark
 AUTOMAKE_OPTIONS = subdir-objects
 @BUILD_PODULES_TRUE@lib_LTLIBRARIES = liblark.la
-@BUILD_PODULES_TRUE@noinst_SCRIPTS = $(am__append_2) $(am__append_4)
-@BUILD_PODULES_TRUE@CLEANFILES = $(am__append_1) $(am__append_3)
+@BUILD_PODULES_TRUE@noinst_SCRIPTS = $(am__append_2)
+@BUILD_PODULES_TRUE@CLEANFILES = $(am__append_1)
 @BUILD_PODULES_TRUE@liblark_la_SOURCES = ../../common/uart/16550.c \
-@BUILD_PODULES_TRUE@	ad1848.c am7202a.c lark.c $(am__append_5) \
-@BUILD_PODULES_TRUE@	$(am__append_6) $(am__append_7)
+@BUILD_PODULES_TRUE@	ad1848.c am7202a.c lark.c \
+@BUILD_PODULES_TRUE@	../../../src/master-cfg-file.c \
+@BUILD_PODULES_TRUE@	$(am__append_3)
 @BUILD_PODULES_TRUE@liblark_la_CFLAGS = -I../../../src -I../../common/midi -I../../common/sound -I../../common/uart
 @BUILD_PODULES_TRUE@liblark_la_LIBADD = @LIBS@
 all: all-am
@@ -472,13 +458,22 @@ clean-libLTLIBRARIES:
 ../../common/uart/liblark_la-16550.lo:  \
 	../../common/uart/$(am__dirstamp) \
 	../../common/uart/$(DEPDIR)/$(am__dirstamp)
+../../../src/$(am__dirstamp):
+	@$(MKDIR_P) ../../../src
+	@: > ../../../src/$(am__dirstamp)
+../../../src/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) ../../../src/$(DEPDIR)
+	@: > ../../../src/$(DEPDIR)/$(am__dirstamp)
+../../../src/liblark_la-master-cfg-file.lo:  \
+	../../../src/$(am__dirstamp) \
+	../../../src/$(DEPDIR)/$(am__dirstamp)
 ../../common/midi/$(am__dirstamp):
 	@$(MKDIR_P) ../../common/midi
 	@: > ../../common/midi/$(am__dirstamp)
 ../../common/midi/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) ../../common/midi/$(DEPDIR)
 	@: > ../../common/midi/$(DEPDIR)/$(am__dirstamp)
-../../common/midi/liblark_la-midi_win.lo:  \
+../../common/midi/liblark_la-midi_alsa.lo:  \
 	../../common/midi/$(am__dirstamp) \
 	../../common/midi/$(DEPDIR)/$(am__dirstamp)
 ../../common/sound/$(am__dirstamp):
@@ -487,22 +482,10 @@ clean-libLTLIBRARIES:
 ../../common/sound/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) ../../common/sound/$(DEPDIR)
 	@: > ../../common/sound/$(DEPDIR)/$(am__dirstamp)
-../../common/sound/liblark_la-sound_wavein.lo:  \
-	../../common/sound/$(am__dirstamp) \
-	../../common/sound/$(DEPDIR)/$(am__dirstamp)
-../../common/sound/liblark_la-sound_openal.lo:  \
-	../../common/sound/$(am__dirstamp) \
-	../../common/sound/$(DEPDIR)/$(am__dirstamp)
-../../common/midi/liblark_la-midi_alsa.lo:  \
-	../../common/midi/$(am__dirstamp) \
-	../../common/midi/$(DEPDIR)/$(am__dirstamp)
 ../../common/sound/liblark_la-sound_alsain.lo:  \
 	../../common/sound/$(am__dirstamp) \
 	../../common/sound/$(DEPDIR)/$(am__dirstamp)
-../../common/midi/liblark_la-midi_null.lo:  \
-	../../common/midi/$(am__dirstamp) \
-	../../common/midi/$(DEPDIR)/$(am__dirstamp)
-../../common/sound/liblark_la-sound_in_null.lo:  \
+../../common/sound/liblark_la-sound_openal.lo:  \
 	../../common/sound/$(am__dirstamp) \
 	../../common/sound/$(DEPDIR)/$(am__dirstamp)
 
@@ -511,6 +494,8 @@ liblark.la: $(liblark_la_OBJECTS) $(liblark_la_DEPENDENCIES) $(EXTRA_liblark_la_
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f ../../../src/*.$(OBJEXT)
+	-rm -f ../../../src/*.lo
 	-rm -f ../../common/midi/*.$(OBJEXT)
 	-rm -f ../../common/midi/*.lo
 	-rm -f ../../common/sound/*.$(OBJEXT)
@@ -521,13 +506,10 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@../../../src/$(DEPDIR)/liblark_la-master-cfg-file.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@../../common/midi/$(DEPDIR)/liblark_la-midi_alsa.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/midi/$(DEPDIR)/liblark_la-midi_null.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/midi/$(DEPDIR)/liblark_la-midi_win.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@../../common/sound/$(DEPDIR)/liblark_la-sound_alsain.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/sound/$(DEPDIR)/liblark_la-sound_in_null.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@../../common/sound/$(DEPDIR)/liblark_la-sound_openal.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/sound/$(DEPDIR)/liblark_la-sound_wavein.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@../../common/uart/$(DEPDIR)/liblark_la-16550.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblark_la-ad1848.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/liblark_la-am7202a.Plo@am__quote@ # am--include-marker
@@ -591,26 +573,12 @@ liblark_la-lark.lo: lark.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblark_la_CFLAGS) $(CFLAGS) -c -o liblark_la-lark.lo `test -f 'lark.c' || echo '$(srcdir)/'`lark.c
 
-../../common/midi/liblark_la-midi_win.lo: ../../common/midi/midi_win.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblark_la_CFLAGS) $(CFLAGS) -MT ../../common/midi/liblark_la-midi_win.lo -MD -MP -MF ../../common/midi/$(DEPDIR)/liblark_la-midi_win.Tpo -c -o ../../common/midi/liblark_la-midi_win.lo `test -f '../../common/midi/midi_win.c' || echo '$(srcdir)/'`../../common/midi/midi_win.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/midi/$(DEPDIR)/liblark_la-midi_win.Tpo ../../common/midi/$(DEPDIR)/liblark_la-midi_win.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/midi/midi_win.c' object='../../common/midi/liblark_la-midi_win.lo' libtool=yes @AMDEPBACKSLASH@
+../../../src/liblark_la-master-cfg-file.lo: ../../../src/master-cfg-file.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblark_la_CFLAGS) $(CFLAGS) -MT ../../../src/liblark_la-master-cfg-file.lo -MD -MP -MF ../../../src/$(DEPDIR)/liblark_la-master-cfg-file.Tpo -c -o ../../../src/liblark_la-master-cfg-file.lo `test -f '../../../src/master-cfg-file.c' || echo '$(srcdir)/'`../../../src/master-cfg-file.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../../src/$(DEPDIR)/liblark_la-master-cfg-file.Tpo ../../../src/$(DEPDIR)/liblark_la-master-cfg-file.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../../src/master-cfg-file.c' object='../../../src/liblark_la-master-cfg-file.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblark_la_CFLAGS) $(CFLAGS) -c -o ../../common/midi/liblark_la-midi_win.lo `test -f '../../common/midi/midi_win.c' || echo '$(srcdir)/'`../../common/midi/midi_win.c
-
-../../common/sound/liblark_la-sound_wavein.lo: ../../common/sound/sound_wavein.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblark_la_CFLAGS) $(CFLAGS) -MT ../../common/sound/liblark_la-sound_wavein.lo -MD -MP -MF ../../common/sound/$(DEPDIR)/liblark_la-sound_wavein.Tpo -c -o ../../common/sound/liblark_la-sound_wavein.lo `test -f '../../common/sound/sound_wavein.c' || echo '$(srcdir)/'`../../common/sound/sound_wavein.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/sound/$(DEPDIR)/liblark_la-sound_wavein.Tpo ../../common/sound/$(DEPDIR)/liblark_la-sound_wavein.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/sound/sound_wavein.c' object='../../common/sound/liblark_la-sound_wavein.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblark_la_CFLAGS) $(CFLAGS) -c -o ../../common/sound/liblark_la-sound_wavein.lo `test -f '../../common/sound/sound_wavein.c' || echo '$(srcdir)/'`../../common/sound/sound_wavein.c
-
-../../common/sound/liblark_la-sound_openal.lo: ../../common/sound/sound_openal.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblark_la_CFLAGS) $(CFLAGS) -MT ../../common/sound/liblark_la-sound_openal.lo -MD -MP -MF ../../common/sound/$(DEPDIR)/liblark_la-sound_openal.Tpo -c -o ../../common/sound/liblark_la-sound_openal.lo `test -f '../../common/sound/sound_openal.c' || echo '$(srcdir)/'`../../common/sound/sound_openal.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/sound/$(DEPDIR)/liblark_la-sound_openal.Tpo ../../common/sound/$(DEPDIR)/liblark_la-sound_openal.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/sound/sound_openal.c' object='../../common/sound/liblark_la-sound_openal.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblark_la_CFLAGS) $(CFLAGS) -c -o ../../common/sound/liblark_la-sound_openal.lo `test -f '../../common/sound/sound_openal.c' || echo '$(srcdir)/'`../../common/sound/sound_openal.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblark_la_CFLAGS) $(CFLAGS) -c -o ../../../src/liblark_la-master-cfg-file.lo `test -f '../../../src/master-cfg-file.c' || echo '$(srcdir)/'`../../../src/master-cfg-file.c
 
 ../../common/midi/liblark_la-midi_alsa.lo: ../../common/midi/midi_alsa.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblark_la_CFLAGS) $(CFLAGS) -MT ../../common/midi/liblark_la-midi_alsa.lo -MD -MP -MF ../../common/midi/$(DEPDIR)/liblark_la-midi_alsa.Tpo -c -o ../../common/midi/liblark_la-midi_alsa.lo `test -f '../../common/midi/midi_alsa.c' || echo '$(srcdir)/'`../../common/midi/midi_alsa.c
@@ -626,25 +594,19 @@ liblark_la-lark.lo: lark.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblark_la_CFLAGS) $(CFLAGS) -c -o ../../common/sound/liblark_la-sound_alsain.lo `test -f '../../common/sound/sound_alsain.c' || echo '$(srcdir)/'`../../common/sound/sound_alsain.c
 
-../../common/midi/liblark_la-midi_null.lo: ../../common/midi/midi_null.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblark_la_CFLAGS) $(CFLAGS) -MT ../../common/midi/liblark_la-midi_null.lo -MD -MP -MF ../../common/midi/$(DEPDIR)/liblark_la-midi_null.Tpo -c -o ../../common/midi/liblark_la-midi_null.lo `test -f '../../common/midi/midi_null.c' || echo '$(srcdir)/'`../../common/midi/midi_null.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/midi/$(DEPDIR)/liblark_la-midi_null.Tpo ../../common/midi/$(DEPDIR)/liblark_la-midi_null.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/midi/midi_null.c' object='../../common/midi/liblark_la-midi_null.lo' libtool=yes @AMDEPBACKSLASH@
+../../common/sound/liblark_la-sound_openal.lo: ../../common/sound/sound_openal.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblark_la_CFLAGS) $(CFLAGS) -MT ../../common/sound/liblark_la-sound_openal.lo -MD -MP -MF ../../common/sound/$(DEPDIR)/liblark_la-sound_openal.Tpo -c -o ../../common/sound/liblark_la-sound_openal.lo `test -f '../../common/sound/sound_openal.c' || echo '$(srcdir)/'`../../common/sound/sound_openal.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/sound/$(DEPDIR)/liblark_la-sound_openal.Tpo ../../common/sound/$(DEPDIR)/liblark_la-sound_openal.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/sound/sound_openal.c' object='../../common/sound/liblark_la-sound_openal.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblark_la_CFLAGS) $(CFLAGS) -c -o ../../common/midi/liblark_la-midi_null.lo `test -f '../../common/midi/midi_null.c' || echo '$(srcdir)/'`../../common/midi/midi_null.c
-
-../../common/sound/liblark_la-sound_in_null.lo: ../../common/sound/sound_in_null.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblark_la_CFLAGS) $(CFLAGS) -MT ../../common/sound/liblark_la-sound_in_null.lo -MD -MP -MF ../../common/sound/$(DEPDIR)/liblark_la-sound_in_null.Tpo -c -o ../../common/sound/liblark_la-sound_in_null.lo `test -f '../../common/sound/sound_in_null.c' || echo '$(srcdir)/'`../../common/sound/sound_in_null.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/sound/$(DEPDIR)/liblark_la-sound_in_null.Tpo ../../common/sound/$(DEPDIR)/liblark_la-sound_in_null.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/sound/sound_in_null.c' object='../../common/sound/liblark_la-sound_in_null.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblark_la_CFLAGS) $(CFLAGS) -c -o ../../common/sound/liblark_la-sound_in_null.lo `test -f '../../common/sound/sound_in_null.c' || echo '$(srcdir)/'`../../common/sound/sound_in_null.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liblark_la_CFLAGS) $(CFLAGS) -c -o ../../common/sound/liblark_la-sound_openal.lo `test -f '../../common/sound/sound_openal.c' || echo '$(srcdir)/'`../../common/sound/sound_openal.c
 
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
+	-rm -rf ../../../src/.libs ../../../src/_libs
 	-rm -rf ../../common/midi/.libs ../../common/midi/_libs
 	-rm -rf ../../common/sound/.libs ../../common/sound/_libs
 	-rm -rf ../../common/uart/.libs ../../common/uart/_libs
@@ -767,6 +729,8 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f ../../../src/$(DEPDIR)/$(am__dirstamp)
+	-rm -f ../../../src/$(am__dirstamp)
 	-rm -f ../../common/midi/$(DEPDIR)/$(am__dirstamp)
 	-rm -f ../../common/midi/$(am__dirstamp)
 	-rm -f ../../common/sound/$(DEPDIR)/$(am__dirstamp)
@@ -783,13 +747,10 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ../../common/midi/$(DEPDIR)/liblark_la-midi_alsa.Plo
-	-rm -f ../../common/midi/$(DEPDIR)/liblark_la-midi_null.Plo
-	-rm -f ../../common/midi/$(DEPDIR)/liblark_la-midi_win.Plo
+		-rm -f ../../../src/$(DEPDIR)/liblark_la-master-cfg-file.Plo
+	-rm -f ../../common/midi/$(DEPDIR)/liblark_la-midi_alsa.Plo
 	-rm -f ../../common/sound/$(DEPDIR)/liblark_la-sound_alsain.Plo
-	-rm -f ../../common/sound/$(DEPDIR)/liblark_la-sound_in_null.Plo
 	-rm -f ../../common/sound/$(DEPDIR)/liblark_la-sound_openal.Plo
-	-rm -f ../../common/sound/$(DEPDIR)/liblark_la-sound_wavein.Plo
 	-rm -f ../../common/uart/$(DEPDIR)/liblark_la-16550.Plo
 	-rm -f ./$(DEPDIR)/liblark_la-ad1848.Plo
 	-rm -f ./$(DEPDIR)/liblark_la-am7202a.Plo
@@ -839,13 +800,10 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ../../common/midi/$(DEPDIR)/liblark_la-midi_alsa.Plo
-	-rm -f ../../common/midi/$(DEPDIR)/liblark_la-midi_null.Plo
-	-rm -f ../../common/midi/$(DEPDIR)/liblark_la-midi_win.Plo
+		-rm -f ../../../src/$(DEPDIR)/liblark_la-master-cfg-file.Plo
+	-rm -f ../../common/midi/$(DEPDIR)/liblark_la-midi_alsa.Plo
 	-rm -f ../../common/sound/$(DEPDIR)/liblark_la-sound_alsain.Plo
-	-rm -f ../../common/sound/$(DEPDIR)/liblark_la-sound_in_null.Plo
 	-rm -f ../../common/sound/$(DEPDIR)/liblark_la-sound_openal.Plo
-	-rm -f ../../common/sound/$(DEPDIR)/liblark_la-sound_wavein.Plo
 	-rm -f ../../common/uart/$(DEPDIR)/liblark_la-16550.Plo
 	-rm -f ./$(DEPDIR)/liblark_la-ad1848.Plo
 	-rm -f ./$(DEPDIR)/liblark_la-am7202a.Plo
@@ -888,10 +846,8 @@ uninstall-am: uninstall-libLTLIBRARIES
 
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@../lark.so: liblark.la
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@	cp .libs/liblark.so ../lark.so
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@../lark.dylib: liblark.la
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@	cp .libs/liblark.dylib ../lark.dylib
 
-@BUILD_PODULES_TRUE@amrefresh:	
+@BUILD_PODULES_TRUE@amrefresh:
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

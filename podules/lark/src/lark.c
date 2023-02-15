@@ -65,47 +65,44 @@ MIDI podules.
 #include "sound_in.h"
 #include "sound_out.h"
 #include "config.h"
+#include "master-cfg-file.h"
 #include "arc.h"
 
 #define BOOL int
 #define APIENTRY
+#define MIDI_UART_CLOCK 2000000 //(31250Hz * 4 * 16)
+#define CTRL_OUT_FIFO_ENA (1 << 3)
+#define CTRL_IN_FIFO_ENA (1 << 4)
+#define LARKLOG LOGDIR "lark.log"
 
 static const podule_callbacks_t *podule_callbacks;
 char podule_path[PATH_MAX];
+static FILE *lark_logf;
 
-#define MIDI_UART_CLOCK 2000000 //(31250Hz * 4 * 16)
-
-#define CTRL_OUT_FIFO_ENA (1 << 3)
-#define CTRL_IN_FIFO_ENA (1 << 4)
-
-typedef struct lark_t
-{
+typedef struct lark_t {
     uint8_t rom[0x20000];
     int page;
     uint8_t irqstat;
     uint8_t ctrl;
-
     ad1848_t ad1848;
     am7202a_t out_fifo, in_fifo;
     n16550_t n16550;
-
     void *sound_in;
     void *sound_out;
     void *midi;
-
     podule_t *podule;
 } lark_t;
 
-#ifdef DEBUG_LOG
-static FILE *lark_logf;
-#endif
-void lark_log(const char *format, ...)
-{
+void lark_log(const char *format, ...) {
 #ifdef DEBUG_LOG
     char buf[1024];
+    char logfile[PATH_MAX];
+    get_config_dir_loc(logfile);
+    strncat(logfile, LARKLOG, sizeof(logfile) - strlen(logfile));
 
     if (!lark_logf)
-        lark_logf = fopen(LARKLOG, "wt");
+        lark_logf = fopen(logfile, "wt");
+
     va_list ap;
     va_start(ap, format);
     vsprintf(buf, format, ap);
@@ -115,8 +112,7 @@ void lark_log(const char *format, ...)
 #endif
 }
 
-static void lark_update_irqs(lark_t *lark)
-{
+static void lark_update_irqs(lark_t *lark) {
     uint8_t irq_status = lark->irqstat ^ 0x80;
 
     if (!(lark->ctrl & 0x10))
@@ -128,19 +124,16 @@ static void lark_update_irqs(lark_t *lark)
         podule_callbacks->set_irq(lark->podule, 0);
 }
 
-static uint8_t lark_read_b(struct podule_t *podule, podule_io_type type, uint32_t addr)
-{
+static uint8_t lark_read_b(struct podule_t *podule, podule_io_type type, uint32_t addr) {
     lark_t *lark = podule->p;
     uint8_t temp = 0xff;
 
-    if (type != PODULE_IO_TYPE_IOC)
-    {
+    if (type != PODULE_IO_TYPE_IOC) {
         lark_log("lark_read_b: MEMC %04x\n", addr);
         return 0xff;
     }
 
-    switch (addr&0x3c00)
-    {
+    switch (addr&0x3c00) {
         case 0x0000: case 0x0400: case 0x0800: case 0x0c00:
         case 0x1000: case 0x1400: case 0x1800: case 0x1c00:
             addr = ((addr & 0x1ffc) | (lark->page << 13)) >> 2;
@@ -165,18 +158,15 @@ static uint8_t lark_read_b(struct podule_t *podule, podule_io_type type, uint32_
     return temp;
 }
 
-static void lark_write_b(struct podule_t *podule, podule_io_type type, uint32_t addr, uint8_t val)
-{
+static void lark_write_b(struct podule_t *podule, podule_io_type type, uint32_t addr, uint8_t val) {
     lark_t *lark = podule->p;
 
-    if (type != PODULE_IO_TYPE_IOC)
-    {
+    if (type != PODULE_IO_TYPE_IOC) {
         lark_log("lark_write_b: MEMC %04x %02x\n", addr, val);
         return;
     }
 
-    switch (addr & 0x3c00)
-    {
+    switch (addr & 0x3c00) {
         case 0x2000:
             lark->page = val;
             break;
@@ -198,15 +188,13 @@ static void lark_write_b(struct podule_t *podule, podule_io_type type, uint32_t 
     }
 }
 
-static uint16_t lark_read_w(struct podule_t *podule, podule_io_type type, uint32_t addr)
-{
+static uint16_t lark_read_w(struct podule_t *podule, podule_io_type type, uint32_t addr) {
     lark_t *lark = podule->p;
     uint16_t temp = 0xffff;
 
     if (type == PODULE_IO_TYPE_IOC)
         lark_log("lark_read_w: IOC %04x\n", addr);
-    else
-    {
+    else {
         temp = am7202a_read(&lark->in_fifo);
         temp |= am7202a_read(&lark->in_fifo) << 8;
     }
@@ -214,8 +202,7 @@ static uint16_t lark_read_w(struct podule_t *podule, podule_io_type type, uint32
     return temp;
 }
 
-static void lark_write_w(struct podule_t *podule, podule_io_type type, uint32_t addr, uint16_t val)
-{
+static void lark_write_w(struct podule_t *podule, podule_io_type type, uint32_t addr, uint16_t val) {
     lark_t *lark = podule->p;
 
     if (type == PODULE_IO_TYPE_IOC)
@@ -227,35 +214,29 @@ static void lark_write_w(struct podule_t *podule, podule_io_type type, uint32_t 
     }
 }
 
-static int lark_run(struct podule_t *podule, int timeslice_us)
-{
+static int lark_run(struct podule_t *podule, int timeslice_us) {
     lark_t *lark = podule->p;
-
     ad1848_run(&lark->ad1848, timeslice_us);
     n16550_run(&lark->n16550, timeslice_us);
 
-    return 320; /*320us - 1 8N1 byte at 31250Hz (MIDI transfer speed)*/
+    return 320; /* 320us - 1 8N1 byte at 31250Hz (MIDI transfer speed) */
 }
 
-void lark_set_irq(lark_t *lark, uint8_t irq)
-{
+void lark_set_irq(lark_t *lark, uint8_t irq) {
     lark->irqstat |= irq;
     lark_update_irqs(lark);
 }
 
-void lark_clear_irq(lark_t *lark, uint8_t irq)
-{
+void lark_clear_irq(lark_t *lark, uint8_t irq) {
     lark->irqstat &= ~irq;
     lark_update_irqs(lark);
 }
 
-void lark_sound_out_buffer(struct lark_t *lark, void *buffer, int samples)
-{
+void lark_sound_out_buffer(struct lark_t *lark, void *buffer, int samples) {
     sound_out_buffer(lark->sound_out, buffer, samples);
 }
 
-static void lark_uart_irq(void *p, int state)
-{
+static void lark_uart_irq(void *p, int state) {
     struct lark_t *lark = p;
 
     if (state)
@@ -264,39 +245,30 @@ static void lark_uart_irq(void *p, int state)
         lark_clear_irq(lark, IRQ_16550);
 }
 
-static void lark_uart_send(void *p, uint8_t val)
-{
+static void lark_uart_send(void *p, uint8_t val) {
     struct lark_t *lark = p;
-
     midi_write(lark->midi, val);
 }
 
-void lark_midi_receive(void *p, uint8_t val)
-{
+void lark_midi_receive(void *p, uint8_t val) {
     struct lark_t *lark = p;
-
     n16550_receive(&lark->n16550, val);
 }
 
-void lark_sound_in_start(struct lark_t *lark)
-{
+void lark_sound_in_start(struct lark_t *lark) {
     sound_in_start(lark->sound_in);
 }
 
-void lark_sound_in_stop(struct lark_t *lark)
-{
+void lark_sound_in_stop(struct lark_t *lark) {
     sound_in_stop(lark->sound_in);
 }
 
-static void lark_sound_in_buffer(void *p, void *buffer, int samples)
-{
+static void lark_sound_in_buffer(void *p, void *buffer, int samples) {
     struct lark_t *lark = p;
-
     ad1848_in_buffer(&lark->ad1848, buffer, samples);
 }
 
-static void lark_set_out_hf(int state, void *p)
-{
+static void lark_set_out_hf(int state, void *p) {
     lark_t *lark = p;
 
     if (!state)
@@ -305,8 +277,7 @@ static void lark_set_out_hf(int state, void *p)
         lark_clear_irq(lark, IRQ_OUT_FIFO);
 }
 
-static void lark_set_in_hf(int state, void *p)
-{
+static void lark_set_in_hf(int state, void *p) {
     lark_t *lark = p;
 
     if (!state)
@@ -315,33 +286,30 @@ static void lark_set_in_hf(int state, void *p)
         lark_clear_irq(lark, IRQ_IN_FIFO);
 }
 
-static uint8_t lark_dma_read(lark_t *lark)
-{
+static uint8_t lark_dma_read(lark_t *lark) {
     if (lark->ctrl & CTRL_OUT_FIFO_ENA)
         return am7202a_read(&lark->out_fifo);
     else
         return 0;
 }
 
-static void lark_dma_write(lark_t *lark, uint8_t val)
-{
+static void lark_dma_write(lark_t *lark, uint8_t val) {
     if (lark->ctrl & CTRL_IN_FIFO_ENA)
         am7202a_write(&lark->in_fifo, val);
 }
 
-static int lark_init(struct podule_t *podule)
-{
+static int lark_init(struct podule_t *podule) {
     FILE *f;
     char rom_fn[PATH_MAX];
 
     lark_t *lark = malloc(sizeof(lark_t));
     memset(lark, 0, sizeof(lark_t));
     sprintf(rom_fn, "%s%slark.rom", PODULEROMDIR, "lark/");
-    lark_log("Lark ROM %s\n", rom_fn);
+    lark_log("Loading the Lark ROM %s\n", rom_fn);
     f = fopen(rom_fn, "rb");
 
     if (!f) {
-        lark_log("Failed to open LARK.ROM!\n");
+        lark_log("Failed to load the Lark ROM\n");
         return -1;
     }
 
@@ -360,19 +328,15 @@ static int lark_init(struct podule_t *podule)
     return 0;
 }
 
-static void lark_close(struct podule_t *podule)
-{
+static void lark_close(struct podule_t *podule) {
     lark_t *lark = podule->p;
-
     sound_out_close(lark->sound_out);
     sound_in_close(lark->sound_in);
     midi_close(lark->midi);
-
     free(lark);
 }
 
-static podule_config_t lark_config =
-{
+static podule_config_t lark_config = {
     .items =
     {
         {
@@ -402,8 +366,7 @@ static podule_config_t lark_config =
     }
 };
 
-static const podule_header_t lark_podule_header =
-{
+static const podule_header_t lark_podule_header = {
     .version = PODULE_API_VERSION,
     .flags = PODULE_FLAGS_UNIQUE,
     .short_name = "lark",
@@ -421,16 +384,12 @@ static const podule_header_t lark_podule_header =
     .config = &lark_config
 };
 
-const podule_header_t *podule_probe(const podule_callbacks_t *callbacks, char *path)
-{
+const podule_header_t *podule_probe(const podule_callbacks_t *callbacks, char *path) {
     char dev_name[256];
-
     podule_callbacks = callbacks;
     strcpy(podule_path, path);
-
     lark_config.items[0].selection = sound_in_devices_config();
     lark_config.items[1].selection = midi_out_devices_config();
     lark_config.items[2].selection = midi_in_devices_config();
-
     return &lark_podule_header;
 }

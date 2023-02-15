@@ -14,8 +14,6 @@
 
 @SET_MAKE@
 
-# Makefile.am for Oak SCSI
-
 
 VPATH = @srcdir@
 am__is_gnu_make = { \
@@ -93,11 +91,7 @@ build_triplet = @build@
 host_triplet = @host@
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_1 = $(noinst_SCRIPTS)
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_2 = ../oak_scsi.so
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_3 = $(noinst_SCRIPTS)
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_4 = ../oak_scsi.dylib
-@BUILD_PODULES_TRUE@@OS_WINDOWS_TRUE@am__append_5 = ../../common/cdrom/cdrom-windows-ioctl.c 
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_6 = ../../common/cdrom/cdrom-linux-ioctl.c 
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_7 = ../../common/cdrom/cdrom-osx-ioctl.c 
+@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_3 = ../../common/cdrom/cdrom-linux-ioctl.c
 subdir = podules/oak_scsi/src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -141,14 +135,10 @@ am__liboak_scsi_la_SOURCES_DIST = oak_scsi.c ncr5380.c \
 	../../common/scsi/hdd_file.c ../../common/scsi/scsi.c \
 	../../common/scsi/scsi_cd.c ../../common/scsi/scsi_config.c \
 	../../common/scsi/scsi_hd.c ../../common/sound/sound_openal.c \
-	../../common/eeprom/93c06.c \
-	../../common/cdrom/cdrom-windows-ioctl.c \
-	../../common/cdrom/cdrom-linux-ioctl.c \
-	../../common/cdrom/cdrom-osx-ioctl.c
+	../../common/eeprom/93c06.c ../../../src/master-cfg-file.c \
+	../../common/cdrom/cdrom-linux-ioctl.c
 am__dirstamp = $(am__leading_dot)dirstamp
-@BUILD_PODULES_TRUE@@OS_WINDOWS_TRUE@am__objects_1 = ../../common/cdrom/liboak_scsi_la-cdrom-windows-ioctl.lo
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__objects_2 = ../../common/cdrom/liboak_scsi_la-cdrom-linux-ioctl.lo
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__objects_3 = ../../common/cdrom/liboak_scsi_la-cdrom-osx-ioctl.lo
+@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__objects_1 = ../../common/cdrom/liboak_scsi_la-cdrom-linux-ioctl.lo
 @BUILD_PODULES_TRUE@am_liboak_scsi_la_OBJECTS =  \
 @BUILD_PODULES_TRUE@	liboak_scsi_la-oak_scsi.lo \
 @BUILD_PODULES_TRUE@	liboak_scsi_la-ncr5380.lo \
@@ -159,8 +149,8 @@ am__dirstamp = $(am__leading_dot)dirstamp
 @BUILD_PODULES_TRUE@	../../common/scsi/liboak_scsi_la-scsi_hd.lo \
 @BUILD_PODULES_TRUE@	../../common/sound/liboak_scsi_la-sound_openal.lo \
 @BUILD_PODULES_TRUE@	../../common/eeprom/liboak_scsi_la-93c06.lo \
-@BUILD_PODULES_TRUE@	$(am__objects_1) $(am__objects_2) \
-@BUILD_PODULES_TRUE@	$(am__objects_3)
+@BUILD_PODULES_TRUE@	../../../src/liboak_scsi_la-master-cfg-file.lo \
+@BUILD_PODULES_TRUE@	$(am__objects_1)
 liboak_scsi_la_OBJECTS = $(am_liboak_scsi_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -187,9 +177,9 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-linux-ioctl.Plo \
-	../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-osx-ioctl.Plo \
-	../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-windows-ioctl.Plo \
+am__depfiles_remade =  \
+	../../../src/$(DEPDIR)/liboak_scsi_la-master-cfg-file.Plo \
+	../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-linux-ioctl.Plo \
 	../../common/eeprom/$(DEPDIR)/liboak_scsi_la-93c06.Plo \
 	../../common/scsi/$(DEPDIR)/liboak_scsi_la-hdd_file.Plo \
 	../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi.Plo \
@@ -388,10 +378,12 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+
+# Makefile.am for Oak SCSI
 AUTOMAKE_OPTIONS = subdir-objects
 @BUILD_PODULES_TRUE@lib_LTLIBRARIES = liboak_scsi.la
-@BUILD_PODULES_TRUE@noinst_SCRIPTS = $(am__append_2) $(am__append_4)
-@BUILD_PODULES_TRUE@CLEANFILES = $(am__append_1) $(am__append_3)
+@BUILD_PODULES_TRUE@noinst_SCRIPTS = $(am__append_2)
+@BUILD_PODULES_TRUE@CLEANFILES = $(am__append_1)
 @BUILD_PODULES_TRUE@liboak_scsi_la_SOURCES = oak_scsi.c ncr5380.c \
 @BUILD_PODULES_TRUE@	../../common/scsi/hdd_file.c \
 @BUILD_PODULES_TRUE@	../../common/scsi/scsi.c \
@@ -400,8 +392,8 @@ AUTOMAKE_OPTIONS = subdir-objects
 @BUILD_PODULES_TRUE@	../../common/scsi/scsi_hd.c \
 @BUILD_PODULES_TRUE@	../../common/sound/sound_openal.c \
 @BUILD_PODULES_TRUE@	../../common/eeprom/93c06.c \
-@BUILD_PODULES_TRUE@	$(am__append_5) $(am__append_6) \
-@BUILD_PODULES_TRUE@	$(am__append_7)
+@BUILD_PODULES_TRUE@	../../../src/master-cfg-file.c \
+@BUILD_PODULES_TRUE@	$(am__append_3)
 @BUILD_PODULES_TRUE@liboak_scsi_la_CFLAGS = -I../../../src -I../../common/cdrom -I../../common/eeprom -I../../common/sound -I../../common/scsi
 @BUILD_PODULES_TRUE@liboak_scsi_la_LIBADD = @LIBS@
 all: all-am
@@ -511,19 +503,22 @@ clean-libLTLIBRARIES:
 ../../common/eeprom/liboak_scsi_la-93c06.lo:  \
 	../../common/eeprom/$(am__dirstamp) \
 	../../common/eeprom/$(DEPDIR)/$(am__dirstamp)
+../../../src/$(am__dirstamp):
+	@$(MKDIR_P) ../../../src
+	@: > ../../../src/$(am__dirstamp)
+../../../src/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) ../../../src/$(DEPDIR)
+	@: > ../../../src/$(DEPDIR)/$(am__dirstamp)
+../../../src/liboak_scsi_la-master-cfg-file.lo:  \
+	../../../src/$(am__dirstamp) \
+	../../../src/$(DEPDIR)/$(am__dirstamp)
 ../../common/cdrom/$(am__dirstamp):
 	@$(MKDIR_P) ../../common/cdrom
 	@: > ../../common/cdrom/$(am__dirstamp)
 ../../common/cdrom/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) ../../common/cdrom/$(DEPDIR)
 	@: > ../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
-../../common/cdrom/liboak_scsi_la-cdrom-windows-ioctl.lo:  \
-	../../common/cdrom/$(am__dirstamp) \
-	../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
 ../../common/cdrom/liboak_scsi_la-cdrom-linux-ioctl.lo:  \
-	../../common/cdrom/$(am__dirstamp) \
-	../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
-../../common/cdrom/liboak_scsi_la-cdrom-osx-ioctl.lo:  \
 	../../common/cdrom/$(am__dirstamp) \
 	../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
 
@@ -532,6 +527,8 @@ liboak_scsi.la: $(liboak_scsi_la_OBJECTS) $(liboak_scsi_la_DEPENDENCIES) $(EXTRA
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f ../../../src/*.$(OBJEXT)
+	-rm -f ../../../src/*.lo
 	-rm -f ../../common/cdrom/*.$(OBJEXT)
 	-rm -f ../../common/cdrom/*.lo
 	-rm -f ../../common/eeprom/*.$(OBJEXT)
@@ -544,9 +541,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@../../../src/$(DEPDIR)/liboak_scsi_la-master-cfg-file.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-linux-ioctl.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-osx-ioctl.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-windows-ioctl.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@../../common/eeprom/$(DEPDIR)/liboak_scsi_la-93c06.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@../../common/scsi/$(DEPDIR)/liboak_scsi_la-hdd_file.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi.Plo@am__quote@ # am--include-marker
@@ -650,12 +646,12 @@ liboak_scsi_la-ncr5380.lo: ncr5380.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -c -o ../../common/eeprom/liboak_scsi_la-93c06.lo `test -f '../../common/eeprom/93c06.c' || echo '$(srcdir)/'`../../common/eeprom/93c06.c
 
-../../common/cdrom/liboak_scsi_la-cdrom-windows-ioctl.lo: ../../common/cdrom/cdrom-windows-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -MT ../../common/cdrom/liboak_scsi_la-cdrom-windows-ioctl.lo -MD -MP -MF ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-windows-ioctl.Tpo -c -o ../../common/cdrom/liboak_scsi_la-cdrom-windows-ioctl.lo `test -f '../../common/cdrom/cdrom-windows-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-windows-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-windows-ioctl.Tpo ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-windows-ioctl.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/cdrom/cdrom-windows-ioctl.c' object='../../common/cdrom/liboak_scsi_la-cdrom-windows-ioctl.lo' libtool=yes @AMDEPBACKSLASH@
+../../../src/liboak_scsi_la-master-cfg-file.lo: ../../../src/master-cfg-file.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -MT ../../../src/liboak_scsi_la-master-cfg-file.lo -MD -MP -MF ../../../src/$(DEPDIR)/liboak_scsi_la-master-cfg-file.Tpo -c -o ../../../src/liboak_scsi_la-master-cfg-file.lo `test -f '../../../src/master-cfg-file.c' || echo '$(srcdir)/'`../../../src/master-cfg-file.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../../src/$(DEPDIR)/liboak_scsi_la-master-cfg-file.Tpo ../../../src/$(DEPDIR)/liboak_scsi_la-master-cfg-file.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../../src/master-cfg-file.c' object='../../../src/liboak_scsi_la-master-cfg-file.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -c -o ../../common/cdrom/liboak_scsi_la-cdrom-windows-ioctl.lo `test -f '../../common/cdrom/cdrom-windows-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-windows-ioctl.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -c -o ../../../src/liboak_scsi_la-master-cfg-file.lo `test -f '../../../src/master-cfg-file.c' || echo '$(srcdir)/'`../../../src/master-cfg-file.c
 
 ../../common/cdrom/liboak_scsi_la-cdrom-linux-ioctl.lo: ../../common/cdrom/cdrom-linux-ioctl.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -MT ../../common/cdrom/liboak_scsi_la-cdrom-linux-ioctl.lo -MD -MP -MF ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-linux-ioctl.Tpo -c -o ../../common/cdrom/liboak_scsi_la-cdrom-linux-ioctl.lo `test -f '../../common/cdrom/cdrom-linux-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-linux-ioctl.c
@@ -664,18 +660,12 @@ liboak_scsi_la-ncr5380.lo: ncr5380.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -c -o ../../common/cdrom/liboak_scsi_la-cdrom-linux-ioctl.lo `test -f '../../common/cdrom/cdrom-linux-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-linux-ioctl.c
 
-../../common/cdrom/liboak_scsi_la-cdrom-osx-ioctl.lo: ../../common/cdrom/cdrom-osx-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -MT ../../common/cdrom/liboak_scsi_la-cdrom-osx-ioctl.lo -MD -MP -MF ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-osx-ioctl.Tpo -c -o ../../common/cdrom/liboak_scsi_la-cdrom-osx-ioctl.lo `test -f '../../common/cdrom/cdrom-osx-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-osx-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-osx-ioctl.Tpo ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-osx-ioctl.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/cdrom/cdrom-osx-ioctl.c' object='../../common/cdrom/liboak_scsi_la-cdrom-osx-ioctl.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(liboak_scsi_la_CFLAGS) $(CFLAGS) -c -o ../../common/cdrom/liboak_scsi_la-cdrom-osx-ioctl.lo `test -f '../../common/cdrom/cdrom-osx-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-osx-ioctl.c
-
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
+	-rm -rf ../../../src/.libs ../../../src/_libs
 	-rm -rf ../../common/cdrom/.libs ../../common/cdrom/_libs
 	-rm -rf ../../common/eeprom/.libs ../../common/eeprom/_libs
 	-rm -rf ../../common/scsi/.libs ../../common/scsi/_libs
@@ -799,6 +789,8 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f ../../../src/$(DEPDIR)/$(am__dirstamp)
+	-rm -f ../../../src/$(am__dirstamp)
 	-rm -f ../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
 	-rm -f ../../common/cdrom/$(am__dirstamp)
 	-rm -f ../../common/eeprom/$(DEPDIR)/$(am__dirstamp)
@@ -817,9 +809,8 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-linux-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-osx-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-windows-ioctl.Plo
+		-rm -f ../../../src/$(DEPDIR)/liboak_scsi_la-master-cfg-file.Plo
+	-rm -f ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-linux-ioctl.Plo
 	-rm -f ../../common/eeprom/$(DEPDIR)/liboak_scsi_la-93c06.Plo
 	-rm -f ../../common/scsi/$(DEPDIR)/liboak_scsi_la-hdd_file.Plo
 	-rm -f ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi.Plo
@@ -874,9 +865,8 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-linux-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-osx-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-windows-ioctl.Plo
+		-rm -f ../../../src/$(DEPDIR)/liboak_scsi_la-master-cfg-file.Plo
+	-rm -f ../../common/cdrom/$(DEPDIR)/liboak_scsi_la-cdrom-linux-ioctl.Plo
 	-rm -f ../../common/eeprom/$(DEPDIR)/liboak_scsi_la-93c06.Plo
 	-rm -f ../../common/scsi/$(DEPDIR)/liboak_scsi_la-hdd_file.Plo
 	-rm -f ../../common/scsi/$(DEPDIR)/liboak_scsi_la-scsi.Plo
@@ -924,10 +914,8 @@ uninstall-am: uninstall-libLTLIBRARIES
 
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@../oak_scsi.so: liboak_scsi.la
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@	cp .libs/liboak_scsi.so ../oak_scsi.so
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@../oak_scsi.dylib: liboak_scsi.la
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@	cp .libs/liboak_scsi.dylib ../oak_scsi.dylib
 
-@BUILD_PODULES_TRUE@amrefresh:	
+@BUILD_PODULES_TRUE@amrefresh:
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.
