@@ -1,5 +1,7 @@
 #include <limits.h>
+#include "master-cfg-file.h"
 
+//NAME_MAX
 
 // FIXME These need to be able to be passed into the build
 #define GLOBAL_CMOS_DIR "/usr/share/syracuse/cmos/"
@@ -11,9 +13,9 @@
 #define ARCLOG "/tmp/syracuse-log.txt"
 #define CPUREGDUMP "/tmp/modules.dmp"
 #define HOSTFSDIR "/tmp/"
+#define LOGDIR MACHINE_CFG_DIRNAME "logs/"
 #define DOES_NOT_EXIST -1
 #define DEBUG_LOG 1
-
 #define PODULE_LONG_NAME_LEN 255
 #define PODULE_SHORT_NAME_LEN 16
 
@@ -21,7 +23,7 @@
 #define AKA10LOG "/tmp/aka10-log.txt"
 #define AKA12LOG "/tmp/aka12-log.txt"
 #define AKA16LOG "/tmp/aka16-log.txt"
-#define AKA31LOG "/tmp/aka31-log.txt"
+#define AKA31LOG LOGDIR "aka31.log"
 #define LARKLOG "/tmp/lark-log.txt"
 #define MIDIMAXLOG "/tmp/midimax-log.txt"
 #define OAKSCSILOG "/tmp/oakscsi-log.txt"

@@ -14,18 +14,22 @@ extern "C" {
     #include "config.h"
     #include "podules.h"
     #include "soundopenal.h"
+#include "master-cfg-file.h"
+
 }
 
-extern char cmosdir[PATH_MAX + 1];
+extern char cmosdir[PATH_MAX];
 
 int main(int argc, char **argv) {
-    char configdir_loc[PATH_MAX + 1];
+    char configdir_loc[PATH_MAX];
+    char logdir[PATH_MAX];
     struct stat st = {0};
     XInitThreads();
     al_init_main(0, NULL);
     get_config_dir_loc(configdir_loc);
     snprintf(configdir, sizeof(configdir), "%s%s", configdir_loc, MACHINE_CFG_DIRNAME);
     snprintf(cmosdir, sizeof(cmosdir), "%s%scmos/", configdir_loc, MACHINE_CFG_DIRNAME);
+    snprintf(logdir, sizeof(logdir), "%s%s", configdir_loc, LOGDIR);
 
     if (stat(configdir, &st) == DOES_NOT_EXIST) {
         mkdir(configdir, 0755);
@@ -34,6 +38,16 @@ int main(int argc, char **argv) {
     if (stat(cmosdir, &st) == DOES_NOT_EXIST) {
         mkdir(cmosdir, 0755);
     }
+
+    if (stat(logdir, &st) == DOES_NOT_EXIST) {
+        mkdir(logdir, 0755);
+    }
+
+#ifdef DEBUG_LOG
+    printf("DEBUG MODE ENABLED\n");
+#else
+    printf("DEBUG MODE NOT ENABLED\n");
+#endif
 
     podule_build_list();
     opendlls();

@@ -93,11 +93,7 @@ build_triplet = @build@
 host_triplet = @host@
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_1 = $(noinst_SCRIPTS)
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_2 = ../aka31.so
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_3 = $(noinst_SCRIPTS)
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_4 = ../aka31.dylib
-@BUILD_PODULES_TRUE@@OS_WINDOWS_TRUE@am__append_5 = ../../common/cdrom/cdrom-windows-ioctl.c 
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_6 = ../../common/cdrom/cdrom-linux-ioctl.c 
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_7 = ../../common/cdrom/cdrom-osx-ioctl.c 
+@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_3 = ../../common/cdrom/cdrom-linux-ioctl.c
 subdir = podules/aka31/src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -142,13 +138,10 @@ am__libaka31_la_SOURCES_DIST = aka31.c d71071l.c \
 	../../common/scsi/scsi_cd.c ../../common/scsi/scsi_config.c \
 	../../common/scsi/scsi_hd.c wd33c93a.c \
 	../../common/sound/sound_openal.c \
-	../../common/cdrom/cdrom-windows-ioctl.c \
-	../../common/cdrom/cdrom-linux-ioctl.c \
-	../../common/cdrom/cdrom-osx-ioctl.c
+	../../../src/master-cfg-file.c \
+	../../common/cdrom/cdrom-linux-ioctl.c
 am__dirstamp = $(am__leading_dot)dirstamp
-@BUILD_PODULES_TRUE@@OS_WINDOWS_TRUE@am__objects_1 = ../../common/cdrom/libaka31_la-cdrom-windows-ioctl.lo
-@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__objects_2 = ../../common/cdrom/libaka31_la-cdrom-linux-ioctl.lo
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__objects_3 = ../../common/cdrom/libaka31_la-cdrom-osx-ioctl.lo
+@BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__objects_1 = ../../common/cdrom/libaka31_la-cdrom-linux-ioctl.lo
 @BUILD_PODULES_TRUE@am_libaka31_la_OBJECTS = libaka31_la-aka31.lo \
 @BUILD_PODULES_TRUE@	libaka31_la-d71071l.lo \
 @BUILD_PODULES_TRUE@	../../common/scsi/libaka31_la-hdd_file.lo \
@@ -158,8 +151,8 @@ am__dirstamp = $(am__leading_dot)dirstamp
 @BUILD_PODULES_TRUE@	../../common/scsi/libaka31_la-scsi_hd.lo \
 @BUILD_PODULES_TRUE@	libaka31_la-wd33c93a.lo \
 @BUILD_PODULES_TRUE@	../../common/sound/libaka31_la-sound_openal.lo \
-@BUILD_PODULES_TRUE@	$(am__objects_1) $(am__objects_2) \
-@BUILD_PODULES_TRUE@	$(am__objects_3)
+@BUILD_PODULES_TRUE@	../../../src/libaka31_la-master-cfg-file.lo \
+@BUILD_PODULES_TRUE@	$(am__objects_1)
 libaka31_la_OBJECTS = $(am_libaka31_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -185,9 +178,9 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-linux-ioctl.Plo \
-	../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-osx-ioctl.Plo \
-	../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-windows-ioctl.Plo \
+am__depfiles_remade =  \
+	../../../src/$(DEPDIR)/libaka31_la-master-cfg-file.Plo \
+	../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-linux-ioctl.Plo \
 	../../common/scsi/$(DEPDIR)/libaka31_la-hdd_file.Plo \
 	../../common/scsi/$(DEPDIR)/libaka31_la-scsi.Plo \
 	../../common/scsi/$(DEPDIR)/libaka31_la-scsi_cd.Plo \
@@ -388,8 +381,8 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = subdir-objects
 @BUILD_PODULES_TRUE@lib_LTLIBRARIES = libaka31.la
-@BUILD_PODULES_TRUE@noinst_SCRIPTS = $(am__append_2) $(am__append_4)
-@BUILD_PODULES_TRUE@CLEANFILES = $(am__append_1) $(am__append_3)
+@BUILD_PODULES_TRUE@noinst_SCRIPTS = $(am__append_2)
+@BUILD_PODULES_TRUE@CLEANFILES = $(am__append_1)
 @BUILD_PODULES_TRUE@libaka31_la_SOURCES = aka31.c d71071l.c \
 @BUILD_PODULES_TRUE@	../../common/scsi/hdd_file.c \
 @BUILD_PODULES_TRUE@	../../common/scsi/scsi.c \
@@ -397,8 +390,8 @@ AUTOMAKE_OPTIONS = subdir-objects
 @BUILD_PODULES_TRUE@	../../common/scsi/scsi_config.c \
 @BUILD_PODULES_TRUE@	../../common/scsi/scsi_hd.c wd33c93a.c \
 @BUILD_PODULES_TRUE@	../../common/sound/sound_openal.c \
-@BUILD_PODULES_TRUE@	$(am__append_5) $(am__append_6) \
-@BUILD_PODULES_TRUE@	$(am__append_7)
+@BUILD_PODULES_TRUE@	../../../src/master-cfg-file.c \
+@BUILD_PODULES_TRUE@	$(am__append_3)
 @BUILD_PODULES_TRUE@libaka31_la_CFLAGS = -I../../../src -I../../common/cdrom -I../../common/sound -I../../common/scsi
 @BUILD_PODULES_TRUE@libaka31_la_LIBADD = @LIBS@
 all: all-am
@@ -499,19 +492,22 @@ clean-libLTLIBRARIES:
 ../../common/sound/libaka31_la-sound_openal.lo:  \
 	../../common/sound/$(am__dirstamp) \
 	../../common/sound/$(DEPDIR)/$(am__dirstamp)
+../../../src/$(am__dirstamp):
+	@$(MKDIR_P) ../../../src
+	@: > ../../../src/$(am__dirstamp)
+../../../src/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) ../../../src/$(DEPDIR)
+	@: > ../../../src/$(DEPDIR)/$(am__dirstamp)
+../../../src/libaka31_la-master-cfg-file.lo:  \
+	../../../src/$(am__dirstamp) \
+	../../../src/$(DEPDIR)/$(am__dirstamp)
 ../../common/cdrom/$(am__dirstamp):
 	@$(MKDIR_P) ../../common/cdrom
 	@: > ../../common/cdrom/$(am__dirstamp)
 ../../common/cdrom/$(DEPDIR)/$(am__dirstamp):
 	@$(MKDIR_P) ../../common/cdrom/$(DEPDIR)
 	@: > ../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
-../../common/cdrom/libaka31_la-cdrom-windows-ioctl.lo:  \
-	../../common/cdrom/$(am__dirstamp) \
-	../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
 ../../common/cdrom/libaka31_la-cdrom-linux-ioctl.lo:  \
-	../../common/cdrom/$(am__dirstamp) \
-	../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
-../../common/cdrom/libaka31_la-cdrom-osx-ioctl.lo:  \
 	../../common/cdrom/$(am__dirstamp) \
 	../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
 
@@ -520,6 +516,8 @@ libaka31.la: $(libaka31_la_OBJECTS) $(libaka31_la_DEPENDENCIES) $(EXTRA_libaka31
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f ../../../src/*.$(OBJEXT)
+	-rm -f ../../../src/*.lo
 	-rm -f ../../common/cdrom/*.$(OBJEXT)
 	-rm -f ../../common/cdrom/*.lo
 	-rm -f ../../common/scsi/*.$(OBJEXT)
@@ -530,9 +528,8 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@../../../src/$(DEPDIR)/libaka31_la-master-cfg-file.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-linux-ioctl.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-osx-ioctl.Plo@am__quote@ # am--include-marker
-@AMDEP_TRUE@@am__include@ @am__quote@../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-windows-ioctl.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@../../common/scsi/$(DEPDIR)/libaka31_la-hdd_file.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@../../common/scsi/$(DEPDIR)/libaka31_la-scsi.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@../../common/scsi/$(DEPDIR)/libaka31_la-scsi_cd.Plo@am__quote@ # am--include-marker
@@ -636,12 +633,12 @@ libaka31_la-wd33c93a.lo: wd33c93a.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -c -o ../../common/sound/libaka31_la-sound_openal.lo `test -f '../../common/sound/sound_openal.c' || echo '$(srcdir)/'`../../common/sound/sound_openal.c
 
-../../common/cdrom/libaka31_la-cdrom-windows-ioctl.lo: ../../common/cdrom/cdrom-windows-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -MT ../../common/cdrom/libaka31_la-cdrom-windows-ioctl.lo -MD -MP -MF ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-windows-ioctl.Tpo -c -o ../../common/cdrom/libaka31_la-cdrom-windows-ioctl.lo `test -f '../../common/cdrom/cdrom-windows-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-windows-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-windows-ioctl.Tpo ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-windows-ioctl.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/cdrom/cdrom-windows-ioctl.c' object='../../common/cdrom/libaka31_la-cdrom-windows-ioctl.lo' libtool=yes @AMDEPBACKSLASH@
+../../../src/libaka31_la-master-cfg-file.lo: ../../../src/master-cfg-file.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -MT ../../../src/libaka31_la-master-cfg-file.lo -MD -MP -MF ../../../src/$(DEPDIR)/libaka31_la-master-cfg-file.Tpo -c -o ../../../src/libaka31_la-master-cfg-file.lo `test -f '../../../src/master-cfg-file.c' || echo '$(srcdir)/'`../../../src/master-cfg-file.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../../src/$(DEPDIR)/libaka31_la-master-cfg-file.Tpo ../../../src/$(DEPDIR)/libaka31_la-master-cfg-file.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../../src/master-cfg-file.c' object='../../../src/libaka31_la-master-cfg-file.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -c -o ../../common/cdrom/libaka31_la-cdrom-windows-ioctl.lo `test -f '../../common/cdrom/cdrom-windows-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-windows-ioctl.c
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -c -o ../../../src/libaka31_la-master-cfg-file.lo `test -f '../../../src/master-cfg-file.c' || echo '$(srcdir)/'`../../../src/master-cfg-file.c
 
 ../../common/cdrom/libaka31_la-cdrom-linux-ioctl.lo: ../../common/cdrom/cdrom-linux-ioctl.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -MT ../../common/cdrom/libaka31_la-cdrom-linux-ioctl.lo -MD -MP -MF ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-linux-ioctl.Tpo -c -o ../../common/cdrom/libaka31_la-cdrom-linux-ioctl.lo `test -f '../../common/cdrom/cdrom-linux-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-linux-ioctl.c
@@ -650,18 +647,12 @@ libaka31_la-wd33c93a.lo: wd33c93a.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -c -o ../../common/cdrom/libaka31_la-cdrom-linux-ioctl.lo `test -f '../../common/cdrom/cdrom-linux-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-linux-ioctl.c
 
-../../common/cdrom/libaka31_la-cdrom-osx-ioctl.lo: ../../common/cdrom/cdrom-osx-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -MT ../../common/cdrom/libaka31_la-cdrom-osx-ioctl.lo -MD -MP -MF ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-osx-ioctl.Tpo -c -o ../../common/cdrom/libaka31_la-cdrom-osx-ioctl.lo `test -f '../../common/cdrom/cdrom-osx-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-osx-ioctl.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-osx-ioctl.Tpo ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-osx-ioctl.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../common/cdrom/cdrom-osx-ioctl.c' object='../../common/cdrom/libaka31_la-cdrom-osx-ioctl.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka31_la_CFLAGS) $(CFLAGS) -c -o ../../common/cdrom/libaka31_la-cdrom-osx-ioctl.lo `test -f '../../common/cdrom/cdrom-osx-ioctl.c' || echo '$(srcdir)/'`../../common/cdrom/cdrom-osx-ioctl.c
-
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
+	-rm -rf ../../../src/.libs ../../../src/_libs
 	-rm -rf ../../common/cdrom/.libs ../../common/cdrom/_libs
 	-rm -rf ../../common/scsi/.libs ../../common/scsi/_libs
 	-rm -rf ../../common/sound/.libs ../../common/sound/_libs
@@ -784,6 +775,8 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f ../../../src/$(DEPDIR)/$(am__dirstamp)
+	-rm -f ../../../src/$(am__dirstamp)
 	-rm -f ../../common/cdrom/$(DEPDIR)/$(am__dirstamp)
 	-rm -f ../../common/cdrom/$(am__dirstamp)
 	-rm -f ../../common/scsi/$(DEPDIR)/$(am__dirstamp)
@@ -800,9 +793,8 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-linux-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-osx-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-windows-ioctl.Plo
+		-rm -f ../../../src/$(DEPDIR)/libaka31_la-master-cfg-file.Plo
+	-rm -f ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-linux-ioctl.Plo
 	-rm -f ../../common/scsi/$(DEPDIR)/libaka31_la-hdd_file.Plo
 	-rm -f ../../common/scsi/$(DEPDIR)/libaka31_la-scsi.Plo
 	-rm -f ../../common/scsi/$(DEPDIR)/libaka31_la-scsi_cd.Plo
@@ -857,9 +849,8 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-linux-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-osx-ioctl.Plo
-	-rm -f ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-windows-ioctl.Plo
+		-rm -f ../../../src/$(DEPDIR)/libaka31_la-master-cfg-file.Plo
+	-rm -f ../../common/cdrom/$(DEPDIR)/libaka31_la-cdrom-linux-ioctl.Plo
 	-rm -f ../../common/scsi/$(DEPDIR)/libaka31_la-hdd_file.Plo
 	-rm -f ../../common/scsi/$(DEPDIR)/libaka31_la-scsi.Plo
 	-rm -f ../../common/scsi/$(DEPDIR)/libaka31_la-scsi_cd.Plo
@@ -907,10 +898,8 @@ uninstall-am: uninstall-libLTLIBRARIES
 
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@../aka31.so: libaka31.la
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@	cp .libs/libaka31.so ../aka31.so
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@../aka31.dylib: libaka31.la
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@	cp .libs/libaka31.dylib ../aka31.dylib
 
-@BUILD_PODULES_TRUE@amrefresh:	
+@BUILD_PODULES_TRUE@amrefresh:
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

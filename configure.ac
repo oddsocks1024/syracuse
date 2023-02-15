@@ -3,7 +3,7 @@
 AC_PREREQ([2.71])
 AC_INIT([Syracuse],[v2.2],[Ian Chapman],[syracuse])
 
-AM_INIT_AUTOMAKE(-Wall -Werror dist-bzip2 dist-zip subdir-objects)
+AM_INIT_AUTOMAKE(-Wall -Werror -Wno-portability dist-bzip2 dist-zip subdir-objects)
 AC_CANONICAL_HOST
 AC_PROG_CC
 AM_PROG_AR

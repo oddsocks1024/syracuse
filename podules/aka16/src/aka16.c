@@ -23,7 +23,7 @@
 
 
 static const podule_callbacks_t *podule_callbacks;
-char podule_path[PATH_MAX + 1];
+char podule_path[PATH_MAX];
 
 #define MIDI_UART_CLOCK 2000000 //(31250Hz * 4 * 16)
 
@@ -129,7 +129,7 @@ static void aka16_midi_receive(void *p, uint8_t val)
 
 static int aka16_init(struct podule_t *podule) {
     FILE *f;
-    char rom_fn[PATH_MAX + 1];
+    char rom_fn[PATH_MAX];
 
     aka16_t *aka16 = malloc(sizeof(aka16_t));
     memset(aka16, 0, sizeof(aka16_t));

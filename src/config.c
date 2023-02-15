@@ -20,7 +20,7 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <pwd.h>
+
 
 char hd_fn[2][512];
 int hd_spt[2], hd_hpc[2], hd_cyl[2];
@@ -32,13 +32,7 @@ char joystick_if[16];
 char _5th_column_fn[512];
 int support_rom_enabled;
 
-/* The location to place the main configuration directory */
-void get_config_dir_loc(char *s) {
-    struct passwd *pw = getpwuid(getuid());
-    const char *homedir = pw->pw_dir;
-    strncpy(s, homedir, 501);
-    strcat(s, "/");
-}
+
 
 /* This needs to be made safer */
 void append_filename(char *dest, const char *s1, const char *s2, int size) {
