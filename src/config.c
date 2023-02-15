@@ -32,12 +32,9 @@ char joystick_if[16];
 char _5th_column_fn[512];
 int support_rom_enabled;
 
-
-
-/* This needs to be made safer */
 void append_filename(char *dest, const char *s1, const char *s2, int size) {
     strcpy(dest, s1);
-    strcat(dest, s2);
+    strncat(dest, s2, sizeof(dest) - strlen(dest));
 }
 
 void append_slash(char *s, int size)
