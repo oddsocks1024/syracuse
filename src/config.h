@@ -19,7 +19,6 @@
 #define PODULE_LONG_NAME_LEN 255
 #define PODULE_SHORT_NAME_LEN 16
 
-#define AKA12LOG "/tmp/aka12-log.txt"
 #define AKA16LOG "/tmp/aka16-log.txt"
 #define LARKLOG "/tmp/lark-log.txt"
 #define MIDIMAXLOG "/tmp/midimax-log.txt"

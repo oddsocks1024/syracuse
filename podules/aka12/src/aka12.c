@@ -11,7 +11,6 @@
     results in the ROM high bits being pulled high. The loader will switch PA0-PA2 between input to read the
     header and chunk directory, and output to read module data.
 */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -26,23 +25,24 @@
 
 #define BOOL int
 #define APIENTRY
+#define MIDI_UART_CLOCK 2000000 //(31250Hz * 4 * 16)
+#define AKA12LOG LOGDIR "aka12.log"
 
 static const podule_callbacks_t *podule_callbacks;
 char podule_path[PATH_MAX];
-
-#define MIDI_UART_CLOCK 2000000 //(31250Hz * 4 * 16)
-
-#ifdef DEBUG_LOG
 static FILE *aka12_logf;
-#endif
 
-void aka12_log(const char *format, ...)
-{
+void aka12_log(const char *format, ...) {
 #ifdef DEBUG_LOG
     char buf[1024];
-    //return;
-    if (!aka12_logf) aka12_logf=fopen(AKA12LOG,"wt");
+    char logfile[PATH_MAX];
+    get_config_dir_loc(logfile);
+    strncat(logfile, AKA12LOG, sizeof(logfile) - strlen(logfile));
     va_list ap;
+
+    if (!aka12_logf)
+        aka12_logf=fopen(logfile,"wt");
+
     va_start(ap, format);
     vsprintf(buf, format, ap);
     va_end(ap);
@@ -51,24 +51,16 @@ void aka12_log(const char *format, ...)
 #endif
 }
 
-typedef struct aka12_t
-{
+typedef struct aka12_t {
     uint8_t rom[0x4000];
     int rom_page;
-
-    //        int tx_irq_pending;
-    //uint8_t intena, intstat;
-
     scc2691_t scc2691;
-
     uint8_t ora, ddra;
-
     podule_t *podule;
     void *midi;
 } aka12_t;
 
-static uint8_t aka12_read_b(struct podule_t *podule, podule_io_type type, uint32_t addr)
-{
+static uint8_t aka12_read_b(struct podule_t *podule, podule_io_type type, uint32_t addr) {
     aka12_t *aka12 = podule->p;
     uint8_t temp = 0xff;
 
@@ -76,8 +68,7 @@ static uint8_t aka12_read_b(struct podule_t *podule, podule_io_type type, uint32
         return 0xff;
 
     //aka12_log("aka12_read_b: addr=%04x\n", addr);
-    switch (addr&0x3000)
-    {
+    switch (addr&0x3000) {
         case 0x0000: case 0x1000:
             //aka12_log("  rom_page=%i rom_addr=%04x\n", aka12->rom_page, ((aka12->rom_page * 2048) + ((addr & 0x1fff) >> 2)) & 0x3fff);
             return aka12->rom[((aka12->rom_page * 2048) + ((addr & 0x1fff) >> 2)) & 0x3fff];
@@ -88,16 +79,14 @@ static uint8_t aka12_read_b(struct podule_t *podule, podule_io_type type, uint32
     return 0xFF;
 }
 
-static void aka12_write_b(struct podule_t *podule, podule_io_type type, uint32_t addr, uint8_t val)
-{
+static void aka12_write_b(struct podule_t *podule, podule_io_type type, uint32_t addr, uint8_t val) {
     aka12_t *aka12 = podule->p;
 
     if (type != PODULE_IO_TYPE_IOC)
         return;
 
     //	aka12_log("aka12_write_b: addr=%04x val=%02x\n", addr, val);
-    switch (addr & 0x3000)
-    {
+    switch (addr & 0x3000) {
         case 0x2000:
             /*6522 VIA is mapped here. We only currently look at port A which is used for ROM paging*/
             if ((addr & 0x3c) == 0x4)
@@ -113,37 +102,27 @@ static void aka12_write_b(struct podule_t *podule, podule_io_type type, uint32_t
     }
 }
 
-static int aka12_run(struct podule_t *podule, int timeslice_us)
-{
+static int aka12_run(struct podule_t *podule, int timeslice_us) {
     aka12_t *aka12 = podule->p;
-
     scc2691_run(&aka12->scc2691, timeslice_us);
-
     return 256; /*256us = 1 byte at 31250 baud*/
 }
 
-static void aka12_uart_irq(void *p, int state)
-{
+static void aka12_uart_irq(void *p, int state) {
     aka12_t *aka12 = p;
     podule_t *podule = aka12->podule;
-
     podule_callbacks->set_irq(podule, state);
 }
 
-static void aka12_uart_send(void *p, uint8_t val)
-{
+static void aka12_uart_send(void *p, uint8_t val) {
     struct aka12_t *aka12 = p;
-
     midi_write(aka12->midi, val);
 }
 
-static void aka12_midi_receive(void *p, uint8_t val)
-{
+static void aka12_midi_receive(void *p, uint8_t val) {
     struct aka12_t *aka12 = p;
-
     scc2691_receive(&aka12->scc2691, val);
 }
-
 
 static int aka12_init(struct podule_t *podule) {
     FILE *f;
@@ -152,11 +131,11 @@ static int aka12_init(struct podule_t *podule) {
     aka12_t *aka12 = malloc(sizeof(aka12_t));
     memset(aka12, 0, sizeof(aka12_t));
     sprintf(rom_fn, "%s%saka12.rom", PODULEROMDIR, "aka12/");
-    aka12_log("aka12 ROM %s\n", rom_fn);
+    aka12_log("Loading AKA12 ROM %s\n", rom_fn);
     f = fopen(rom_fn, "rb");
 
     if (!f) {
-        aka12_log("Failed to open aka12.ROM!\n");
+        aka12_log("Failed to load AKA12 ROM\n");
         return -1;
     }
 
@@ -170,16 +149,13 @@ static int aka12_init(struct podule_t *podule) {
     return 0;
 }
 
-
 static void aka12_close(struct podule_t *podule) {
     aka12_t *aka12 = podule->p;
     midi_close(aka12->midi);
     free(aka12);
 }
 
-
-static podule_config_t aka12_config =
-{
+static podule_config_t aka12_config = {
     .items =
     {
         {
@@ -202,8 +178,7 @@ static podule_config_t aka12_config =
     }
 };
 
-static const podule_header_t aka12_podule_header =
-{
+static const podule_header_t aka12_podule_header = {
     .version = PODULE_API_VERSION,
     .flags = PODULE_FLAGS_UNIQUE | PODULE_FLAGS_8BIT,
     .short_name = "aka12",
@@ -219,13 +194,10 @@ static const podule_header_t aka12_podule_header =
     .config = &aka12_config
 };
 
-const podule_header_t *podule_probe(const podule_callbacks_t *callbacks, char *path)
-{
+const podule_header_t *podule_probe(const podule_callbacks_t *callbacks, char *path) {
     podule_callbacks = callbacks;
     strcpy(podule_path, path);
-
     aka12_config.items[0].selection = midi_out_devices_config();
     aka12_config.items[1].selection = midi_in_devices_config();
-
     return &aka12_podule_header;
 }
