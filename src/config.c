@@ -21,7 +21,6 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
-
 char hd_fn[2][512];
 int hd_spt[2], hd_hpc[2], hd_cyl[2];
 char machine[7];
@@ -34,7 +33,7 @@ int support_rom_enabled;
 
 void append_filename(char *dest, const char *s1, const char *s2, int size) {
     strcpy(dest, s1);
-    strncat(dest, s2, sizeof(dest) - strlen(dest));
+    strcat(dest, s2);
 }
 
 void append_slash(char *s, int size)

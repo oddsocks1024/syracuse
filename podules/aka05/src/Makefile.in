@@ -93,8 +93,6 @@ build_triplet = @build@
 host_triplet = @host@
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_1 = $(noinst_SCRIPTS)
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__append_2 = ../aka05.so
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_3 = $(noinst_SCRIPTS)
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@am__append_4 = ../aka05.dylib
 subdir = podules/aka05/src
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/configure.ac
@@ -134,8 +132,10 @@ am__uninstall_files_from_dir = { \
 am__installdirs = "$(DESTDIR)$(libdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libaka05_la_DEPENDENCIES =
-am__libaka05_la_SOURCES_DIST = aka05.c
-@BUILD_PODULES_TRUE@am_libaka05_la_OBJECTS = libaka05_la-aka05.lo
+am__libaka05_la_SOURCES_DIST = aka05.c ../../../src/master-cfg-file.c
+am__dirstamp = $(am__leading_dot)dirstamp
+@BUILD_PODULES_TRUE@am_libaka05_la_OBJECTS = libaka05_la-aka05.lo \
+@BUILD_PODULES_TRUE@	../../../src/libaka05_la-master-cfg-file.lo
 libaka05_la_OBJECTS = $(am_libaka05_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -161,7 +161,9 @@ am__v_at_1 =
 DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
-am__depfiles_remade = ./$(DEPDIR)/libaka05_la-aka05.Plo
+am__depfiles_remade =  \
+	../../../src/$(DEPDIR)/libaka05_la-master-cfg-file.Plo \
+	./$(DEPDIR)/libaka05_la-aka05.Plo
 am__mv = mv -f
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -353,9 +355,9 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = subdir-objects
 @BUILD_PODULES_TRUE@lib_LTLIBRARIES = libaka05.la
-@BUILD_PODULES_TRUE@noinst_SCRIPTS = $(am__append_2) $(am__append_4)
-@BUILD_PODULES_TRUE@CLEANFILES = $(am__append_1) $(am__append_3)
-@BUILD_PODULES_TRUE@libaka05_la_SOURCES = aka05.c
+@BUILD_PODULES_TRUE@noinst_SCRIPTS = $(am__append_2)
+@BUILD_PODULES_TRUE@CLEANFILES = $(am__append_1)
+@BUILD_PODULES_TRUE@libaka05_la_SOURCES = aka05.c ../../../src/master-cfg-file.c
 @BUILD_PODULES_TRUE@libaka05_la_CFLAGS = -I../../../src
 @BUILD_PODULES_TRUE@libaka05_la_LIBADD = @LIBS@
 all: all-am
@@ -426,16 +428,28 @@ clean-libLTLIBRARIES:
 	  echo rm -f $${locs}; \
 	  rm -f $${locs}; \
 	}
+../../../src/$(am__dirstamp):
+	@$(MKDIR_P) ../../../src
+	@: > ../../../src/$(am__dirstamp)
+../../../src/$(DEPDIR)/$(am__dirstamp):
+	@$(MKDIR_P) ../../../src/$(DEPDIR)
+	@: > ../../../src/$(DEPDIR)/$(am__dirstamp)
+../../../src/libaka05_la-master-cfg-file.lo:  \
+	../../../src/$(am__dirstamp) \
+	../../../src/$(DEPDIR)/$(am__dirstamp)
 
 libaka05.la: $(libaka05_la_OBJECTS) $(libaka05_la_DEPENDENCIES) $(EXTRA_libaka05_la_DEPENDENCIES) 
 	$(AM_V_CCLD)$(libaka05_la_LINK) $(am_libaka05_la_rpath) $(libaka05_la_OBJECTS) $(libaka05_la_LIBADD) $(LIBS)
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
+	-rm -f ../../../src/*.$(OBJEXT)
+	-rm -f ../../../src/*.lo
 
 distclean-compile:
 	-rm -f *.tab.c
 
+@AMDEP_TRUE@@am__include@ @am__quote@../../../src/$(DEPDIR)/libaka05_la-master-cfg-file.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaka05_la-aka05.Plo@am__quote@ # am--include-marker
 
 $(am__depfiles_remade):
@@ -475,11 +489,19 @@ libaka05_la-aka05.lo: aka05.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka05_la_CFLAGS) $(CFLAGS) -c -o libaka05_la-aka05.lo `test -f 'aka05.c' || echo '$(srcdir)/'`aka05.c
 
+../../../src/libaka05_la-master-cfg-file.lo: ../../../src/master-cfg-file.c
+@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka05_la_CFLAGS) $(CFLAGS) -MT ../../../src/libaka05_la-master-cfg-file.lo -MD -MP -MF ../../../src/$(DEPDIR)/libaka05_la-master-cfg-file.Tpo -c -o ../../../src/libaka05_la-master-cfg-file.lo `test -f '../../../src/master-cfg-file.c' || echo '$(srcdir)/'`../../../src/master-cfg-file.c
+@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../../src/$(DEPDIR)/libaka05_la-master-cfg-file.Tpo ../../../src/$(DEPDIR)/libaka05_la-master-cfg-file.Plo
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../../src/master-cfg-file.c' object='../../../src/libaka05_la-master-cfg-file.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka05_la_CFLAGS) $(CFLAGS) -c -o ../../../src/libaka05_la-master-cfg-file.lo `test -f '../../../src/master-cfg-file.c' || echo '$(srcdir)/'`../../../src/master-cfg-file.c
+
 mostlyclean-libtool:
 	-rm -f *.lo
 
 clean-libtool:
 	-rm -rf .libs _libs
+	-rm -rf ../../../src/.libs ../../../src/_libs
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -599,6 +621,8 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
+	-rm -f ../../../src/$(DEPDIR)/$(am__dirstamp)
+	-rm -f ../../../src/$(am__dirstamp)
 
 maintainer-clean-generic:
 	@echo "This command is intended for maintainers to use"
@@ -609,7 +633,8 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ./$(DEPDIR)/libaka05_la-aka05.Plo
+		-rm -f ../../../src/$(DEPDIR)/libaka05_la-master-cfg-file.Plo
+	-rm -f ./$(DEPDIR)/libaka05_la-aka05.Plo
 	-rm -f Makefile
 distclean-am: clean-am distclean-compile distclean-generic \
 	distclean-tags
@@ -655,7 +680,8 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ./$(DEPDIR)/libaka05_la-aka05.Plo
+		-rm -f ../../../src/$(DEPDIR)/libaka05_la-master-cfg-file.Plo
+	-rm -f ./$(DEPDIR)/libaka05_la-aka05.Plo
 	-rm -f Makefile
 maintainer-clean-am: distclean-am maintainer-clean-generic
 
@@ -694,10 +720,8 @@ uninstall-am: uninstall-libLTLIBRARIES
 
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@../aka05.so: libaka05.la
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@	cp .libs/libaka05.so ../aka05.so
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@../aka05.dylib: libaka05.la
-@BUILD_PODULES_TRUE@@OS_MACOSX_TRUE@	cp .libs/libaka05.dylib ../aka05.dylib
 
-@BUILD_PODULES_TRUE@amrefresh:	
+@BUILD_PODULES_TRUE@amrefresh:
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -18,6 +18,7 @@
 #include <string.h>
 #include "podule_api.h"
 #include "config.h"
+#include "master-cfg-file.h"
 #include "arc.h"
 
 #define BOOL int
@@ -25,18 +26,19 @@
 
 static const podule_callbacks_t *podule_callbacks;
 char podule_path[PATH_MAX];
-
-#ifdef DEBUG_LOG
 static FILE *aka05_logf;
-#endif
 
-void aka05_log(const char *format, ...)
-{
+void aka05_log(const char *format, ...) {
 #ifdef DEBUG_LOG
     char buf[1024];
-    //return;
-    if (!aka05_logf) aka05_logf=fopen(AKA05LOG,"wt");
+    char logfile[PATH_MAX];
+    get_config_dir_loc(logfile);
+    strncat(logfile, AKA05LOG, sizeof(logfile) - strlen(logfile));
     va_list ap;
+
+    if (!aka05_logf)
+        aka05_logf=fopen(logfile,"wt");
+
     va_start(ap, format);
     vsprintf(buf, format, ap);
     va_end(ap);
@@ -45,28 +47,22 @@ void aka05_log(const char *format, ...)
 #endif
 }
 
-typedef struct aka05_t
-{
+typedef struct aka05_t {
     uint8_t *roms[8];
     uint32_t rom_mask[8];
     int rom_writable[8];
-
     int rom_page;
     int rom_select;
-
     podule_t *podule;
 } aka05_t;
 
-static uint8_t aka05_read_b(struct podule_t *podule, podule_io_type type, uint32_t addr)
-{
+static uint8_t aka05_read_b(struct podule_t *podule, podule_io_type type, uint32_t addr) {
     aka05_t *aka05 = podule->p;
 
     if (type != PODULE_IO_TYPE_IOC)
         return 0xff;
 
-    //aka05_log("aka05_read_b: addr=%04x\n", addr);
-    switch (addr&0x3000)
-    {
+    switch (addr&0x3000) {
         case 0x0000: case 0x1000:
             //aka05_log("  rom_select=%i rom_page=%i rom_addr=%04x\n", aka05->rom_select, aka05->rom_page, ((aka05->rom_page * 2048) + ((addr & 0x1fff) >> 2)) & 0x3fff);
             if (aka05->roms[aka05->rom_select])
@@ -77,25 +73,22 @@ static uint8_t aka05_read_b(struct podule_t *podule, podule_io_type type, uint32
             }
             return 0xff; /*No ROM present in this slot*/
     }
+
     return 0xFF;
 }
 
-static void aka05_write_b(struct podule_t *podule, podule_io_type type, uint32_t addr, uint8_t val)
-{
+static void aka05_write_b(struct podule_t *podule, podule_io_type type, uint32_t addr, uint8_t val) {
     aka05_t *aka05 = podule->p;
 
     if (type != PODULE_IO_TYPE_IOC)
         return;
 
     //aka05_log("aka05_write_b: addr=%04x val=%02x\n", addr, val);
-    switch (addr & 0x3000)
-    {
+    switch (addr & 0x3000) {
         case 0x0000: case 0x1000:
             //aka05_log("  rom_select=%i rom_page=%i rom_addr=%04x\n", aka05->rom_select, aka05->rom_page, ((aka05->rom_page * 2048) + ((addr & 0x1fff) >> 2)) & 0x3fff);
-            if (aka05->roms[aka05->rom_select] && aka05->rom_writable[aka05->rom_select])
-            {
+            if (aka05->roms[aka05->rom_select] && aka05->rom_writable[aka05->rom_select]) {
                 uint32_t rom_addr = ((aka05->rom_page * 2048) + ((addr & 0x1fff) >> 2));
-
                 aka05->roms[aka05->rom_select][rom_addr & aka05->rom_mask[aka05->rom_select]] = val;
             }
             break;
@@ -114,45 +107,38 @@ static void aka05_write_b(struct podule_t *podule, podule_io_type type, uint32_t
     }
 }
 
-static int aka05_init(struct podule_t *podule)
-{
+static int aka05_init(struct podule_t *podule) {
     FILE *f;
     char rom_fn[512];
     aka05_t *aka05 = malloc(sizeof(aka05_t));
     memset(aka05, 0, sizeof(aka05_t));
-
-    /*Manager ROM is fixed - and required*/
+    /* Manager ROM is fixed - and required */
     sprintf(rom_fn, "%saka05/rom_podule_0.07.bin", PODULEROMDIR);
-    aka05_log("aka05 ROM %s\n", rom_fn);
+    aka05_log("Loading AKA05 Manager ROM %s\n", rom_fn);
     f = fopen(rom_fn, "rb");
-    if (!f)
-    {
-        aka05_log("Failed to open rom_podule_0.07.bin!\n");
+
+    if (!f) {
+        aka05_log("Failed to load the AKA05 Manager ROM\n");
         return -1;
     }
+
     aka05->roms[0] = malloc(0x4000);
     ignore_result(fread(aka05->roms[0], 0x4000, 1, f));
     aka05->rom_mask[0] = 0x3fff;
     fclose(f);
 
-    /*Remaining ROMs are loaded from config*/
-    for (int i = 1; i < 6; i++)
-    {
+    /* Remaining ROMs are loaded from config */
+    for (int i = 1; i < 6; i++) {
         char config_name[16];
-
         sprintf(config_name, "rom_fn%i", i+1);
-
         const char *fn = podule_callbacks->config_get_string(podule, config_name, NULL);
 
-        if (fn)
-        {
-            aka05_log("aka05 ROM %i %s\n", i, fn);
-
+        if (fn) {
+            aka05_log("Loading AKA05 ROM %i %s\n", i, fn);
             f = fopen(fn, "rb");
-            if (f)
-            {
-                uint32_t size, mask;
 
+            if (f) {
+                uint32_t size, mask;
                 fseek(f, -1, SEEK_END);
                 size = ftell(f) + 1;
                 fseek(f, 0, SEEK_SET);
@@ -171,7 +157,6 @@ static int aka05_init(struct podule_t *podule)
                 aka05->roms[i] = malloc(mask+1);
                 aka05->rom_mask[i] = mask;
                 aka05_log("rom_mask[%i]=%04x\n", i, mask);
-
                 ignore_result(fread(aka05->roms[i], mask+1, 1, f));
                 fclose(f);
             }
@@ -195,7 +180,6 @@ static int aka05_init(struct podule_t *podule)
     podule->p = aka05;
     return 0;
 }
-
 
 static void aka05_close(struct podule_t *podule) {
     aka05_t *aka05 = podule->p;
@@ -231,7 +215,6 @@ static int config_load_rom(void *window_p, const struct podule_config_item_t *it
 
     return 0;
 }
-
 
 static podule_config_t aka05_config = {
     .items = {
