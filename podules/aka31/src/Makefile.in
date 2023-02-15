@@ -14,8 +14,6 @@
 
 @SET_MAKE@
 
-# Makefile.am for AKA31
-
 
 VPATH = @srcdir@
 am__is_gnu_make = { \
@@ -379,6 +377,8 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
+
+# Makefile.am for AKA31
 AUTOMAKE_OPTIONS = subdir-objects
 @BUILD_PODULES_TRUE@lib_LTLIBRARIES = libaka31.la
 @BUILD_PODULES_TRUE@noinst_SCRIPTS = $(am__append_2)
