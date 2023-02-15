@@ -19,11 +19,8 @@
 #define PODULE_LONG_NAME_LEN 255
 #define PODULE_SHORT_NAME_LEN 16
 
-#define AKA05LOG LOGDIR "aka05.log"
-#define AKA10LOG "/tmp/aka10-log.txt"
 #define AKA12LOG "/tmp/aka12-log.txt"
 #define AKA16LOG "/tmp/aka16-log.txt"
-#define AKA31LOG LOGDIR "aka31.log"
 #define LARKLOG "/tmp/lark-log.txt"
 #define MIDIMAXLOG "/tmp/midimax-log.txt"
 #define OAKSCSILOG "/tmp/oakscsi-log.txt"

@@ -10,7 +10,6 @@
     A11 : ROM select 2
     D0 is connected to PAL, but doesn't seem to be used (software stores PC to this address)
 */
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -23,6 +22,7 @@
 
 #define BOOL int
 #define APIENTRY
+#define AKA05LOG LOGDIR "aka05.log"
 
 static const podule_callbacks_t *podule_callbacks;
 char podule_path[PATH_MAX];
@@ -109,7 +109,7 @@ static void aka05_write_b(struct podule_t *podule, podule_io_type type, uint32_t
 
 static int aka05_init(struct podule_t *podule) {
     FILE *f;
-    char rom_fn[512];
+    char rom_fn[PATH_MAX];
     aka05_t *aka05 = malloc(sizeof(aka05_t));
     memset(aka05, 0, sizeof(aka05_t));
     /* Manager ROM is fixed - and required */

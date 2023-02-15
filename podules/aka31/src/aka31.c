@@ -16,18 +16,17 @@
 
 #define BOOL int
 #define APIENTRY
-
-const podule_callbacks_t *podule_callbacks;
-char podule_path[PATH_MAX];
-
-void aka31_update_ints(podule_t *p);
-
 #define AKA31_POD_IRQ     0x01
 #define AKA31_TC_IRQ      0x02
 #define AKA31_SBIC_IRQ    0x08
 #define AKA31_PAGE_MASK   0x3f
 #define AKA31_ENABLE_INTS 0x40
 #define AKA31_RESET       0x80
+#define AKA31LOG LOGDIR "aka31.log"
+
+const podule_callbacks_t *podule_callbacks;
+char podule_path[PATH_MAX];
+void aka31_update_ints(podule_t *p);
 
 typedef struct aka31_t {
     uint8_t rom[0x10000];

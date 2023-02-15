@@ -1,5 +1,4 @@
 # Makefile.am for AKA05
-
 AUTOMAKE_OPTIONS = subdir-objects
 
 if BUILD_PODULES
