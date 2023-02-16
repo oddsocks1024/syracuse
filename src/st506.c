@@ -228,7 +228,7 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
                     return;
 
                 case 0x40: /*Read data*/
-                    rpclog("Read data %02X %02X\n",st506->param[0],st506->param[1]);
+                    //rpclog("Read data %02X %02X\n",st506->param[0],st506->param[1]);
                     if (st506->param[0] != 1 && st506->param[0] != 2)
                     {
                         st506_error(st506, NRY);
@@ -240,11 +240,11 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
                     st506->lhead = st506->param[4];
                     st506->lsect = st506->param[5];
                     st506->oplen = (st506->param[6] << 8) | st506->param[7];
-                    rpclog("Read data : cylinder %i head %i sector %i   length %i sectors\n",st506->lcyl,st506->lhead,st506->lsect,st506->oplen);
+                    //rpclog("Read data : cylinder %i head %i sector %i   length %i sectors\n",st506->lcyl,st506->lhead,st506->lsect,st506->oplen);
                     if (check_chs_params(st506, st506->drive))
                         return;
                     fseek(st506->hdfile[st506->drive], (((((st506->lcyl*st506->hpc[st506->drive])+st506->lhead)*st506->spt[st506->drive])+st506->lsect)*256), SEEK_SET);
-                    //                        rpclog("Seeked to %08X\n",(((((st506->lcyl*8)+st506->lhead)*32)+st506->lsect)*256));
+                    //rpclog("Seeked to %08X\n",(((((st506->lcyl*8)+st506->lhead)*32)+st506->lsect)*256));
                     timer_set_delay_u64(&st506->timer, 5000 * TIMER_USEC);
                     st506->status |= 0x80;
                     return;
@@ -261,7 +261,7 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
                     st506->lhead = st506->param[4];
                     st506->lsect = st506->param[5];
                     st506->oplen = (st506->param[6] << 8) | st506->param[7];
-                    rpclog("Check data : cylinder %i head %i sector %i   length %i sectors\n",st506->lcyl,st506->lhead,st506->lsect,st506->oplen);
+                    //rpclog("Check data : cylinder %i head %i sector %i   length %i sectors\n",st506->lcyl,st506->lhead,st506->lsect,st506->oplen);
                     if (check_chs_params(st506, st506->drive))
                         return;
                     fseek(st506->hdfile[st506->drive], (((((st506->lcyl*st506->hpc[st506->drive])+st506->lhead)*st506->spt[st506->drive])+st506->lsect)*256), SEEK_SET);
@@ -281,11 +281,11 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
                     st506->lhead = st506->param[4];
                     st506->lsect = st506->param[5];
                     st506->oplen = (st506->param[6] << 8) | st506->param[7];
-                    rpclog("Write data : cylinder %i head %i sector %i   length %i sectors\n",st506->lcyl,st506->lhead,st506->lsect,st506->oplen);
+                    //rpclog("Write data : cylinder %i head %i sector %i   length %i sectors\n",st506->lcyl,st506->lhead,st506->lsect,st506->oplen);
                     if (check_chs_params(st506, st506->drive))
                         return;
                     fseek(st506->hdfile[st506->drive], (((((st506->lcyl*st506->hpc[st506->drive])+st506->lhead)*st506->spt[st506->drive])+st506->lsect)*256), SEEK_SET);
-                    //                        rpclog("Seeked to %08X\n",(((((st506->lcyl*8)+st506->lhead)*32)+st506->lsect)*256));
+                    //rpclog("Seeked to %08X\n",(((((st506->lcyl*8)+st506->lhead)*32)+st506->lsect)*256));
                     timer_set_delay_u64(&st506->timer, 5000 * TIMER_USEC);
                     st506->status |= 0x80;
                     st506->first = 1;
@@ -303,7 +303,7 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
                     st506->lhead = st506->param[1];
                     st506->lsect = 0;
                     st506->oplen = (st506->param[2] << 8) | st506->param[3];
-                    rpclog("Write format : drive %i cylinder %i head %i sector %i   length %i sectors\n",st506->drive,st506->lcyl,st506->lhead,st506->lsect,st506->oplen);
+                    //rpclog("Write format : drive %i cylinder %i head %i sector %i   length %i sectors\n",st506->drive,st506->lcyl,st506->lhead,st506->lsect,st506->oplen);
                     if (check_chs_params(st506, st506->drive))
                         return;
                     fseek(st506->hdfile[st506->drive], (((((st506->lcyl*st506->hpc[st506->drive])+st506->lhead)*st506->spt[st506->drive])+st506->lsect)*256), SEEK_SET);
@@ -321,7 +321,7 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
                     }
                     st506->drive = st506->param[0] - 1;
                     st506->track[st506->drive] = st506->param[3] | (st506->param[2] << 8);
-                    rpclog("Seek drive %i to track %i\n",st506->drive, st506->track);
+                    //rpclog("Seek drive %i to track %i\n",st506->drive, st506->track);
                     st506->param[0] = 0;
                     st506->param[1] = 0;
                     st506->param[2] = 0;
@@ -340,7 +340,7 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
                     }
                     st506->drive = st506->param[0] - 1;
                     st506->track[st506->drive] = 0;
-                    //                        rpclog("Recalibrate : seek to track %i\n",st506->track);
+                    //rpclog("Recalibrate : seek to track %i\n",st506->track);
                     st506->status |= SEEKEND;
                     st506->param[0] = 0;
                     st506->param[1] = 0;
@@ -349,13 +349,13 @@ void st506_writel(st506_t *st506, uint32_t a, uint32_t v)
                     return;
 
                 case 0xE8: /*Specify*/
-                    //                        rpclog("Specify\nOM1 = %02X\nSHRL = %02X\nSectors = %i\nHeads = %i\nCylinders = %i\n",st506->param[1],st506->param[8],st506->param[7]+1,st506->param[6]+1,(st506->param[5]|((st506->param[4]&3)<<8))+1);
+                    //rpclog("Specify\nOM1 = %02X\nSHRL = %02X\nSectors = %i\nHeads = %i\nCylinders = %i\n",st506->param[1],st506->param[8],st506->param[7]+1,st506->param[6]+1,(st506->param[5]|((st506->param[4]&3)<<8))+1);
                     st506->status = PARAMREJECT;
                     st506->OM1 = st506->param[1];
                     st506->cul = st506->param[3];
                     st506->param[0] = 0;
                     st506->param[1] = 0;
-                    //                        rpclog("OM1=%02X\n",st506->OM1);
+                    //rpclog("OM1=%02X\n",st506->OM1);
                     return;
 
                 case 0xF0: /*Abort*/
@@ -492,11 +492,9 @@ static void st506_callback(void *p)
                     {
                         st506->lhead = 0;
                         st506->lcyl++;
-#ifndef RELEASE_BUILD
-                        // FIXME - Some software attempts to write beyond this
+
                         if (st506->lcyl > 1023)
-                            fatal("Hit limit\n");
-#endif
+                            rpclog("Warning: ST506 Read Sector Command beyond Cylinder Limit > 1023\n\n");
                     }
                 }
                 //                        rpclog("Reading from pos %08X - %i sectors left\n",ftell(st506->hdfile[st506->drive]),st506->oplen);
@@ -544,10 +542,8 @@ static void st506_callback(void *p)
                     {
                         st506->lhead = 0;
                         st506->lcyl++;
-#ifndef RELEASE_BUILD
                         if (st506->lcyl > 1023)
-                            fatal("Hit limit\n");
-#endif
+                            rpclog("Warning: ST506 Check Data Command beyond Cylinder Limit > 1023\n");
                     }
                 }
                 st506->oplen--;
@@ -590,10 +586,8 @@ static void st506_callback(void *p)
                     {
                         st506->lhead = 0;
                         st506->lcyl++;
-#ifndef RELEASE_BUILD
                         if (st506->lcyl > 1023)
-                            fatal("Hit limit\n");
-#endif
+                            rpclog("Warning: ST506 Write Sector Command beyond Cylinder Limit > 1023\n\n");
                     }
                 }
                 st506->oplen--;
@@ -656,7 +650,7 @@ static void st506_callback(void *p)
                             st506->lcyl++;
                             if (st506->lcyl > 1023)
                             {
-                                error("Hit limit\n");
+                                rpclog("Warning: ST506 Write Format Command beyond Cylinder Limit > 1023\n\n");
                                 exit(-1);
                             }
                         }
