@@ -11,7 +11,6 @@
 #define PODULELIBDIR "/usr/lib64/syracuse/"
 #define PODULEROMDIR "/usr/share/syracuse/roms/podules/"
 #define ARCLOG "/tmp/syracuse-log.txt"
-#define CPUREGDUMP "/tmp/modules.dmp"
 #define HOSTFSDIR "/tmp/"
 #define LOGDIR CFGDIR "logs/"
 #define CMOSDIR CFGDIR "cmos/"

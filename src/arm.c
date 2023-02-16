@@ -21,6 +21,8 @@
 #include "vidc.h"
 #include "config.h"
 
+#define REGDUMPFILE LOGDIR "register.dmp"
+
 uint32_t armregs[16];
 
 void refillpipeline();
@@ -709,33 +711,32 @@ void resetarm()
 
 int indumpregs=0;
 
-void dumpregs()
-{
-        int c;
-        FILE *f;
-        uint32_t l;
+void dumpregs() {
+    int c;
+    FILE *f;
+    uint32_t l;
+    char dumpfile[PATH_MAX];
+    get_config_dir_loc(dumpfile);
+    strncat(dumpfile, REGDUMPFILE, sizeof(dumpfile) - strlen(dumpfile));
 
-        if (indumpregs) return;
-        indumpregs=1;
+    if (indumpregs)
+        return;
 
-        memmode=2;
+    indumpregs = 1;
+    memmode = 2;
+    f=fopen(dumpfile,"wb");
 
-        f=fopen(CPUREGDUMP,"wb");
-        for (c=0x0000;c<0x100000;c+=4)
-        {
-                l=readmeml(c+0x1800000);
-                putc(l,f);
-                putc(l>>8,f);
-                putc(l>>16,f);
-                putc(l>>24,f);
-        }
-        fclose(f);
-/*        f=fopen("ram.dmp","wb");
-        for (c=0x0000;c<0x100000;c++)
-            putc(readmemb(c),f);
-        fclose(f);*/
-        rpclog("R 0=%08X R 4=%08X R 8=%08X R12=%08X\nR 1=%08X R 5=%08X R 9=%08X R13=%08X\nR 2=%08X R 6=%08X R10=%08X R14=%08X\nR 3=%08X R 7=%08X R11=%08X R15=%08X\n%i %08X %08X\nf 8=%08X f 9=%08X f10=%08X f11=%08X\nf12=%08X f13=%08X f14=%08X\n",armregs[0],armregs[4],armregs[8],armregs[12],armregs[1],armregs[5],armregs[9],armregs[13],armregs[2],armregs[6],armregs[10],armregs[14],armregs[3],armregs[7],armregs[11],armregs[15],ins,opcode,opcode2,fiqregs[8],fiqregs[9],fiqregs[10],fiqregs[11],fiqregs[12],fiqregs[13],fiqregs[14]);
-        indumpregs=0;
+    for (c=0x0000;c<0x100000;c+=4) {
+        l=readmeml(c+0x1800000);
+        putc(l,f);
+        putc(l>>8,f);
+        putc(l>>16,f);
+        putc(l>>24,f);
+    }
+
+    fclose(f);
+    rpclog("R 0=%08X R 4=%08X R 8=%08X R12=%08X\nR 1=%08X R 5=%08X R 9=%08X R13=%08X\nR 2=%08X R 6=%08X R10=%08X R14=%08X\nR 3=%08X R 7=%08X R11=%08X R15=%08X\n%i %08X %08X\nf 8=%08X f 9=%08X f10=%08X f11=%08X\nf12=%08X f13=%08X f14=%08X\n",armregs[0],armregs[4],armregs[8],armregs[12],armregs[1],armregs[5],armregs[9],armregs[13],armregs[2],armregs[6],armregs[10],armregs[14],armregs[3],armregs[7],armregs[11],armregs[15],ins,opcode,opcode2,fiqregs[8],fiqregs[9],fiqregs[10],fiqregs[11],fiqregs[12],fiqregs[13],fiqregs[14]);
+    indumpregs=0;
 }
 
 #define checkneg(v) (v&0x80000000)
