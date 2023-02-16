@@ -50,6 +50,8 @@
 #define BOOL int
 #define APIENTRY
 #define OAKSCSILOG LOGDIR "oak_scsi.log"
+#define OAKSCSINVR "_oak_scsi.nvr"
+char machine_config_name[256] = "FIXME";
 
 const podule_callbacks_t *podule_callbacks;
 char podule_path[PATH_MAX];
@@ -270,18 +272,23 @@ static void oak_scsi_write_w(struct podule_t *podule, podule_io_type type, uint3
 
 static void oak_scsi_reset(struct podule_t *podule) {
     oak_scsi_t *oak_scsi = podule->p;
-    oak_scsi_log("Reset Oak SCSI podule\n");
+    oak_scsi_log("Reset OAK SCSI podule\n");
     oak_scsi->rom_page = 0;
 }
 
 static int oak_scsi_init(struct podule_t *podule) {
     FILE *f;
     char rom_fn[PATH_MAX];
-
+    char nvrfile[PATH_MAX];
+    get_config_dir_loc(nvrfile);
+    printf("DEBUG balls %s\n", machine_config_name);
+    strncat(nvrfile, CMOSDIR,  sizeof(nvrfile) - strlen(nvrfile));
+    strncat(nvrfile, machine_config_name, sizeof(nvrfile) - strlen(nvrfile));
+    strncat(nvrfile, OAKSCSINVR, sizeof(nvrfile) - strlen(nvrfile));
     oak_scsi_t *oak_scsi = malloc(sizeof(oak_scsi_t));
     memset(oak_scsi, 0, sizeof(oak_scsi_t));
     sprintf(rom_fn, "%s%sOAK 91 SCSI 1V16 - 128.BIN", PODULEROMDIR, "oak_scsi/");
-    oak_scsi_log("Loading the Oak SCSI ROM %s\n", rom_fn);
+    oak_scsi_log("Loading the OAK SCSI ROM %s\n", rom_fn);
     f = fopen(rom_fn, "rb");
 
     if (!f) {
@@ -291,10 +298,8 @@ static int oak_scsi_init(struct podule_t *podule) {
 
     ignore_result(fread(oak_scsi->rom, 0x10000, 1, f));
     fclose(f);
-    // FIXME
-    printf("DEBUG: Oak scsi needs to be in CMOS directory\n");
-    sprintf(rom_fn, "%s%soak_scsi.nvr", PODULEROMDIR, "oak_scsi/");
-    f = fopen(rom_fn, "rb");
+    oak_scsi_log("Loading OAK SCSI Non-Volatile RAM file %s\n", nvrfile);
+    f = fopen(nvrfile, "rb");
 
     if (f) {
         ignore_result(fread(oak_scsi->eeprom.buffer, 32, 1, f));
@@ -305,7 +310,7 @@ static int oak_scsi_init(struct podule_t *podule) {
 
     oak_scsi->rom_page = 0;
     ncr5380_init(&oak_scsi->ncr, podule, podule_callbacks, &oak_scsi->bus);
-    oak_scsi_log("Oak SCSI podule initialised\n");
+    oak_scsi_log("OAK SCSI podule initialised\n");
     oak_scsi->sound_out = sound_out_init(oak_scsi, 44100, 4410, oak_scsi_log, podule_callbacks, podule);
     ioctl_reset();
     podule->p = oak_scsi;
@@ -313,16 +318,18 @@ static int oak_scsi_init(struct podule_t *podule) {
     return 0;
 }
 
-
 static void oak_scsi_write_eeprom(oak_scsi_t *oak_scsi) {
     char fn[PATH_MAX];
+    char nvrfile[PATH_MAX];
+    get_config_dir_loc(nvrfile);
+    strncat(nvrfile, CMOSDIR,  sizeof(nvrfile) - strlen(nvrfile));
+    strncat(nvrfile, machine_config_name, sizeof(nvrfile) - strlen(nvrfile));
+    strncat(nvrfile, OAKSCSINVR, sizeof(nvrfile) - strlen(nvrfile));
     FILE *f;
 
     oak_scsi->eeprom.dirty = 0;
-    // FIXME
-    printf("DEBUG: Oak scsi needs to be in CMOS directory\n");
-    sprintf(fn, "%s%soak_scsi.nvr", PODULEROMDIR, "oak_scsi/");
-    f = fopen(fn, "wb");
+    oak_scsi_log("Writing OAK SCSI Non-Volatile RAM file %s\n", nvrfile);
+    f = fopen(nvrfile, "wb");
 
     if (f) {
         fwrite(oak_scsi->eeprom.buffer, 32, 1, f);
@@ -370,7 +377,7 @@ static const podule_header_t oak_scsi_podule_header = {
     .version = PODULE_API_VERSION,
     .flags = PODULE_FLAGS_UNIQUE,
     .short_name = "oak_scsi",
-    .name = "Oak 16 Bit SCSI Interface",
+    .name = "OAK 16 Bit SCSI Interface",
     .functions =
     {
         .init = oak_scsi_init,

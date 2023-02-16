@@ -265,7 +265,7 @@ static int aka31_init(struct podule_t *podule) {
     f = fopen(rom_fn, "rb");
 
     if (!f) {
-        aka31_log("Failed to open AKA31 SCSI ROM!\n");
+        aka31_log("Failed to open the AKA31 SCSI ROM!\n");
         return -1;
     }
 
@@ -273,7 +273,7 @@ static int aka31_init(struct podule_t *podule) {
     aka31->page = 0;
     d71071l_init(&aka31->dma, podule);
     wd33c93a_init(&aka31->wd, podule, podule_callbacks, &aka31->dma, &aka31->bus);
-    aka31_log("Initialised AKA31 podule\n");
+    aka31_log("Initialised the AKA31 podule\n");
     aka31->sound_out = sound_out_init(aka31, 44100, 4410, aka31_log, podule_callbacks, podule);
     ioctl_reset();
     podule->p = aka31;

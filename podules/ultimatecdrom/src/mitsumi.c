@@ -1,6 +1,8 @@
-/*Mitsumi CD-ROM drive emulation
-  Currently emulates an FX001D (double speed drive supplied with HCCS Ultimate CD-ROM interface)
-  */
+/*
+    Mitsumi CD-ROM drive emulation
+    Currently emulates an FX001D (double speed drive supplied with HCCS Ultimate CD-ROM interface)
+*/
+
 #include <stdint.h>
 #include "mitsumi.h"
 #include "ultimatecdrom.h"

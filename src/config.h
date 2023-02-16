@@ -6,14 +6,15 @@
 // FIXME These need to be able to be passed into the build
 #define GLOBAL_CMOS_DIR "/usr/share/syracuse/cmos/"
 #define GLOBAL_CFG_FILENAME ".syracuse.cfg"
-#define MACHINE_CFG_DIRNAME ".syracuse/"
+#define CFGDIR ".syracuse/"
 #define ARCBASEDIR "/usr/share/syracuse/"
 #define PODULELIBDIR "/usr/lib64/syracuse/"
 #define PODULEROMDIR "/usr/share/syracuse/roms/podules/"
 #define ARCLOG "/tmp/syracuse-log.txt"
 #define CPUREGDUMP "/tmp/modules.dmp"
 #define HOSTFSDIR "/tmp/"
-#define LOGDIR MACHINE_CFG_DIRNAME "logs/"
+#define LOGDIR CFGDIR "logs/"
+#define CMOSDIR CFGDIR "cmos/"
 #define DOES_NOT_EXIST -1
 #define DEBUG_LOG 1
 #define PODULE_LONG_NAME_LEN 255
@@ -76,6 +77,7 @@ extern int config_free_section(int is_global, const char *name);
 extern void add_config_callback(void(*loadconfig)(), void(*saveconfig)(), void(*onloaded)());
 extern char *get_filename(char *s);
 extern void get_config_dir_loc(char *s);
+extern char machine_config_name[256];
 extern void append_filename(char *dest, const char *s1, const char *s2, int size);
 extern void append_slash(char *s, int size);
 extern void put_backslash(char *s);
@@ -85,7 +87,6 @@ extern void config_save(int is_global, char *fn);
 extern void config_dump(int is_global);
 extern void loadconfig();
 extern void saveconfig();
-extern char machine_config_name[256];
 extern char machine_config_file[256];
 extern char hd_fn[2][512];
 extern int hd_spt[2], hd_hpc[2], hd_cyl[2];

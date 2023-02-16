@@ -27,8 +27,8 @@ int main(int argc, char **argv) {
     XInitThreads();
     al_init_main(0, NULL);
     get_config_dir_loc(configdir_loc);
-    snprintf(configdir, sizeof(configdir), "%s%s", configdir_loc, MACHINE_CFG_DIRNAME);
-    snprintf(cmosdir, sizeof(cmosdir), "%s%scmos/", configdir_loc, MACHINE_CFG_DIRNAME);
+    snprintf(configdir, sizeof(configdir), "%s%s", configdir_loc, CFGDIR);
+    snprintf(cmosdir, sizeof(cmosdir), "%s%s", configdir_loc, CMOSDIR);
     snprintf(logdir, sizeof(logdir), "%s%s", configdir_loc, LOGDIR);
 
     if (stat(configdir, &st) == DOES_NOT_EXIST) {
