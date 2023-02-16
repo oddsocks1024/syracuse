@@ -167,16 +167,24 @@ const podule_header_t *podule_find(const char *short_name)
 }
 
 void podules_init(void) {
+
     int c;
+    char *v;
     podules_close();
 
     for (c = 0; c < 4; c++) {
-        const podule_header_t *header = podule_find(podule_names[c]);
+        //v = malloc(strlen(machine_config_name) + 1);
+        //strcpy(v, machine_config_name);
+
+        podule_header_t *header = podule_find(podule_names[c]);
+
         memset(&podules[c], 0, sizeof(podule_internal_state_t));
 
         if (header) {
             podules[c].podule.header = header;
             podule_functions[c] = &header->functions;
+            podules[c].podule.instance_name = malloc(strlen(machine_config_name) + 1);
+            strcpy(podules[c].podule.instance_name, machine_config_name);
 
             if (podule_functions[c]->init) {
                 int ret = podule_functions[c]->init(&podules[c].podule);

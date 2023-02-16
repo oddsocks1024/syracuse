@@ -51,8 +51,8 @@
 #define APIENTRY
 #define OAKSCSILOG LOGDIR "oak_scsi.log"
 #define OAKSCSINVR "_oak_scsi.nvr"
-char machine_config_name[256] = "FIXME";
 
+char instance_name[NAME_MAX - sizeof(OAKSCSINVR)];
 const podule_callbacks_t *podule_callbacks;
 char podule_path[PATH_MAX];
 void oak_scsi_update_ints(podule_t *p);
@@ -131,7 +131,6 @@ void fatal(const char *format, ...) {
     exit(-1);
 }
 
-
 void scsi_log(const char *format, ...) {
     oak_scsi_log(format);
 }
@@ -139,7 +138,6 @@ void scsi_log(const char *format, ...) {
 void scsi_fatal(const char *format, ...) {
     fatal(format);
 }
-
 
 static uint8_t oak_scsi_ioc_readb(podule_t *podule, uint32_t addr) {
     oak_scsi_t *oak_scsi = podule->p;
@@ -280,10 +278,10 @@ static int oak_scsi_init(struct podule_t *podule) {
     FILE *f;
     char rom_fn[PATH_MAX];
     char nvrfile[PATH_MAX];
+    strcpy(instance_name, podule->instance_name);
     get_config_dir_loc(nvrfile);
-    printf("DEBUG balls %s\n", machine_config_name);
     strncat(nvrfile, CMOSDIR,  sizeof(nvrfile) - strlen(nvrfile));
-    strncat(nvrfile, machine_config_name, sizeof(nvrfile) - strlen(nvrfile));
+    strncat(nvrfile, instance_name, sizeof(nvrfile) - strlen(nvrfile));
     strncat(nvrfile, OAKSCSINVR, sizeof(nvrfile) - strlen(nvrfile));
     oak_scsi_t *oak_scsi = malloc(sizeof(oak_scsi_t));
     memset(oak_scsi, 0, sizeof(oak_scsi_t));
@@ -292,21 +290,23 @@ static int oak_scsi_init(struct podule_t *podule) {
     f = fopen(rom_fn, "rb");
 
     if (!f) {
-        oak_scsi_log("Failed to load the Oak SCSI ROM\n");
+        oak_scsi_log("Failed to load the OAK SCSI ROM %s\n", rom_fn);
         return -1;
     }
 
     ignore_result(fread(oak_scsi->rom, 0x10000, 1, f));
     fclose(f);
-    oak_scsi_log("Loading OAK SCSI Non-Volatile RAM file %s\n", nvrfile);
+    oak_scsi_log("Loading the OAK SCSI Non-Volatile RAM file %s\n", nvrfile);
     f = fopen(nvrfile, "rb");
 
     if (f) {
         ignore_result(fread(oak_scsi->eeprom.buffer, 32, 1, f));
         fclose(f);
     }
-    else
+    else {
+        oak_scsi_log("The Non-Volatile RAM was not found, initialising in-memory version\n");
         memcpy(oak_scsi->eeprom.buffer, oak_eeprom_default, 32);
+    }
 
     oak_scsi->rom_page = 0;
     ncr5380_init(&oak_scsi->ncr, podule, podule_callbacks, &oak_scsi->bus);
@@ -323,7 +323,7 @@ static void oak_scsi_write_eeprom(oak_scsi_t *oak_scsi) {
     char nvrfile[PATH_MAX];
     get_config_dir_loc(nvrfile);
     strncat(nvrfile, CMOSDIR,  sizeof(nvrfile) - strlen(nvrfile));
-    strncat(nvrfile, machine_config_name, sizeof(nvrfile) - strlen(nvrfile));
+    strncat(nvrfile, instance_name, sizeof(nvrfile) - strlen(nvrfile));
     strncat(nvrfile, OAKSCSINVR, sizeof(nvrfile) - strlen(nvrfile));
     FILE *f;
 
