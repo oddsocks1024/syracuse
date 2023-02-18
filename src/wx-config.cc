@@ -25,34 +25,13 @@ extern "C" {
 #include "st506.h"
 };
 
-enum {
-    CPU_ARM2 = 0,
-    CPU_ARM250,
-    CPU_ARM3_20,
-    CPU_ARM3_25,
-    CPU_ARM3_26,
-    CPU_ARM3_30,
-    CPU_ARM3_33,
-    CPU_ARM3_35,
-    CPU_ARM3_24,
-    CPU_MAX
-};
+enum { CPU_ARM2 = 0, CPU_ARM250, CPU_ARM3_20, CPU_ARM3_25, CPU_ARM3_26, CPU_ARM3_30, CPU_ARM3_33, CPU_ARM3_35, CPU_ARM3_24, CPU_MAX };
 
-const char *cpu_names[] = {
-    "ARM2",
-    "ARM250",
-    "ARM3 @ 20 MHz",
-    "ARM3 @ 25 MHz",
-    "ARM3 @ 26 MHz",
-    "ARM3 @ 30 MHz",
-    "ARM3 @ 33 MHz",
-    "ARM3 @ 35 MHz",
-    "ARM3 @ 24 MHz"
-};
+const char *cpu_names[] = {"ARM2", "ARM250", "ARM3 @ 20 MHz", "ARM3 @ 25 MHz", "ARM3 @ 26 MHz", "ARM3 @ 30 MHz", "ARM3 @ 33 MHz", "ARM3 @ 35 MHz", "ARM3 @ 24 MHz"};
 
 enum {
-    CPU_MASK_ARM2    = (1 << CPU_ARM2),
-    CPU_MASK_ARM250  = (1 << CPU_ARM250),
+    CPU_MASK_ARM2 = (1 << CPU_ARM2),
+    CPU_MASK_ARM250 = (1 << CPU_ARM250),
     CPU_MASK_ARM3_20 = (1 << CPU_ARM3_20),
     CPU_MASK_ARM3_25 = (1 << CPU_ARM3_25),
     CPU_MASK_ARM3_26 = (1 << CPU_ARM3_26),
@@ -62,117 +41,52 @@ enum {
     CPU_MASK_ARM3_24 = (1 << CPU_ARM3_24)
 };
 
-#define CPU_ARM2_AND_LATER (CPU_MASK_ARM2 | CPU_MASK_ARM3_20 | CPU_MASK_ARM3_25 | \
-        CPU_MASK_ARM3_26 | CPU_MASK_ARM3_30 | CPU_MASK_ARM3_33 | \
-        CPU_MASK_ARM3_35)
+#define CPU_ARM2_AND_LATER (CPU_MASK_ARM2 | CPU_MASK_ARM3_20 | CPU_MASK_ARM3_25 | CPU_MASK_ARM3_26 | CPU_MASK_ARM3_30 | CPU_MASK_ARM3_33 | CPU_MASK_ARM3_35)
 
 #define CPU_ARM250_ONLY (CPU_MASK_ARM250)
 
-#define CPU_ARM3_25_AND_LATER (CPU_MASK_ARM3_25 | CPU_MASK_ARM3_26 | \
-        CPU_MASK_ARM3_30 | CPU_MASK_ARM3_33 | CPU_MASK_ARM3_35)
+#define CPU_ARM3_25_AND_LATER (CPU_MASK_ARM3_25 | CPU_MASK_ARM3_26 | CPU_MASK_ARM3_30 | CPU_MASK_ARM3_33 | CPU_MASK_ARM3_35)
 
-#define CPU_ARM3_26_AND_LATER (CPU_MASK_ARM3_26 | CPU_MASK_ARM3_30 | \
-        CPU_MASK_ARM3_33 | CPU_MASK_ARM3_35)
+#define CPU_ARM3_26_AND_LATER (CPU_MASK_ARM3_26 | CPU_MASK_ARM3_30 | CPU_MASK_ARM3_33 | CPU_MASK_ARM3_35)
 
 #define CPU_ARM3_33_AND_LATER (CPU_MASK_ARM3_33 | CPU_MASK_ARM3_35)
 
 #define CPU_ARM3_24_ONLY (CPU_MASK_ARM3_24)
 
-enum {
-    FPU_NONE = 0,
-    FPU_FPPC,
-    FPU_FPA10
-};
+enum { FPU_NONE = 0, FPU_FPPC, FPU_FPA10 };
 
-enum {
-    MEMC_MEMC1 = 0,
-    MEMC_MEMC1A_8,
-    MEMC_MEMC1A_12,
-    MEMC_MEMC1A_16,
-    MEMC_MAX
-};
+enum { MEMC_MEMC1 = 0, MEMC_MEMC1A_8, MEMC_MEMC1A_12, MEMC_MEMC1A_16, MEMC_MAX };
 
-const char *memc_names[] = {
-    "MEMC1",
-    "MEMC1a (8 MHz)",
-    "MEMC1a (12 MHz)",
-    "MEMC1a (16 MHz - overclocked)"
-};
+const char *memc_names[] = {"MEMC1", "MEMC1a (8 MHz)", "MEMC1a (12 MHz)", "MEMC1a (16 MHz - overclocked)"};
 
-enum {
-    MEMC_MASK_MEMC1     = (1 << MEMC_MEMC1),
-    MEMC_MASK_MEMC1A_8  = (1 << MEMC_MEMC1A_8),
-    MEMC_MASK_MEMC1A_12 = (1 << MEMC_MEMC1A_12),
-    MEMC_MASK_MEMC1A_16 = (1 << MEMC_MEMC1A_16)
-};
+enum { MEMC_MASK_MEMC1 = (1 << MEMC_MEMC1), MEMC_MASK_MEMC1A_8 = (1 << MEMC_MEMC1A_8), MEMC_MASK_MEMC1A_12 = (1 << MEMC_MEMC1A_12), MEMC_MASK_MEMC1A_16 = (1 << MEMC_MEMC1A_16) };
 
-#define MEMC_MIN_MEMC1     (MEMC_MASK_MEMC1 | MEMC_MASK_MEMC1A_8 | \
-        MEMC_MASK_MEMC1A_12 | MEMC_MASK_MEMC1A_16)
-#define MEMC_MIN_MEMC1A    (MEMC_MASK_MEMC1A_8 | MEMC_MASK_MEMC1A_12 | \
-        MEMC_MASK_MEMC1A_16)
+#define MEMC_MIN_MEMC1 (MEMC_MASK_MEMC1 | MEMC_MASK_MEMC1A_8 | MEMC_MASK_MEMC1A_12 | MEMC_MASK_MEMC1A_16)
+#define MEMC_MIN_MEMC1A (MEMC_MASK_MEMC1A_8 | MEMC_MASK_MEMC1A_12 | MEMC_MASK_MEMC1A_16)
 #define MEMC_MIN_MEMC1A_12 (MEMC_MASK_MEMC1A_12 | MEMC_MASK_MEMC1A_16)
 
-enum {
-    IO_OLD = 0,
-    IO_OLD_ST506,
-    IO_NEW
-};
+enum { IO_OLD = 0, IO_OLD_ST506, IO_NEW };
 
-enum {
-    MEM_512K = 0,
-    MEM_1M,
-    MEM_2M,
-    MEM_4M,
-    MEM_8M,
-    MEM_16M,
-    MEM_MAX
-};
+enum { MEM_512K = 0, MEM_1M, MEM_2M, MEM_4M, MEM_8M, MEM_16M, MEM_MAX };
 
-const char *mem_names[] = {
-    "512 kB",
-    "1 MB",
-    "2 MB",
-    "4 MB",
-    "8 MB",
-    "16 MB"
-};
+const char *mem_names[] = {"512 kB", "1 MB", "2 MB", "4 MB", "8 MB", "16 MB"};
 
-enum {
-    MEM_MASK_512K = (1 << MEM_512K),
-    MEM_MASK_1M   = (1 << MEM_1M),
-    MEM_MASK_2M   = (1 << MEM_2M),
-    MEM_MASK_4M   = (1 << MEM_4M),
-    MEM_MASK_8M   = (1 << MEM_8M),
-    MEM_MASK_16M  = (1 << MEM_16M)
-};
+enum { MEM_MASK_512K = (1 << MEM_512K), MEM_MASK_1M = (1 << MEM_1M), MEM_MASK_2M = (1 << MEM_2M), MEM_MASK_4M = (1 << MEM_4M), MEM_MASK_8M = (1 << MEM_8M), MEM_MASK_16M = (1 << MEM_16M) };
 
-#define MEM_MIN_512K (MEM_MASK_512K | MEM_MASK_1M | MEM_MASK_2M | MEM_MASK_4M | \
-        MEM_MASK_8M | MEM_MASK_16M)
+#define MEM_MIN_512K (MEM_MASK_512K | MEM_MASK_1M | MEM_MASK_2M | MEM_MASK_4M | MEM_MASK_8M | MEM_MASK_16M)
 
-#define MEM_MIN_1M (MEM_MASK_1M | MEM_MASK_2M | MEM_MASK_4M | MEM_MASK_8M | \
-        MEM_MASK_16M)
+#define MEM_MIN_1M (MEM_MASK_1M | MEM_MASK_2M | MEM_MASK_4M | MEM_MASK_8M | MEM_MASK_16M)
 
 #define MEM_MIN_2M (MEM_MASK_2M | MEM_MASK_4M | MEM_MASK_8M | MEM_MASK_16M)
 
 #define MEM_MIN_4M (MEM_MASK_4M | MEM_MASK_8M | MEM_MASK_16M)
 
-#define MEM_1M_4M  (MEM_MASK_1M | MEM_MASK_2M | MEM_MASK_4M)
-#define MEM_2M_4M  (MEM_MASK_2M | MEM_MASK_4M)
+#define MEM_1M_4M (MEM_MASK_1M | MEM_MASK_2M | MEM_MASK_4M)
+#define MEM_2M_4M (MEM_MASK_2M | MEM_MASK_4M)
 #define MEM_4M_ONLY (MEM_MASK_4M)
 
-const char *rom_names[] = {
-    "Arthur 0.30",
-    "Arthur 1.20",
-    "RISC OS 2.00",
-    "RISC OS 2.01",
-    "RISC OS 3.00",
-    "RISC OS 3.10",
-    "RISC OS 3.11",
-    "RISC OS 3.19",
-    "Arthur 1.20 (A500)",
-    "RISC OS 2.00 (A500)",
-    "RISC OS 3.10 (A500)"
-};
+const char *rom_names[] = {"Arthur 0.30",  "Arthur 1.20",  "RISC OS 2.00",       "RISC OS 2.01",        "RISC OS 3.00",       "RISC OS 3.10",
+                           "RISC OS 3.11", "RISC OS 3.19", "Arthur 1.20 (A500)", "RISC OS 2.00 (A500)", "RISC OS 3.10 (A500)"};
 
 enum {
     ROM_ARTHUR_030_MASK = (1 << ROM_ARTHUR_030),
@@ -190,59 +104,42 @@ enum {
 };
 
 /*Arthur and later - Archimedes 305, 310, 440*/
-#define ROM_ALL (ROM_ARTHUR_030_MASK | ROM_ARTHUR_120_MASK | ROM_RISCOS_200_MASK | \
-        ROM_RISCOS_201_MASK | ROM_RISCOS_300_MASK | ROM_RISCOS_310_MASK | \
-        ROM_RISCOS_311_MASK | ROM_RISCOS_319_MASK)
+#define ROM_ALL (ROM_ARTHUR_030_MASK | ROM_ARTHUR_120_MASK | ROM_RISCOS_200_MASK | ROM_RISCOS_201_MASK | ROM_RISCOS_300_MASK | ROM_RISCOS_310_MASK | ROM_RISCOS_311_MASK | ROM_RISCOS_319_MASK)
 
 /*RISC OS 2.00 and later - Archimedes 410/1, 420/1, 440/1, A3000*/
-#define ROM_RISCOS (ROM_RISCOS_200_MASK | ROM_RISCOS_201_MASK | ROM_RISCOS_300_MASK | \
-        ROM_RISCOS_310_MASK | ROM_RISCOS_311_MASK | ROM_RISCOS_319_MASK)
+#define ROM_RISCOS (ROM_RISCOS_200_MASK | ROM_RISCOS_201_MASK | ROM_RISCOS_300_MASK | ROM_RISCOS_310_MASK | ROM_RISCOS_311_MASK | ROM_RISCOS_319_MASK)
 
 /*RISC OS 2.01 and later - Archimedes 540*/
-#define ROM_RISCOS201 (ROM_RISCOS_201_MASK | ROM_RISCOS_300_MASK | ROM_RISCOS_310_MASK | \
-        ROM_RISCOS_311_MASK | ROM_RISCOS_319_MASK)
+#define ROM_RISCOS201 (ROM_RISCOS_201_MASK | ROM_RISCOS_300_MASK | ROM_RISCOS_310_MASK | ROM_RISCOS_311_MASK | ROM_RISCOS_319_MASK)
 
 /*RISC OS 3.00 and later - A5000*/
-#define ROM_RISCOS3 (ROM_RISCOS_300_MASK | ROM_RISCOS_310_MASK | ROM_RISCOS_311_MASK | \
-        ROM_RISCOS_319_MASK)
+#define ROM_RISCOS3 (ROM_RISCOS_300_MASK | ROM_RISCOS_310_MASK | ROM_RISCOS_311_MASK | ROM_RISCOS_319_MASK)
 
 /*RISC OS 3.10 and later - A3010, A3020, A4000, A5000a, A4*/
 #define ROM_RISCOS31 (ROM_RISCOS_310_MASK | ROM_RISCOS_311_MASK | ROM_RISCOS_319_MASK)
 
 #define ROM_A500 (ROM_ARTHUR_120_A500_MASK | ROM_RISCOS_200_A500_MASK | ROM_RISCOS_310_A500_MASK)
 
-const char *monitor_names[] = {
-    "Standard",
-    "Multisync",
-    "VGA",
-    "High res mono",
-    "LCD"
-};
+const char *monitor_names[] = {"Standard", "Multisync", "VGA", "High res mono", "LCD"};
 
 enum {
-    MONITOR_STANDARD_MASK  = (1 << MONITOR_STANDARD),
+    MONITOR_STANDARD_MASK = (1 << MONITOR_STANDARD),
     MONITOR_MULTISYNC_MASK = (1 << MONITOR_MULTISYNC),
-    MONITOR_VGA_MASK       = (1 << MONITOR_VGA),
-    MONITOR_MONO_MASK      = (1 << MONITOR_MONO),
-    MONITOR_LCD_MASK       = (1 << MONITOR_LCD)
+    MONITOR_VGA_MASK = (1 << MONITOR_VGA),
+    MONITOR_MONO_MASK = (1 << MONITOR_MONO),
+    MONITOR_LCD_MASK = (1 << MONITOR_LCD)
 };
 
 /*Machines supporting high res mono - Archimedes 440, 4x0/1, 540*/
-#define MONITOR_ALL (MONITOR_STANDARD_MASK | MONITOR_MULTISYNC_MASK | MONITOR_VGA_MASK | \
-        MONITOR_MONO_MASK)
+#define MONITOR_ALL (MONITOR_STANDARD_MASK | MONITOR_MULTISYNC_MASK | MONITOR_VGA_MASK | MONITOR_MONO_MASK)
 
 /*Machines not supporting high res mono - everythine else*/
 #define MONITOR_NO_MONO (MONITOR_STANDARD_MASK | MONITOR_MULTISYNC_MASK | MONITOR_VGA_MASK)
 
 /*Machines with LCD*/
-#define MONITOR_LCD_A4 (MONITOR_STANDARD_MASK | MONITOR_MULTISYNC_MASK | MONITOR_VGA_MASK | \
-        MONITOR_LCD_MASK)
+#define MONITOR_LCD_A4 (MONITOR_STANDARD_MASK | MONITOR_MULTISYNC_MASK | MONITOR_VGA_MASK | MONITOR_LCD_MASK)
 
-enum {
-    PODULE_NONE = 0,
-    PODULE_16BIT,
-    PODULE_8BIT
-};
+enum { PODULE_NONE = 0, PODULE_16BIT, PODULE_8BIT };
 
 typedef struct machine_preset_t {
     const char *name;
@@ -259,72 +156,83 @@ typedef struct machine_preset_t {
     bool has_5th_column;
 } machine_preset_t;
 
-static const machine_preset_t presets[] =
-{
-    {"Archimedes 305",   "a305",   "ARM2, 512kB RAM, MEMC1, Old IO, Arthur",               MACHINE_TYPE_NORMAL, CPU_ARM2_AND_LATER,    MEM_MIN_512K, MEMC_MIN_MEMC1,     ROM_ALL,       MONITOR_NO_MONO, CPU_ARM2,    MEM_512K, MEMC_MEMC1,     IO_OLD,       PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 0},
-    {"Archimedes 310",   "a310",   "ARM2, 1MB RAM, MEMC1, Old IO, Arthur",                 MACHINE_TYPE_NORMAL, CPU_ARM2_AND_LATER,    MEM_MIN_1M,   MEMC_MIN_MEMC1,     ROM_ALL,       MONITOR_NO_MONO, CPU_ARM2,    MEM_1M,   MEMC_MEMC1,     IO_OLD,       PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 0},
-    {"Archimedes 440",   "a440",   "ARM2, 1MB RAM, MEMC1, Old IO + ST-506 HD, Arthur",     MACHINE_TYPE_NORMAL, CPU_ARM2_AND_LATER,    MEM_MIN_4M,   MEMC_MIN_MEMC1,     ROM_ALL,       MONITOR_ALL,     CPU_ARM2,    MEM_4M,   MEMC_MEMC1,     IO_OLD_ST506, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 0},
-    {"Archimedes 410/1", "a410/1", "ARM2, 1MB RAM, MEMC1A, Old IO + ST-506 HD, RISC OS 2", MACHINE_TYPE_NORMAL, CPU_ARM2_AND_LATER,    MEM_MIN_1M,   MEMC_MIN_MEMC1A,    ROM_RISCOS,    MONITOR_ALL,     CPU_ARM2,    MEM_1M,   MEMC_MEMC1A_8,  IO_OLD_ST506, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 0},
-    {"Archimedes 420/1", "a420/1", "ARM2, 2MB RAM, MEMC1A, Old IO + ST-506 HD, RISC OS 2", MACHINE_TYPE_NORMAL, CPU_ARM2_AND_LATER,    MEM_MIN_2M,   MEMC_MIN_MEMC1A,    ROM_RISCOS,    MONITOR_ALL,     CPU_ARM2,    MEM_2M,   MEMC_MEMC1A_8,  IO_OLD_ST506, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 0},
-    {"Archimedes 440/1", "a440/1", "ARM2, 4MB RAM, MEMC1A, Old IO + ST-506 HD, RISC OS 2", MACHINE_TYPE_NORMAL, CPU_ARM2_AND_LATER,    MEM_MIN_4M,   MEMC_MIN_MEMC1A,    ROM_RISCOS,    MONITOR_ALL,     CPU_ARM2,    MEM_4M,   MEMC_MEMC1A_8,  IO_OLD_ST506, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 0},
-    {"A3000",            "a3000",  "ARM2, 1MB RAM, MEMC1A, Old IO, RISC OS 2",             MACHINE_TYPE_NORMAL, CPU_ARM2_AND_LATER,    MEM_MIN_1M,   MEMC_MIN_MEMC1A,    ROM_RISCOS,    MONITOR_NO_MONO, CPU_ARM2,    MEM_1M,   MEMC_MEMC1A_8,  IO_OLD,       PODULE_16BIT, PODULE_8BIT,  PODULE_NONE,  PODULE_NONE,  0},
-    {"Archimedes 540",   "a540",   "ARM3/26, 4MB RAM, MEMC1A, Old IO, RISC OS 2.01",       MACHINE_TYPE_NORMAL, CPU_ARM3_26_AND_LATER, MEM_MIN_4M,   MEMC_MIN_MEMC1A_12, ROM_RISCOS201, MONITOR_ALL,     CPU_ARM3_26, MEM_4M,   MEMC_MEMC1A_12, IO_OLD,       PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 0},
-    {"A5000",            "a5000",  "ARM3/25, 1MB RAM, MEMC1A, New IO, RISC OS 3.0",        MACHINE_TYPE_NORMAL, CPU_ARM3_25_AND_LATER, MEM_MIN_1M,   MEMC_MIN_MEMC1A_12, ROM_RISCOS3,   MONITOR_NO_MONO, CPU_ARM3_25, MEM_2M,   MEMC_MEMC1A_12, IO_NEW,       PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 1},
-    {"A4",               "a4",     "ARM3/24, 2MB RAM, MEMC1A, New IO, RISC OS 3.0",        MACHINE_TYPE_A4,     CPU_ARM3_24_ONLY,      MEM_2M_4M,    MEMC_MIN_MEMC1A_12, ROM_RISCOS3,   MONITOR_LCD_A4,  CPU_ARM3_24, MEM_2M,   MEMC_MEMC1A_12, IO_NEW,       PODULE_NONE,  PODULE_NONE,  PODULE_NONE,  PODULE_NONE,  1},
-    {"A3010",            "a3010",  "ARM250, 1MB RAM, MEMC1A, New IO, RISC OS 3.1",         MACHINE_TYPE_NORMAL, CPU_ARM250_ONLY,       MEM_1M_4M,    MEMC_MIN_MEMC1A_12, ROM_RISCOS31,  MONITOR_NO_MONO, CPU_ARM250,  MEM_1M,   MEMC_MEMC1A_12, IO_NEW,       PODULE_NONE,  PODULE_8BIT,  PODULE_NONE,  PODULE_NONE,  0},
-    {"A3020",            "a3020",  "ARM250, 2MB RAM, MEMC1A, New IO, RISC OS 3.1",         MACHINE_TYPE_NORMAL, CPU_ARM250_ONLY,       MEM_2M_4M,    MEMC_MIN_MEMC1A_12, ROM_RISCOS31,  MONITOR_NO_MONO, CPU_ARM250,  MEM_2M,   MEMC_MEMC1A_12, IO_NEW,       PODULE_NONE,  PODULE_8BIT,  PODULE_NONE,  PODULE_NONE,  0},
-    {"A4000",            "a4000",  "ARM250, 2MB RAM, MEMC1A, New IO, RISC OS 3.1",         MACHINE_TYPE_NORMAL, CPU_ARM250_ONLY,       MEM_2M_4M,    MEMC_MIN_MEMC1A_12, ROM_RISCOS31,  MONITOR_NO_MONO, CPU_ARM250,  MEM_2M,   MEMC_MEMC1A_12, IO_NEW,       PODULE_NONE,  PODULE_8BIT,  PODULE_NONE,  PODULE_NONE,  0},
-    {"A5000a",           "a5000a", "ARM3/33, 4MB RAM, MEMC1A, New IO, RISC OS 3.1",        MACHINE_TYPE_NORMAL, CPU_ARM3_33_AND_LATER, MEM_MIN_4M,   MEMC_MIN_MEMC1A_12, ROM_RISCOS31,  MONITOR_NO_MONO, CPU_ARM3_33, MEM_4M,   MEMC_MEMC1A_12, IO_NEW,       PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 1},
-    {"A500 (prototype)", "a500",   "ARM2, 4MB RAM, MEMC1, Old IO + ST-506 HD, Arthur",     MACHINE_TYPE_NORMAL, CPU_ARM2_AND_LATER,    MEM_4M_ONLY,  MEMC_MIN_MEMC1,     ROM_A500,      MONITOR_ALL,     CPU_ARM2,    MEM_4M,   MEMC_MEMC1,     IO_OLD_ST506, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 0},
-    {"", 0, 0, 0, 0, 0}
+static const machine_preset_t presets[] = {{"Archimedes 305", "a305", "ARM2, 512kB RAM, MEMC1, Old IO, Arthur", MACHINE_TYPE_NORMAL, CPU_ARM2_AND_LATER, MEM_MIN_512K, MEMC_MIN_MEMC1, ROM_ALL,
+                                            MONITOR_NO_MONO, CPU_ARM2, MEM_512K, MEMC_MEMC1, IO_OLD, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 0},
+                                           {"Archimedes 310", "a310", "ARM2, 1MB RAM, MEMC1, Old IO, Arthur", MACHINE_TYPE_NORMAL, CPU_ARM2_AND_LATER, MEM_MIN_1M, MEMC_MIN_MEMC1, ROM_ALL,
+                                            MONITOR_NO_MONO, CPU_ARM2, MEM_1M, MEMC_MEMC1, IO_OLD, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 0},
+                                           {"Archimedes 440", "a440", "ARM2, 1MB RAM, MEMC1, Old IO + ST-506 HD, Arthur", MACHINE_TYPE_NORMAL, CPU_ARM2_AND_LATER, MEM_MIN_4M, MEMC_MIN_MEMC1, ROM_ALL,
+                                            MONITOR_ALL, CPU_ARM2, MEM_4M, MEMC_MEMC1, IO_OLD_ST506, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 0},
+                                           {"Archimedes 410/1", "a410/1", "ARM2, 1MB RAM, MEMC1A, Old IO + ST-506 HD, RISC OS 2", MACHINE_TYPE_NORMAL, CPU_ARM2_AND_LATER, MEM_MIN_1M, MEMC_MIN_MEMC1A,
+                                            ROM_RISCOS, MONITOR_ALL, CPU_ARM2, MEM_1M, MEMC_MEMC1A_8, IO_OLD_ST506, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 0},
+                                           {"Archimedes 420/1", "a420/1", "ARM2, 2MB RAM, MEMC1A, Old IO + ST-506 HD, RISC OS 2", MACHINE_TYPE_NORMAL, CPU_ARM2_AND_LATER, MEM_MIN_2M, MEMC_MIN_MEMC1A,
+                                            ROM_RISCOS, MONITOR_ALL, CPU_ARM2, MEM_2M, MEMC_MEMC1A_8, IO_OLD_ST506, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 0},
+                                           {"Archimedes 440/1", "a440/1", "ARM2, 4MB RAM, MEMC1A, Old IO + ST-506 HD, RISC OS 2", MACHINE_TYPE_NORMAL, CPU_ARM2_AND_LATER, MEM_MIN_4M, MEMC_MIN_MEMC1A,
+                                            ROM_RISCOS, MONITOR_ALL, CPU_ARM2, MEM_4M, MEMC_MEMC1A_8, IO_OLD_ST506, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 0},
+                                           {"A3000", "a3000", "ARM2, 1MB RAM, MEMC1A, Old IO, RISC OS 2", MACHINE_TYPE_NORMAL, CPU_ARM2_AND_LATER, MEM_MIN_1M, MEMC_MIN_MEMC1A, ROM_RISCOS,
+                                            MONITOR_NO_MONO, CPU_ARM2, MEM_1M, MEMC_MEMC1A_8, IO_OLD, PODULE_16BIT, PODULE_8BIT, PODULE_NONE, PODULE_NONE, 0},
+                                           {"Archimedes 540", "a540", "ARM3/26, 4MB RAM, MEMC1A, Old IO, RISC OS 2.01", MACHINE_TYPE_NORMAL, CPU_ARM3_26_AND_LATER, MEM_MIN_4M, MEMC_MIN_MEMC1A_12,
+                                            ROM_RISCOS201, MONITOR_ALL, CPU_ARM3_26, MEM_4M, MEMC_MEMC1A_12, IO_OLD, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 0},
+                                           {"A5000", "a5000", "ARM3/25, 1MB RAM, MEMC1A, New IO, RISC OS 3.0", MACHINE_TYPE_NORMAL, CPU_ARM3_25_AND_LATER, MEM_MIN_1M, MEMC_MIN_MEMC1A_12, ROM_RISCOS3,
+                                            MONITOR_NO_MONO, CPU_ARM3_25, MEM_2M, MEMC_MEMC1A_12, IO_NEW, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 1},
+                                           {"A4", "a4", "ARM3/24, 2MB RAM, MEMC1A, New IO, RISC OS 3.0", MACHINE_TYPE_A4, CPU_ARM3_24_ONLY, MEM_2M_4M, MEMC_MIN_MEMC1A_12, ROM_RISCOS3, MONITOR_LCD_A4,
+                                            CPU_ARM3_24, MEM_2M, MEMC_MEMC1A_12, IO_NEW, PODULE_NONE, PODULE_NONE, PODULE_NONE, PODULE_NONE, 1},
+                                           {"A3010", "a3010", "ARM250, 1MB RAM, MEMC1A, New IO, RISC OS 3.1", MACHINE_TYPE_NORMAL, CPU_ARM250_ONLY, MEM_1M_4M, MEMC_MIN_MEMC1A_12, ROM_RISCOS31,
+                                            MONITOR_NO_MONO, CPU_ARM250, MEM_1M, MEMC_MEMC1A_12, IO_NEW, PODULE_NONE, PODULE_8BIT, PODULE_NONE, PODULE_NONE, 0},
+                                           {"A3020", "a3020", "ARM250, 2MB RAM, MEMC1A, New IO, RISC OS 3.1", MACHINE_TYPE_NORMAL, CPU_ARM250_ONLY, MEM_2M_4M, MEMC_MIN_MEMC1A_12, ROM_RISCOS31,
+                                            MONITOR_NO_MONO, CPU_ARM250, MEM_2M, MEMC_MEMC1A_12, IO_NEW, PODULE_NONE, PODULE_8BIT, PODULE_NONE, PODULE_NONE, 0},
+                                           {"A4000", "a4000", "ARM250, 2MB RAM, MEMC1A, New IO, RISC OS 3.1", MACHINE_TYPE_NORMAL, CPU_ARM250_ONLY, MEM_2M_4M, MEMC_MIN_MEMC1A_12, ROM_RISCOS31,
+                                            MONITOR_NO_MONO, CPU_ARM250, MEM_2M, MEMC_MEMC1A_12, IO_NEW, PODULE_NONE, PODULE_8BIT, PODULE_NONE, PODULE_NONE, 0},
+                                           {"A5000a", "a5000a", "ARM3/33, 4MB RAM, MEMC1A, New IO, RISC OS 3.1", MACHINE_TYPE_NORMAL, CPU_ARM3_33_AND_LATER, MEM_MIN_4M, MEMC_MIN_MEMC1A_12,
+                                            ROM_RISCOS31, MONITOR_NO_MONO, CPU_ARM3_33, MEM_4M, MEMC_MEMC1A_12, IO_NEW, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 1},
+                                           {"A500 (prototype)", "a500", "ARM2, 4MB RAM, MEMC1, Old IO + ST-506 HD, Arthur", MACHINE_TYPE_NORMAL, CPU_ARM2_AND_LATER, MEM_4M_ONLY, MEMC_MIN_MEMC1,
+                                            ROM_A500, MONITOR_ALL, CPU_ARM2, MEM_4M, MEMC_MEMC1, IO_OLD_ST506, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, PODULE_16BIT, 0},
+                                           {"", 0, 0, 0, 0, 0}};
+
+class ConfigDialog : public wxDialog {
+   public:
+    ConfigDialog(wxWindow *parent, bool is_running);
+    ConfigDialog(wxWindow *parent, bool is_running, int preset);
+
+   private:
+    void OnOK(wxCommandEvent &event);
+    void OnCancel(wxCommandEvent &event);
+    void OnMachine(wxCommandEvent &event);
+    void OnComboCPU(wxCommandEvent &event);
+    void OnComboFPU(wxCommandEvent &event);
+    void OnComboMEMC(wxCommandEvent &event);
+    void OnComboMemory(wxCommandEvent &event);
+    void OnComboOS(wxCommandEvent &event);
+    void OnComboMonitor(wxCommandEvent &event);
+    void OnComboPodule(wxCommandEvent &event);
+    void OnConfigPodule(wxCommandEvent &event);
+    void OnHDSel(wxCommandEvent &event);
+    void OnHDNew(wxCommandEvent &event);
+    void OnHDEject(wxCommandEvent &event);
+    void OnConfigJoystick(wxCommandEvent &event);
+    void OnIDEdit(wxCommandEvent &event);
+    void On5thColumn(wxCommandEvent &event);
+    void CommonInit(wxWindow *parent, bool is_running);
+    void UpdateList(int cpu, int mem, int memc, int fpu, int io);
+    void PopulatePoduleList(int nr, wxComboBox *cbox);
+    void PopulatePoduleLists(void);
+    bool PoduleGetConfigEnable(int slot_nr);
+    wxString PoduleGetLabel(int slot_nr);
+    void Update5thColumn();
+    int get_preset(char *machine);
+    int get_preset_config(char *machine);
+    int get_cpu(char *cpu);
+    int get_memc(char *memc);
+    int get_mem(char *mem);
+    int get_rom(char *rom);
+    int get_monitor(char *monitor);
+    int config_preset;
+    int config_cpu, config_mem, config_memc, config_fpu, config_io, config_rom, config_monitor;
+    uint32_t config_unique_id;
+    wxString hd_fns[2];
+    char config_podules[4][16];
+    bool running;
+    bool is_a3010;
 };
-
-class ConfigDialog: public wxDialog {
-    public:
-        ConfigDialog(wxWindow *parent, bool is_running);
-        ConfigDialog(wxWindow *parent, bool is_running, int preset);
-
-    private:
-        void OnOK(wxCommandEvent &event);
-        void OnCancel(wxCommandEvent &event);
-        void OnMachine(wxCommandEvent &event);
-        void OnComboCPU(wxCommandEvent &event);
-        void OnComboFPU(wxCommandEvent &event);
-        void OnComboMEMC(wxCommandEvent &event);
-        void OnComboMemory(wxCommandEvent &event);
-        void OnComboOS(wxCommandEvent &event);
-        void OnComboMonitor(wxCommandEvent &event);
-        void OnComboPodule(wxCommandEvent &event);
-        void OnConfigPodule(wxCommandEvent &event);
-        void OnHDSel(wxCommandEvent &event);
-        void OnHDNew(wxCommandEvent &event);
-        void OnHDEject(wxCommandEvent &event);
-        void OnConfigJoystick(wxCommandEvent &event);
-        void OnIDEdit(wxCommandEvent &event);
-        void On5thColumn(wxCommandEvent &event);
-        void CommonInit(wxWindow *parent, bool is_running);
-        void UpdateList(int cpu, int mem, int memc, int fpu, int io);
-        void PopulatePoduleList(int nr, wxComboBox *cbox);
-        void PopulatePoduleLists(void);
-        bool PoduleGetConfigEnable(int slot_nr);
-        wxString PoduleGetLabel(int slot_nr);
-        void Update5thColumn();
-        int get_preset(char *machine);
-        int get_preset_config(char *machine);
-        int get_cpu(char *cpu);
-        int get_memc(char *memc);
-        int get_mem(char *mem);
-        int get_rom(char *rom);
-        int get_monitor(char *monitor);
-        int config_preset;
-        int config_cpu, config_mem, config_memc, config_fpu, config_io, config_rom, config_monitor;
-        uint32_t config_unique_id;
-        wxString hd_fns[2];
-        char config_podules[4][16];
-        bool running;
-        bool is_a3010;
-};
-
 
 int ConfigDialog::get_preset(char *machine) {
     int c = 0;
@@ -340,7 +248,6 @@ int ConfigDialog::get_preset(char *machine) {
     return 0;
 }
 
-
 int ConfigDialog::get_preset_config(char *machine) {
     int c = 0;
 
@@ -355,11 +262,8 @@ int ConfigDialog::get_preset_config(char *machine) {
     return 0;
 }
 
-
-int ConfigDialog::get_cpu(char *cpu)
-{
-    for (int c = 0; c < nr_elems(cpu_names); c++)
-    {
+int ConfigDialog::get_cpu(char *cpu) {
+    for (int c = 0; c < nr_elems(cpu_names); c++) {
         if (!strcmp(cpu_names[c], cpu))
             return c;
     }
@@ -367,11 +271,8 @@ int ConfigDialog::get_cpu(char *cpu)
     return 0;
 }
 
-
-int ConfigDialog::get_memc(char *memc)
-{
-    for (int c = 0; c < nr_elems(memc_names); c++)
-    {
+int ConfigDialog::get_memc(char *memc) {
+    for (int c = 0; c < nr_elems(memc_names); c++) {
         if (!strcmp(memc_names[c], memc))
             return c;
     }
@@ -379,11 +280,8 @@ int ConfigDialog::get_memc(char *memc)
     return 0;
 }
 
-
-int ConfigDialog::get_mem(char *mem)
-{
-    for (int c = 0; c < nr_elems(mem_names); c++)
-    {
+int ConfigDialog::get_mem(char *mem) {
+    for (int c = 0; c < nr_elems(mem_names); c++) {
         if (!strcmp(mem_names[c], mem))
             return c;
     }
@@ -391,11 +289,8 @@ int ConfigDialog::get_mem(char *mem)
     return 0;
 }
 
-
-int ConfigDialog::get_rom(char *rom)
-{
-    for (int c = 0; c < nr_elems(rom_names); c++)
-    {
+int ConfigDialog::get_rom(char *rom) {
+    for (int c = 0; c < nr_elems(rom_names); c++) {
         if (!strcmp(rom_names[c], rom))
             return c;
     }
@@ -403,11 +298,8 @@ int ConfigDialog::get_rom(char *rom)
     return 0;
 }
 
-
-int ConfigDialog::get_monitor(char *monitor)
-{
-    for (int c = 0; c < nr_elems(monitor_names); c++)
-    {
+int ConfigDialog::get_monitor(char *monitor) {
+    for (int c = 0; c < nr_elems(monitor_names); c++) {
         if (!strcmp(monitor_names[c], monitor))
             return c;
     }
@@ -415,9 +307,7 @@ int ConfigDialog::get_monitor(char *monitor)
     return 0;
 }
 
-
-void ConfigDialog::CommonInit(wxWindow *parent, bool is_running)
-{
+void ConfigDialog::CommonInit(wxWindow *parent, bool is_running) {
     running = is_running;
     wxXmlResource::Get()->LoadDialog(this, parent, "ConfigureDlg");
 
@@ -465,9 +355,9 @@ void ConfigDialog::CommonInit(wxWindow *parent, bool is_running)
     tctrl = (wxTextCtrl *)this->FindWindow(XRCID("IDC_EDIT_CYLINDERS_4"));
     tctrl->SetValue(temp_s);
     if (config_io == IO_NEW)
-        sprintf(temp_s, "%i", (hd_cyl[0]*hd_hpc[0]*hd_spt[0]*512) / (1024*1024));
+        sprintf(temp_s, "%i", (hd_cyl[0] * hd_hpc[0] * hd_spt[0] * 512) / (1024 * 1024));
     else
-        sprintf(temp_s, "%i", (hd_cyl[0]*hd_hpc[0]*hd_spt[0]*256) / (1024*1024));
+        sprintf(temp_s, "%i", (hd_cyl[0] * hd_hpc[0] * hd_spt[0] * 256) / (1024 * 1024));
     tctrl = (wxTextCtrl *)this->FindWindow(XRCID("IDC_EDIT_SIZE_4"));
     tctrl->SetValue(temp_s);
 
@@ -483,9 +373,9 @@ void ConfigDialog::CommonInit(wxWindow *parent, bool is_running)
     tctrl = (wxTextCtrl *)this->FindWindow(XRCID("IDC_EDIT_CYLINDERS_5"));
     tctrl->SetValue(temp_s);
     if (config_io == IO_NEW)
-        sprintf(temp_s, "%i", (hd_cyl[1]*hd_hpc[1]*hd_spt[1]*512) / (1024*1024));
+        sprintf(temp_s, "%i", (hd_cyl[1] * hd_hpc[1] * hd_spt[1] * 512) / (1024 * 1024));
     else
-        sprintf(temp_s, "%i", (hd_cyl[1]*hd_hpc[1]*hd_spt[1]*256) / (1024*1024));
+        sprintf(temp_s, "%i", (hd_cyl[1] * hd_hpc[1] * hd_spt[1] * 256) / (1024 * 1024));
     tctrl = (wxTextCtrl *)this->FindWindow(XRCID("IDC_EDIT_SIZE_5"));
     tctrl->SetValue(temp_s);
 
@@ -496,7 +386,6 @@ void ConfigDialog::CommonInit(wxWindow *parent, bool is_running)
     cbctrl->SetValue(support_rom_enabled);
     cbctrl->Enable(config_rom >= ROM_RISCOS_300);
 }
-
 
 ConfigDialog::ConfigDialog(wxWindow *parent, bool is_running) {
     int c;
@@ -512,24 +401,23 @@ ConfigDialog::ConfigDialog(wxWindow *parent, bool is_running) {
 
     CommonInit(parent, is_running);
 
-    switch (memsize)
-    {
-        case   512:
+    switch (memsize) {
+        case 512:
             config_mem = MEM_512K;
             break;
-        case   1024:
+        case 1024:
             config_mem = MEM_1M;
             break;
-        case   2048:
+        case 2048:
             config_mem = MEM_2M;
             break;
-        case   4096:
+        case 4096:
             config_mem = MEM_4M;
             break;
-        case   8192:
+        case 8192:
             config_mem = MEM_8M;
             break;
-        case   16384:
+        case 16384:
             config_mem = MEM_16M;
             break;
     }
@@ -537,25 +425,22 @@ ConfigDialog::ConfigDialog(wxWindow *parent, bool is_running) {
     UpdateList(config_cpu, config_mem, config_memc, config_fpu, config_io);
 
     for (c = 0; c < 4; c++) {
-        strncpy(config_podules[c], podule_names[c], PODULE_SHORT_NAME_LEN - 1);
+        strncpy(config_podules[c], podule_names[c], PODULE_SHORT_NAME_LEN - 1); // GCC -Wstringop-truncation - it's a 2D 'string' - 4 x 16
     }
 
     PopulatePoduleLists();
     Update5thColumn();
 }
 
-
-ConfigDialog::ConfigDialog(wxWindow *parent, bool is_running, int preset)
-{
+ConfigDialog::ConfigDialog(wxWindow *parent, bool is_running, int preset) {
     config_preset = preset;
-    config_cpu  = presets[preset].default_cpu;
-    config_mem  = presets[preset].default_mem;
+    config_cpu = presets[preset].default_cpu;
+    config_mem = presets[preset].default_mem;
     config_memc = presets[preset].default_memc;
-    config_fpu  = FPU_NONE;
-    config_io   = presets[preset].io;
+    config_fpu = FPU_NONE;
+    config_io = presets[preset].io;
     config_monitor = MONITOR_MULTISYNC;
-    if (config_io == IO_NEW)
-    {
+    if (config_io == IO_NEW) {
         /*TODO - should replace with something better...*/
         srand(time(NULL));
         config_unique_id = rand() ^ (rand() << 16);
@@ -575,16 +460,13 @@ ConfigDialog::ConfigDialog(wxWindow *parent, bool is_running, int preset)
     Update5thColumn();
 }
 
-
-void ConfigDialog::UpdateList(int cpu, int mem, int memc, int fpu, int io)
-{
+void ConfigDialog::UpdateList(int cpu, int mem, int memc, int fpu, int io) {
     int c;
     wxComboBox *cbox = (wxComboBox *)this->FindWindow(XRCID("IDC_COMBO_MACHINE"));
     cbox->SetValue("");
     cbox->Clear();
     c = 0;
-    while (presets[c].name[0])
-    {
+    while (presets[c].name[0]) {
         if (romset_available_mask & presets[c].allowed_romset_mask)
             cbox->Append(presets[c].name);
         c++;
@@ -594,8 +476,7 @@ void ConfigDialog::UpdateList(int cpu, int mem, int memc, int fpu, int io)
     cbox = (wxComboBox *)this->FindWindow(XRCID("IDC_COMBO_CPU"));
     cbox->SetValue("");
     cbox->Clear();
-    for (c = 0; c < nr_elems(cpu_names); c++)
-    {
+    for (c = 0; c < nr_elems(cpu_names); c++) {
         if (presets[config_preset].allowed_cpu_mask & (1 << c))
             cbox->Append(cpu_names[c]);
     }
@@ -604,8 +485,7 @@ void ConfigDialog::UpdateList(int cpu, int mem, int memc, int fpu, int io)
     cbox = (wxComboBox *)this->FindWindow(XRCID("IDC_COMBO_MEMORY"));
     cbox->SetValue("");
     cbox->Clear();
-    for (c = 0; c < nr_elems(mem_names); c++)
-    {
+    for (c = 0; c < nr_elems(mem_names); c++) {
         if (presets[config_preset].allowed_mem_mask & (1 << c))
             cbox->Append(mem_names[c]);
     }
@@ -614,8 +494,7 @@ void ConfigDialog::UpdateList(int cpu, int mem, int memc, int fpu, int io)
     cbox = (wxComboBox *)this->FindWindow(XRCID("IDC_COMBO_MEMC"));
     cbox->SetValue("");
     cbox->Clear();
-    for (c = 0; c < nr_elems(memc_names); c++)
-    {
+    for (c = 0; c < nr_elems(memc_names); c++) {
         if (presets[config_preset].allowed_memc_mask & (1 << c))
             cbox->Append(memc_names[c]);
     }
@@ -634,8 +513,7 @@ void ConfigDialog::UpdateList(int cpu, int mem, int memc, int fpu, int io)
     cbox = (wxComboBox *)this->FindWindow(XRCID("IDC_COMBO_OS"));
     cbox->SetValue("");
     cbox->Clear();
-    for (c = 0; c < nr_elems(rom_names); c++)
-    {
+    for (c = 0; c < nr_elems(rom_names); c++) {
         if ((romset_available_mask & (1 << c)) && (presets[config_preset].allowed_romset_mask & (1 << c)))
             cbox->Append(rom_names[c]);
     }
@@ -647,8 +525,7 @@ void ConfigDialog::UpdateList(int cpu, int mem, int memc, int fpu, int io)
     cbox = (wxComboBox *)this->FindWindow(XRCID("IDC_COMBO_MONITOR"));
     cbox->SetValue("");
     cbox->Clear();
-    for (c = 0; c < nr_elems(monitor_names); c++)
-    {
+    for (c = 0; c < nr_elems(monitor_names); c++) {
         if (presets[config_preset].allowed_monitor_mask & (1 << c))
             cbox->Append(monitor_names[c]);
     }
@@ -669,10 +546,8 @@ void ConfigDialog::UpdateList(int cpu, int mem, int memc, int fpu, int io)
     cbox->Append("None");
     cbox->SetValue("None");
     c = 0;
-    while (joystick_get_name(c))
-    {
-        if (strcmp(joystick_get_config_name(c), "a3010") || is_a3010)
-        {
+    while (joystick_get_name(c)) {
+        if (strcmp(joystick_get_config_name(c), "a3010") || is_a3010) {
             cbox->Append(joystick_get_name(c));
             if (!strcmp(joystick_if, joystick_get_config_name(c)))
                 cbox->SetValue(joystick_get_name(c));
@@ -680,7 +555,6 @@ void ConfigDialog::UpdateList(int cpu, int mem, int memc, int fpu, int io)
         c++;
     }
 }
-
 
 void ConfigDialog::PopulatePoduleList(int slot_nr, wxComboBox *cbox) {
     int c = 0;
@@ -705,15 +579,12 @@ void ConfigDialog::PopulatePoduleList(int slot_nr, wxComboBox *cbox) {
             c++;
         }
 
-    }
-    else {
+    } else {
         cbox->Disable();
     }
 }
 
-
-bool ConfigDialog::PoduleGetConfigEnable(int slot_nr)
-{
+bool ConfigDialog::PoduleGetConfigEnable(int slot_nr) {
     if (presets[config_preset].podule_type[slot_nr] == PODULE_NONE)
         return false;
 
@@ -725,9 +596,7 @@ bool ConfigDialog::PoduleGetConfigEnable(int slot_nr)
     return false;
 }
 
-
-wxString ConfigDialog::PoduleGetLabel(int slot_nr)
-{
+wxString ConfigDialog::PoduleGetLabel(int slot_nr) {
     wxString s;
 
     if (presets[config_preset].podule_type[slot_nr] == PODULE_8BIT)
@@ -740,9 +609,7 @@ wxString ConfigDialog::PoduleGetLabel(int slot_nr)
     return s;
 }
 
-
-void ConfigDialog::PopulatePoduleLists(void)
-{
+void ConfigDialog::PopulatePoduleLists(void) {
     PopulatePoduleList(0, (wxComboBox *)this->FindWindow(XRCID("IDC_COMBO_PODULE0")));
     PopulatePoduleList(1, (wxComboBox *)this->FindWindow(XRCID("IDC_COMBO_PODULE1")));
     PopulatePoduleList(2, (wxComboBox *)this->FindWindow(XRCID("IDC_COMBO_PODULE2")));
@@ -758,7 +625,6 @@ void ConfigDialog::PopulatePoduleLists(void)
     ((wxButton *)this->FindWindow(XRCID("IDC_TEXT_PODULE2")))->SetLabel(PoduleGetLabel(2));
     ((wxButton *)this->FindWindow(XRCID("IDC_TEXT_PODULE3")))->SetLabel(PoduleGetLabel(3));
 }
-
 
 void ConfigDialog::OnOK(wxCommandEvent &event) {
     int c;
@@ -836,8 +702,7 @@ void ConfigDialog::OnOK(wxCommandEvent &event) {
 
     if (romset == ROM_ARTHUR_120_A500 || romset == ROM_RISCOS_200_A500 || romset == ROM_RISCOS_310_A500) {
         fdctype = FDC_WD1793_A500;
-    }
-    else {
+    } else {
         fdctype = (config_io >= IO_NEW) ? 1 : 0;
     }
 
@@ -901,7 +766,7 @@ void ConfigDialog::OnOK(wxCommandEvent &event) {
         c++;
     }
 
-    strncpy(machine, presets[config_preset].config_name, sizeof(machine));
+    strncpy(machine, presets[config_preset].config_name, sizeof(machine) - 1);
     tctrl = (wxTextCtrl *)this->FindWindow(XRCID("IDC_EDIT_5THCOL"));
     strcpy(_5th_column_fn, tctrl->GetValue().mb_str());
     support_rom_enabled = ((wxCheckBox *)this->FindWindow(XRCID("IDC_CHECK_ASROM")))->GetValue();
@@ -914,11 +779,9 @@ void ConfigDialog::OnOK(wxCommandEvent &event) {
     EndModal(0);
 }
 
-
 void ConfigDialog::OnCancel(wxCommandEvent &event) {
     EndModal(-1);
 }
-
 
 void ConfigDialog::OnMachine(wxCommandEvent &event) {
     char machine_c_s[256];
@@ -926,15 +789,14 @@ void ConfigDialog::OnMachine(wxCommandEvent &event) {
     wxString machine_s = ((wxComboBox *)this->FindWindow(XRCID("IDC_COMBO_MACHINE")))->GetValue();
     strncpy(machine_c_s, machine_s, sizeof(machine_c_s));
     config_preset = get_preset(machine_c_s);
-    config_cpu  = presets[config_preset].default_cpu;
-    config_mem  = presets[config_preset].default_mem;
+    config_cpu = presets[config_preset].default_cpu;
+    config_mem = presets[config_preset].default_mem;
     config_memc = presets[config_preset].default_memc;
-    config_io   = presets[config_preset].io;
+    config_io = presets[config_preset].io;
     UpdateList(config_cpu, config_mem, config_memc, config_fpu, config_io);
     PopulatePoduleLists();
     Update5thColumn();
 }
-
 
 void ConfigDialog::OnComboCPU(wxCommandEvent &event) {
     char cpu_c_s[256];
@@ -944,14 +806,11 @@ void ConfigDialog::OnComboCPU(wxCommandEvent &event) {
     rpclog("New CPU = %s\n", cpu_c_s);
     config_cpu = get_cpu(cpu_c_s);
     rpclog("config_cpu = %i\n", config_cpu);
-    if (config_cpu == CPU_ARM2)
-    {
+    if (config_cpu == CPU_ARM2) {
         /*ARM2 does not support FPA*/
         if (config_fpu != FPU_NONE)
             config_fpu = FPU_FPPC;
-    }
-    else
-    {
+    } else {
         /*ARM3 only supports MEMC1A*/
         if (config_fpu != FPU_NONE)
             config_fpu = FPU_FPA10;
@@ -961,7 +820,6 @@ void ConfigDialog::OnComboCPU(wxCommandEvent &event) {
     UpdateList(config_cpu, config_mem, config_memc, config_fpu, config_io);
 }
 
-
 void ConfigDialog::OnComboMemory(wxCommandEvent &event) {
     char mem_c_s[256];
 
@@ -969,7 +827,6 @@ void ConfigDialog::OnComboMemory(wxCommandEvent &event) {
     strncpy(mem_c_s, mem_s, sizeof(mem_c_s));
     config_mem = get_mem(mem_c_s);
 }
-
 
 void ConfigDialog::OnComboMEMC(wxCommandEvent &event) {
     char memc_c_s[256];
@@ -992,8 +849,7 @@ void ConfigDialog::OnComboOS(wxCommandEvent &event) {
     ((wxCheckBox *)FindWindow(XRCID("IDC_CHECK_ASROM")))->Enable(config_rom >= ROM_RISCOS_300);
 }
 
-void ConfigDialog::OnComboMonitor(wxCommandEvent &event)
-{
+void ConfigDialog::OnComboMonitor(wxCommandEvent &event) {
     char monitor_c_s[256];
     wxString monitor_s = ((wxComboBox *)this->FindWindow(event.GetId()))->GetValue();
     strncpy(monitor_c_s, monitor_s, sizeof(monitor_c_s));
@@ -1001,24 +857,19 @@ void ConfigDialog::OnComboMonitor(wxCommandEvent &event)
     config_monitor = get_monitor(monitor_c_s);
 }
 
-void ConfigDialog::OnHDSel(wxCommandEvent &event)
-{
+void ConfigDialog::OnHDSel(wxCommandEvent &event) {
     int hd_nr = (event.GetId() == XRCID("IDC_SEL_HD4")) ? 0 : 1;
 
-    wxFileDialog dlg(NULL, "Select a disc image", "", hd_fns[hd_nr],
-            "HDF Disc Image|*.hdf|All Files|*.*",
-            wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    wxFileDialog dlg(NULL, "Select a disc image", "", hd_fns[hd_nr], "HDF Disc Image|*.hdf|All Files|*.*", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 
-    if (dlg.ShowModal() == wxID_OK)
-    {
+    if (dlg.ShowModal() == wxID_OK) {
         wxString new_fn = dlg.GetPath();
         char new_fn_c[256];
         int new_sectors, new_heads, new_cylinders;
 
         strncpy(new_fn_c, new_fn, sizeof(new_fn_c));
 
-        if (ShowConfHD(this, &new_sectors, &new_heads, &new_cylinders, new_fn_c, config_io != IO_NEW))
-        {
+        if (ShowConfHD(this, &new_sectors, &new_heads, &new_cylinders, new_fn_c, config_io != IO_NEW)) {
             char temp_s[80];
             int new_size;
 
@@ -1027,8 +878,7 @@ void ConfigDialog::OnHDSel(wxCommandEvent &event)
             else
                 new_size = (new_cylinders * new_heads * new_sectors * 512) / (1024 * 1024);
 
-            if (!hd_nr)
-            {
+            if (!hd_nr) {
                 sprintf(temp_s, "%i", new_cylinders);
                 ((wxTextCtrl *)this->FindWindow(XRCID("IDC_EDIT_CYLINDERS_4")))->SetValue(temp_s);
                 sprintf(temp_s, "%i", new_heads);
@@ -1038,9 +888,7 @@ void ConfigDialog::OnHDSel(wxCommandEvent &event)
                 sprintf(temp_s, "%i", new_size);
                 ((wxTextCtrl *)this->FindWindow(XRCID("IDC_EDIT_SIZE_4")))->SetValue(temp_s);
                 ((wxTextCtrl *)this->FindWindow(XRCID("IDC_EDIT_HD4")))->SetValue(new_fn);
-            }
-            else
-            {
+            } else {
                 sprintf(temp_s, "%i", new_cylinders);
                 ((wxTextCtrl *)this->FindWindow(XRCID("IDC_EDIT_CYLINDERS_5")))->SetValue(temp_s);
                 sprintf(temp_s, "%i", new_heads);
@@ -1054,15 +902,14 @@ void ConfigDialog::OnHDSel(wxCommandEvent &event)
         }
     }
 }
-void ConfigDialog::OnHDNew(wxCommandEvent &event)
-{
+
+void ConfigDialog::OnHDNew(wxCommandEvent &event) {
     int new_sectors, new_heads, new_cylinders;
     char new_fn[256];
 
     int ret = ShowNewHD(this, &new_sectors, &new_heads, &new_cylinders, new_fn, sizeof(new_fn), config_io != IO_NEW);
 
-    if (ret)
-    {
+    if (ret) {
         char temp_s[256];
         int new_size;
 
@@ -1070,8 +917,7 @@ void ConfigDialog::OnHDNew(wxCommandEvent &event)
             new_size = (new_cylinders * new_heads * new_sectors * 256) / (1024 * 1024);
         else
             new_size = (new_cylinders * new_heads * new_sectors * 512) / (1024 * 1024);
-        if (event.GetId() == XRCID("IDC_NEW_HD4"))
-        {
+        if (event.GetId() == XRCID("IDC_NEW_HD4")) {
             sprintf(temp_s, "%i", new_cylinders);
             ((wxTextCtrl *)this->FindWindow(XRCID("IDC_EDIT_CYLINDERS_4")))->SetValue(temp_s);
             sprintf(temp_s, "%i", new_heads);
@@ -1081,9 +927,7 @@ void ConfigDialog::OnHDNew(wxCommandEvent &event)
             sprintf(temp_s, "%i", new_size);
             ((wxTextCtrl *)this->FindWindow(XRCID("IDC_EDIT_SIZE_4")))->SetValue(temp_s);
             ((wxTextCtrl *)this->FindWindow(XRCID("IDC_EDIT_HD4")))->SetValue(new_fn);
-        }
-        else
-        {
+        } else {
             sprintf(temp_s, "%i", new_cylinders);
             ((wxTextCtrl *)this->FindWindow(XRCID("IDC_EDIT_CYLINDERS_5")))->SetValue(temp_s);
             sprintf(temp_s, "%i", new_heads);
@@ -1096,8 +940,8 @@ void ConfigDialog::OnHDNew(wxCommandEvent &event)
         }
     }
 }
-void ConfigDialog::OnHDEject(wxCommandEvent &event)
-{
+
+void ConfigDialog::OnHDEject(wxCommandEvent &event) {
     wxTextCtrl *tctrl;
     int hd_nr = (event.GetId() == XRCID("IDC_EJECT_HD4")) ? 0 : 1;
 
@@ -1108,28 +952,24 @@ void ConfigDialog::OnHDEject(wxCommandEvent &event)
     tctrl->SetValue("");
 }
 
-
 /* Selects a Podule from the combobox by long name, looks up the shortname and puts in config */
 void ConfigDialog::OnComboPodule(wxCommandEvent &event) {
     char sel_s[PODULE_LONG_NAME_LEN];
     wxComboBox *cbox = (wxComboBox *)this->FindWindow(event.GetId());
-    strncpy(sel_s, (const char*)cbox->GetStringSelection().mb_str(wxConvUTF8), PODULE_LONG_NAME_LEN - 1);
+    strncpy(sel_s, (const char *)cbox->GetStringSelection().mb_str(wxConvUTF8), PODULE_LONG_NAME_LEN - 1);
     wxButton *config_button;
     int slot_nr;
 
     if (event.GetId() == XRCID("IDC_COMBO_PODULE0")) {
         slot_nr = 0;
         config_button = (wxButton *)this->FindWindow(XRCID("IDC_CONFIG_PODULE0"));
-    }
-    else if (event.GetId() == XRCID("IDC_COMBO_PODULE1")) {
+    } else if (event.GetId() == XRCID("IDC_COMBO_PODULE1")) {
         slot_nr = 1;
         config_button = (wxButton *)this->FindWindow(XRCID("IDC_CONFIG_PODULE1"));
-    }
-    else if (event.GetId() == XRCID("IDC_COMBO_PODULE2")) {
+    } else if (event.GetId() == XRCID("IDC_COMBO_PODULE2")) {
         slot_nr = 2;
         config_button = (wxButton *)this->FindWindow(XRCID("IDC_CONFIG_PODULE2"));
-    }
-    else {
+    } else {
         slot_nr = 3;
         config_button = (wxButton *)this->FindWindow(XRCID("IDC_CONFIG_PODULE3"));
     }
@@ -1138,7 +978,7 @@ void ConfigDialog::OnComboPodule(wxCommandEvent &event) {
 
     for (int i = 0; podule_get_name(i) != NULL; i++) {
         if (!strcmp(sel_s, podule_get_name(i))) {
-            sel_nr = i+1;
+            sel_nr = i + 1;
             break;
         }
     }
@@ -1146,12 +986,11 @@ void ConfigDialog::OnComboPodule(wxCommandEvent &event) {
     if (!sel_nr) {
         strcpy(config_podules[slot_nr], "");
         config_button->Enable(false);
-    }
-    else {
-        strncpy(config_podules[slot_nr], podule_get_short_name(sel_nr-1), PODULE_SHORT_NAME_LEN - 1);
+    } else {
+        strncpy(config_podules[slot_nr], podule_get_short_name(sel_nr - 1), PODULE_SHORT_NAME_LEN - 1);
         config_button->Enable(PoduleGetConfigEnable(slot_nr));
 
-        if (podule_get_flags(sel_nr-1) & PODULE_FLAGS_UNIQUE) {
+        if (podule_get_flags(sel_nr - 1) & PODULE_FLAGS_UNIQUE) {
             /*Clear out any duplicates*/
             int c;
 
@@ -1181,8 +1020,7 @@ void ConfigDialog::OnComboPodule(wxCommandEvent &event) {
     }
 }
 
-void ConfigDialog::OnConfigPodule(wxCommandEvent &event)
-{
+void ConfigDialog::OnConfigPodule(wxCommandEvent &event) {
     int slot_nr;
 
     if (event.GetId() == XRCID("IDC_CONFIG_PODULE0"))
@@ -1198,8 +1036,7 @@ void ConfigDialog::OnConfigPodule(wxCommandEvent &event)
     ShowPoduleConfig(this, podule, podule->config, running, slot_nr);
 }
 
-void ConfigDialog::OnConfigJoystick(wxCommandEvent &event)
-{
+void ConfigDialog::OnConfigJoystick(wxCommandEvent &event) {
     int joy_nr = 0;
 
     if (event.GetId() == XRCID("IDC_JOY1"))
@@ -1213,8 +1050,7 @@ void ConfigDialog::OnConfigJoystick(wxCommandEvent &event)
 
     int c = 0;
     int joy_type = 0;
-    while (joystick_get_name(c))
-    {
+    while (joystick_get_name(c)) {
         if (!strcmp(temp_s, joystick_get_name(c)))
             joy_type = c;
         c++;
@@ -1223,8 +1059,7 @@ void ConfigDialog::OnConfigJoystick(wxCommandEvent &event)
     ShowConfJoy(this, joy_nr, joy_type);
 }
 
-void ConfigDialog::OnIDEdit(wxCommandEvent &event)
-{
+void ConfigDialog::OnIDEdit(wxCommandEvent &event) {
     static bool skip_processing = false;
 
     if (skip_processing)
@@ -1235,17 +1070,14 @@ void ConfigDialog::OnIDEdit(wxCommandEvent &event)
     unsigned long pos = tctrl->GetInsertionPoint();
     wxString s2 = "";
     config_unique_id = 0;
-    for (unsigned int c = 0; c < s.Len(); c++)
-    {
+    for (unsigned int c = 0; c < s.Len(); c++) {
         wxUniChar uch = s.at(c);
 
-        if (uch.IsAscii())
-        {
+        if (uch.IsAscii()) {
             char ch = uch;
 
             /*Is character a valid hex digit?*/
-            if ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F'))
-            {
+            if ((ch >= '0' && ch <= '9') || (ch >= 'a' && ch <= 'f') || (ch >= 'A' && ch <= 'F')) {
                 s2 << uch;
                 config_unique_id <<= 4;
                 if (ch >= '0' && ch <= '9')
@@ -1254,8 +1086,7 @@ void ConfigDialog::OnIDEdit(wxCommandEvent &event)
                     config_unique_id |= ((ch - 'A') + 10);
                 else if (ch >= 'a' && ch <= 'f')
                     config_unique_id |= ((ch - 'a') + 10);
-            }
-            else if (c < pos)
+            } else if (c < pos)
                 pos--;
         }
     }
@@ -1266,35 +1097,28 @@ void ConfigDialog::OnIDEdit(wxCommandEvent &event)
     skip_processing = false;
 }
 
-void ConfigDialog::Update5thColumn()
-{
+void ConfigDialog::Update5thColumn() {
     ((wxTextCtrl *)this->FindWindow(XRCID("IDC_EDIT_5THCOL")))->Enable(presets[config_preset].has_5th_column);
     ((wxButton *)this->FindWindow(XRCID("IDC_FILE_5THCOL")))->Enable(presets[config_preset].has_5th_column);
 }
 
-void ConfigDialog::On5thColumn(wxCommandEvent &event)
-{
+void ConfigDialog::On5thColumn(wxCommandEvent &event) {
     wxString old_fn = ((wxTextCtrl *)this->FindWindow(XRCID("IDC_EDIT_5THCOL")))->GetValue();
-    wxFileDialog dlg(NULL, "Select a 5th Column ROM image", "", old_fn,
-            "ROM Image|*.bin;*.rom|All Files|*.*",
-            wxFD_OPEN | wxFD_FILE_MUST_EXIST);
+    wxFileDialog dlg(NULL, "Select a 5th Column ROM image", "", old_fn, "ROM Image|*.bin;*.rom|All Files|*.*", wxFD_OPEN | wxFD_FILE_MUST_EXIST);
 
-    if (dlg.ShowModal() == wxID_OK)
-    {
+    if (dlg.ShowModal() == wxID_OK) {
         wxString new_fn = dlg.GetPath();
         ((wxTextCtrl *)this->FindWindow(XRCID("IDC_EDIT_5THCOL")))->SetValue(new_fn);
     }
 }
 
-int ShowConfig(bool running)
-{
+int ShowConfig(bool running) {
     ConfigDialog dlg(NULL, running);
 
     return dlg.ShowModal();
 }
 
-int ShowPresetList()
-{
+int ShowPresetList() {
     wxArrayString achoices;
     int c = 0;
     int preset = -1;
@@ -1303,8 +1127,7 @@ int ShowPresetList()
     while (presets[c].name[0])
         achoices.Add(presets[c++].name);
 
-    while (1)
-    {
+    while (1) {
         preset = wxGetSingleChoiceIndex("Please select a machine type", "Syracuse", achoices);
 
         if (preset == -1)

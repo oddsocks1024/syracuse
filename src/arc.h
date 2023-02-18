@@ -154,7 +154,8 @@ extern int readflash[4];
 
 /*Causes a databort during RISC OS 3.11 startup*/
 #define mousehack 0
-extern char configdir[512];
+extern char configdir[4096];
+
 
 /*Eterna*/
 extern uint8_t readeterna(uint32_t addr);

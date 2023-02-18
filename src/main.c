@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdarg.h>
 #include <sys/time.h>
+#include <limits.h>
 #include "82c711.h"
 #include "82c711_fdc.h"
 #include "arc.h"
@@ -67,7 +68,7 @@ static float inssecf;  /*Millions of instructions executed in the last second*/
 int inssec;            /*Speed ratio percentage (100% = realtime emulation), updated by updateins()*/
 int updatemips;        /*1 if MIPS counter has not been updated since last updateins() call*/
 static int frameco = 0;  /*Number of 1/100 second executions (arm_run() calls) since last updateins()*/
-char configdir[512];
+extern char configdir[PATH_MAX];
 int jint,jtotal;
 
 #define SYRACUSELOG LOGDIR "syracuse.log"

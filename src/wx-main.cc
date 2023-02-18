@@ -1,5 +1,5 @@
 /*
-    Syracuse 2.2 modified from Arculator (by Sarah Walker) by Ian Chapman
+    Syracuse 2.2 forked from Arculator which was written by Sarah Walker
     Main Function
 */
 #include "wx-app.h"
@@ -19,6 +19,7 @@ extern "C" {
 }
 
 extern char cmosdir[PATH_MAX];
+char configdir[PATH_MAX];
 
 int main(int argc, char **argv) {
     char configdir_loc[PATH_MAX];
@@ -27,9 +28,9 @@ int main(int argc, char **argv) {
     XInitThreads();
     al_init_main(0, NULL);
     get_config_dir_loc(configdir_loc);
-    snprintf(configdir, sizeof(configdir), "%s%s", configdir_loc, CFGDIR);
-    snprintf(cmosdir, sizeof(cmosdir), "%s%s", configdir_loc, CMOSDIR);
-    snprintf(logdir, sizeof(logdir), "%s%s", configdir_loc, LOGDIR);
+    snprintf(configdir, sizeof(configdir), "%s%s", configdir_loc, CFGDIR); // Ignore truncation warnings
+    snprintf(cmosdir, sizeof(cmosdir), "%s%s", configdir_loc, CMOSDIR); // Ignore truncation warnings
+    snprintf(logdir, sizeof(logdir), "%s%s", configdir_loc, LOGDIR); // Ignore truncation warnings
 
     if (stat(configdir, &st) == DOES_NOT_EXIST) {
         mkdir(configdir, 0755);
