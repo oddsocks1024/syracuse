@@ -234,7 +234,7 @@ static void mitsumi_command_run(mitsumi_t *mitsumi)
                 mitsumi_add_status_disc_changed(mitsumi);
             else
             {
-                /*CD-ROM interface returns TOC suitable for ATAPI. Mangle a bit for MCD*/
+                /* CD-ROM interface returns TOC suitable for ATAPI. Mangle a bit for MCD */
                 uint8_t buf[12];
                 uint32_t size;
 
@@ -266,7 +266,7 @@ static void mitsumi_command_run(mitsumi_t *mitsumi)
             {
                 int toc_len;
                 int offset;
-                uint32_t size;
+                uint32_t size;  // GCC Warning: variable 'size' set but not used - FALSE POSITIVE //
 
                 atapi->medium_changed();
                 toc_len = atapi->readtoc_raw(mitsumi->toc, 2048);

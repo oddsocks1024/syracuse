@@ -15,8 +15,8 @@ char cmosdir[PATH_MAX];
 int cmos_changed = 0;
 int i2c_clock = 1, i2c_data = 1;
 
-#define TRANSMITTER_CMOS 1
-#define TRANSMITTER_ARM -1
+#define TRANSMITTER_CMOS     1
+#define TRANSMITTER_ARM      -1
 #define I2C_IDLE             0
 #define I2C_RECEIVE          1
 #define I2C_TRANSMIT         2
@@ -67,8 +67,8 @@ static const int rtc_days_in_month[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31
 static void cmos_get_time();
 
 /*
- * Attempts to load the machine specific CMOS. If it can't find it, it loads the global default
- * CMOS. Then this written out to the machine specific CMOS
+    Attempts to load the machine specific CMOS. If it can't find it, it loads the global default
+    CMOS. Then this written out to the machine specific CMOS
 */
 void cmos_load() {
     char fn[PATH_MAX];

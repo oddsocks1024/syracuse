@@ -68,7 +68,6 @@ typedef struct aka10_t {
 
 static uint8_t aka10_read_b(struct podule_t *podule, podule_io_type type, uint32_t addr) {
     aka10_t *aka10 = podule->p;
-    uint8_t temp = 0xff;
 
     if (type == PODULE_IO_TYPE_MEMC) {
         //aka10_log("aka10_read_b: MEMC, addr=%04x\n", addr);

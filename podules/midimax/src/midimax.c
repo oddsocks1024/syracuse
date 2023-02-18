@@ -51,7 +51,6 @@ typedef struct midimax_t {
 
 static uint8_t midimax_read_b(struct podule_t *podule, podule_io_type type, uint32_t addr) {
     midimax_t *midimax = podule->p;
-    uint8_t temp = 0xff;
 
     if (type != PODULE_IO_TYPE_IOC)
         return 0xff;

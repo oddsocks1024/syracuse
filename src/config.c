@@ -89,8 +89,7 @@ typedef struct list_t
 static list_t global_config_head;
 static list_t machine_config_head;
 
-typedef struct section_t
-{
+typedef struct section_t {
     struct list_t list;
 
     char name[256];
@@ -245,7 +244,7 @@ void config_load(int is_global, char *fn)
         if (buffer[c] == '[') /*Section*/
         {
             section_t *new_section;
-            char name[256];
+            char name[255];
             int d = 0;
 
             c++;
@@ -258,7 +257,7 @@ void config_load(int is_global, char *fn)
 
             new_section = (section_t *)malloc(sizeof(section_t));
             memset(new_section, 0, sizeof(section_t));
-            strncpy(new_section->name, name, 256);
+            strncpy(new_section->name, name, 255);
             list_add(&new_section->list, head);
 
             current_section = new_section;
@@ -268,7 +267,7 @@ void config_load(int is_global, char *fn)
         else
         {
             entry_t *new_entry;
-            char name[256];
+            char name[255];
             int d = 0, data_pos;
 
             while (buffer[c] != '=' && buffer[c] != ' ' && buffer[c])
@@ -292,8 +291,8 @@ void config_load(int is_global, char *fn)
 
             new_entry = (entry_t *)malloc(sizeof(entry_t));
             memset(new_entry, 0, sizeof(entry_t));
-            strncpy(new_entry->name, name, 256);
-            strncpy(new_entry->data, &buffer[data_pos], 256);
+            strncpy(new_entry->name, name, 255);
+            strncpy(new_entry->data, &buffer[data_pos], 255);
             list_add(&new_entry->list, &current_section->entry_head);
 
             //                        rpclog("New data under section [%s] : %s = %s\n", current_section->name, new_entry->name, new_entry->data);
@@ -304,15 +303,12 @@ void config_load(int is_global, char *fn)
 }
 
 
-
-void config_new()
-{
+void config_new() {
     FILE *f = fopen(config_file, "wt");
     fclose(f);
 }
 
-static section_t *find_section(const char *name, int is_global)
-{
+static section_t *find_section(const char *name, int is_global) {
     section_t *current_section;
     char blank[] = "";
     list_t *head = is_global ? &global_config_head : &machine_config_head;
@@ -321,8 +317,7 @@ static section_t *find_section(const char *name, int is_global)
     if (!name)
         name = blank;
 
-    while (current_section)
-    {
+    while (current_section) {
         if (!strncmp(current_section->name, name, 256))
             return current_section;
 
@@ -353,7 +348,7 @@ static section_t *create_section(const char *name, int is_global)
     list_t *head = is_global ? &global_config_head : &machine_config_head;
 
     memset(new_section, 0, sizeof(section_t));
-    strncpy(new_section->name, name, 256);
+    strncpy(new_section->name, name, 255);
     list_add(&new_section->list, head);
 
     return new_section;
@@ -363,7 +358,7 @@ static entry_t *create_entry(section_t *section, const char *name)
 {
     entry_t *new_entry = (entry_t *)malloc(sizeof(entry_t));
     memset(new_entry, 0, sizeof(entry_t));
-    strncpy(new_entry->name, name, 256);
+    strncpy(new_entry->name, name, 255);
     list_add(&new_entry->list, &section->entry_head);
 
     return new_entry;

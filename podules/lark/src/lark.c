@@ -385,7 +385,6 @@ static const podule_header_t lark_podule_header = {
 };
 
 const podule_header_t *podule_probe(const podule_callbacks_t *callbacks, char *path) {
-    char dev_name[256];
     podule_callbacks = callbacks;
     strcpy(podule_path, path);
     lark_config.items[0].selection = sound_in_devices_config();

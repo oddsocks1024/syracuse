@@ -30,7 +30,6 @@ static void closedlls(void) {
     }
 }
 
-
 void opendlls(void) {
     DIR *dirp;
     struct dirent *dp;
