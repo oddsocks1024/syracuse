@@ -7,45 +7,40 @@
 #include "ncr5380.h"
 #include "scsi.h"
 
-
-#define ICR_DBP             0x01
-#define ICR_SEL             0x04
-#define ICR_BSY             0x08
-#define ICR_ACK             0x10
-#define ICR_ARB_LOST        0x20
+#define ICR_DBP 0x01
+#define ICR_SEL 0x04
+#define ICR_BSY 0x08
+#define ICR_ACK 0x10
+#define ICR_ARB_LOST 0x20
 #define ICR_ARB_IN_PROGRESS 0x40
 
 #define MODE_ARBITRATE 0x01
-#define MODE_DMA       0x02
-#define MODE_TARGET    0x40
+#define MODE_DMA 0x02
+#define MODE_TARGET 0x40
 
 #define STATUS_ACK 0x01
 #define STATUS_DRQ 0x40
 
-#define TCR_IO  0x01
-#define TCR_CD  0x02
+#define TCR_IO 0x01
+#define TCR_CD 0x02
 #define TCR_MSG 0x04
 #define TCR_REQ 0x08
 
-
-void ncr5380_init(ncr5380_t *ncr, podule_t *podule, const podule_callbacks_t *podule_callbacks, struct scsi_bus_t *bus)
-{
-    memset(ncr, 0, sizeof(ncr));
+void ncr5380_init(ncr5380_t *ncr, podule_t *podule, const podule_callbacks_t *podule_callbacks, struct scsi_bus_t *bus) {
+    memset(ncr, 0, sizeof(ncr5380_t));
     ncr->podule = podule;
     ncr->bus = bus;
     scsi_bus_init(ncr->bus, podule, podule_callbacks);
 }
 
-static int get_bus_host(ncr5380_t *ncr, int match)
-{
+static int get_bus_host(ncr5380_t *ncr, int match) {
     int bus_host = 0;
 
     if (ncr->icr & ICR_DBP)
         bus_host |= BUS_DBP;
     if (ncr->icr & ICR_SEL)
         bus_host |= BUS_SEL;
-    if ((ncr->mode & MODE_TARGET) || match)
-    {
+    if ((ncr->mode & MODE_TARGET) || match) {
         if (ncr->tcr & TCR_IO)
             bus_host |= BUS_IO;
         if (ncr->tcr & TCR_CD)
@@ -65,27 +60,24 @@ static int get_bus_host(ncr5380_t *ncr, int match)
     return bus_host | BUS_SETDATA(ncr->output_data);
 }
 
-void ncr5380_write(ncr5380_t *ncr, uint32_t addr, uint8_t val)
-{
+void ncr5380_write(ncr5380_t *ncr, uint32_t addr, uint8_t val) {
     int bus_host = 0;
 
     //	scsi_log("ncr5380_write: addr=%06x val=%02x\n", addr, val);
-    switch (addr & 7)
-    {
-        //#if 0
+    switch (addr & 7) {
+        // #if 0
         case 0: /*Output data register*/
             ncr->output_data = val;
             break;
-            //#endif
+            // #endif
         case 1: /*Initiator Command Register*/
             ncr->icr = val;
             break;
 
         case 2: /*Mode register*/
-            if ((val & MODE_ARBITRATE) && !(ncr->mode & MODE_ARBITRATE))
-            {
+            if ((val & MODE_ARBITRATE) && !(ncr->mode & MODE_ARBITRATE)) {
                 ncr->icr &= ~ICR_ARB_LOST;
-                ncr->icr |=  ICR_ARB_IN_PROGRESS;
+                ncr->icr |= ICR_ARB_IN_PROGRESS;
             }
 
             ncr->mode = val;
@@ -107,7 +99,6 @@ void ncr5380_write(ncr5380_t *ncr, uint32_t addr, uint8_t val)
         case 7: /*Start DMA Initiator Receive*/
             break;
 
-
         default:
             scsi_fatal("Bad NCR5380 write %06x %02x\n", addr, val);
     }
@@ -117,18 +108,16 @@ void ncr5380_write(ncr5380_t *ncr, uint32_t addr, uint8_t val)
     scsi_bus_update(ncr->bus, bus_host);
 }
 
-uint8_t ncr5380_read(ncr5380_t *ncr, uint32_t addr)
-{
+uint8_t ncr5380_read(ncr5380_t *ncr, uint32_t addr) {
     int bus = 0;
     uint8_t temp;
 
-    //scsi_log("ncr5380_read: addr=%06x\n", addr);
-    switch (addr & 7)
-    {
+    // scsi_log("ncr5380_read: addr=%06x\n", addr);
+    switch (addr & 7) {
         case 0: /*Current SCSI Data*/
             bus = scsi_bus_read(ncr->bus);
-            return BUS_GETDATA(bus);//ncr->output_data;
-        case 1: /*Initiator Command Register*/
+            return BUS_GETDATA(bus);  // ncr->output_data;
+        case 1:                       /*Initiator Command Register*/
             return ncr->icr;
         case 2: /*Mode Register*/
             return ncr->mode;
@@ -160,12 +149,12 @@ uint8_t ncr5380_read(ncr5380_t *ncr, uint32_t addr)
         default:
             scsi_fatal("Bad NCR5380 read %06x\n", addr);
     }
+
+    return -1; /* Silence compiler warnings. Should not reach here due to fatal */
 }
 
-void ncr5380_dack(ncr5380_t *ncr)
-{
-    if (ncr->mode & MODE_DMA)
-    {
+void ncr5380_dack(ncr5380_t *ncr) {
+    if (ncr->mode & MODE_DMA) {
         int bus = get_bus_host(ncr, 0);
 
         scsi_bus_update(ncr->bus, bus | BUS_ACK);
@@ -173,15 +162,13 @@ void ncr5380_dack(ncr5380_t *ncr)
     }
 }
 
-int ncr5380_drq(ncr5380_t *ncr)
-{
+int ncr5380_drq(ncr5380_t *ncr) {
     int bus = scsi_bus_read(ncr->bus);
 
     return ((bus & BUS_REQ) && (ncr->mode & MODE_DMA) && !(bus & (BUS_MSG | BUS_CD)));
 }
 
-int ncr5380_bsy(ncr5380_t *ncr)
-{
+int ncr5380_bsy(ncr5380_t *ncr) {
     int bus = scsi_bus_read(ncr->bus);
 
     return bus & (BUS_MSG | BUS_CD);

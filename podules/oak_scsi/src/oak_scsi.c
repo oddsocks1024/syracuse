@@ -195,13 +195,14 @@ static uint16_t oak_scsi_memc_readw(podule_t *podule, uint32_t addr) {
         }
     }
 
-    //	oak_scsi_log("Read oak_scsi MEMC W %04X  %04x\n", addr, ret);
+    //oak_scsi_log("Read oak_scsi MEMC W %04X  %04x\n", addr, ret);
     return ret;
 }
 
 static void oak_scsi_ioc_writeb(podule_t *podule, uint32_t addr, uint8_t val) {
-    oak_scsi_t *oak_scsi = podule->p;
+    //oak_scsi_t *oak_scsi = podule->p;
     //oak_scsi_log("Write oak_scsi B %04X %02X\n", addr, val);
+    oak_scsi_log("Warning: ioc_writeb not supported yet [oak_scsi_ioc_writeb]\n");
 }
 
 static void oak_scsi_memc_writeb(podule_t *podule, uint32_t addr, uint8_t val) {
@@ -319,7 +320,6 @@ static int oak_scsi_init(struct podule_t *podule) {
 }
 
 static void oak_scsi_write_eeprom(oak_scsi_t *oak_scsi) {
-    char fn[PATH_MAX];
     char nvrfile[PATH_MAX];
     get_config_dir_loc(nvrfile);
     strncat(nvrfile, CMOSDIR,  sizeof(nvrfile) - strlen(nvrfile));
