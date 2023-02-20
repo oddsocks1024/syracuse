@@ -48,12 +48,12 @@
 #include "hostfs.h"
 
 /*
-    0=Arthur
-    1=RiscOS 2
-    2=RiscOS 3.1 with WD1772
-    3=RiscOS 3.1 with 82c711
-    4=MAME 'ertictac' set
-    5=MAME 'poizone' set
+    0 = Arthur
+    1 = RiscOS 2
+    2 = RiscOS 3.1 with WD1772
+    3 = RiscOS 3.1 with 82c711
+    4 = MAME 'ertictac' set
+    5 = MAME 'poizone' set
 
     There are two RiscOS 3.1 sets as configuring for 82c711 corrupts ADFS CMOS space
     used for WD1772 - the effect is that WD1772 will hang more often if they are the
@@ -64,10 +64,10 @@ int romset = 2;
 void fdiclose();
 int firstfull = 1;
 int memsize = 4096;
-static float inssecf;  /*Millions of instructions executed in the last second*/
-int inssec;            /*Speed ratio percentage (100% = realtime emulation), updated by updateins()*/
-int updatemips;        /*1 if MIPS counter has not been updated since last updateins() call*/
-static int frameco = 0;  /*Number of 1/100 second executions (arm_run() calls) since last updateins()*/
+static float inssecf;  /* Millions of instructions executed in the last second */
+int inssec;            /* Speed ratio percentage (100% = realtime emulation), updated by updateins() */
+int updatemips;        /* 1 if MIPS counter has not been updated since last updateins() call */
+static int frameco = 0;  /* Number of 1/100 second executions (arm_run() calls) since last updateins() */
 extern char configdir[PATH_MAX];
 int jint,jtotal;
 

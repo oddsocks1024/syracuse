@@ -94,10 +94,6 @@ Frame::Frame(App* app, const wxString& title, const wxPoint& pos,
         Bind(WX_POPUP_MENU_EVENT, &Frame::OnPopupMenuEvent, this);
         Bind(WX_UPDATE_MENU_EVENT, &Frame::OnUpdateMenuEvent, this);
         Bind(WX_STOP_EMULATION_EVENT, &Frame::OnStopEmulationEvent, this);
-#ifdef _WIN32
-        Bind(WX_WIN_SEND_MESSAGE_EVENT, &Frame::OnWinSendMessageEvent, this);
-#endif
-
         CenterOnScreen();
 }
 
