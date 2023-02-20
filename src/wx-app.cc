@@ -143,7 +143,6 @@ void Frame::UpdateMenu(wxMenu *menu) {
     sprintf(menuitem, "IDM_VIDEO_SCALE[%d]", video_scale);
     item = ((wxMenu *)menu)->FindItem(XRCID(menuitem));
     item->Check(true);
-
     item = ((wxMenu *)menu)->FindItem(XRCID("IDM_DRIVER_AUTO"));
     item->Enable(video_renderer_available(RENDERER_AUTO) ? true : false);
     item->Check((selected_video_renderer == RENDERER_AUTO) ? true : false);
@@ -309,11 +308,11 @@ void Frame::OnMenuCommand(wxCommandEvent &event) {
 
         video_linear_filtering = 1;
         arc_renderer_reset();
-    } else if (event.GetId() >= XRCID("IDM_VIDEO_SCALE[0]") && event.GetId() <= XRCID("IDM_VIDEO_SCALE[7]")) {
+    } else if (event.GetId() >= XRCID("IDM_VIDEO_SCALE[7]") && event.GetId() <= XRCID("IDM_VIDEO_SCALE[0]")) {
         wxMenuItem *item = ((wxMenu *)menu)->FindItem(event.GetId());
         item->Check(true);
-
         video_scale = event.GetId() - XRCID("IDM_VIDEO_SCALE[0]");
+        video_scale *= -1;
     } else if (event.GetId() == XRCID("IDM_VIDEO_FS_FULL")) {
         wxMenuItem *item = ((wxMenu *)menu)->FindItem(event.GetId());
         item->Check(true);
