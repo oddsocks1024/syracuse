@@ -343,7 +343,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-SUBDIRS = src/ podules/aka05/src podules/aka10/src podules/aka12/src podules/aka16/src podules/aka31/src podules/lark/src podules/midimax/src podules/oak_scsi/src podules/ultimatecdrom/src
+SUBDIRS = src podules/aeh50/src podules/aeh54/src podules/aka05/src podules/aka10/src podules/aka12/src podules/aka16/src podules/aka31/src podules/lark/src podules/midimax/src podules/morley_uap/src podules/oak_scsi/src  podules/ultimatecdrom/src
 all: all-recursive
 
 .SUFFIXES:
@@ -816,6 +816,7 @@ uninstall-am:
 
 .PRECIOUS: Makefile
 
+# podules/pccard/src
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

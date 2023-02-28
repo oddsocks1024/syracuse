@@ -20691,7 +20691,7 @@ printf "%s\n" "$as_me: WARNING: unrecognized options: $ac_unrecognized_opts" >&2
 fi
 
 
-ac_config_files="$ac_config_files podules/aka05/src/Makefile podules/aka10/src/Makefile podules/aka12/src/Makefile podules/aka16/src/Makefile podules/aka31/src/Makefile podules/lark/src/Makefile podules/midimax/src/Makefile podules/oak_scsi/src/Makefile podules/ultimatecdrom/src/Makefile"
+ac_config_files="$ac_config_files podules/aeh50/src/Makefile podules/aeh54/src/Makefile podules/aka05/src/Makefile podules/aka10/src/Makefile podules/aka12/src/Makefile podules/aka16/src/Makefile podules/aka31/src/Makefile podules/lark/src/Makefile podules/midimax/src/Makefile podules/morley_uap/src/Makefile podules/oak_scsi/src/Makefile podules/ultimatecdrom/src/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -21849,6 +21849,8 @@ do
     "libtool") CONFIG_COMMANDS="$CONFIG_COMMANDS libtool" ;;
     "Makefile") CONFIG_FILES="$CONFIG_FILES Makefile" ;;
     "src/Makefile") CONFIG_FILES="$CONFIG_FILES src/Makefile" ;;
+    "podules/aeh50/src/Makefile") CONFIG_FILES="$CONFIG_FILES podules/aeh50/src/Makefile" ;;
+    "podules/aeh54/src/Makefile") CONFIG_FILES="$CONFIG_FILES podules/aeh54/src/Makefile" ;;
     "podules/aka05/src/Makefile") CONFIG_FILES="$CONFIG_FILES podules/aka05/src/Makefile" ;;
     "podules/aka10/src/Makefile") CONFIG_FILES="$CONFIG_FILES podules/aka10/src/Makefile" ;;
     "podules/aka12/src/Makefile") CONFIG_FILES="$CONFIG_FILES podules/aka12/src/Makefile" ;;
@@ -21856,6 +21858,7 @@ do
     "podules/aka31/src/Makefile") CONFIG_FILES="$CONFIG_FILES podules/aka31/src/Makefile" ;;
     "podules/lark/src/Makefile") CONFIG_FILES="$CONFIG_FILES podules/lark/src/Makefile" ;;
     "podules/midimax/src/Makefile") CONFIG_FILES="$CONFIG_FILES podules/midimax/src/Makefile" ;;
+    "podules/morley_uap/src/Makefile") CONFIG_FILES="$CONFIG_FILES podules/morley_uap/src/Makefile" ;;
     "podules/oak_scsi/src/Makefile") CONFIG_FILES="$CONFIG_FILES podules/oak_scsi/src/Makefile" ;;
     "podules/ultimatecdrom/src/Makefile") CONFIG_FILES="$CONFIG_FILES podules/ultimatecdrom/src/Makefile" ;;
 

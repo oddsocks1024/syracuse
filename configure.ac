@@ -121,13 +121,16 @@ AM_CONDITIONAL(BUILD_PODULES, [test "$enable_podules" != "no"])
 AC_CONFIG_FILES([Makefile src/Makefile])
 AC_OUTPUT
 
-AC_CONFIG_FILES([podules/aka05/src/Makefile
+AC_CONFIG_FILES([podules/aeh50/src/Makefile
+                 podules/aeh54/src/Makefile
+                 podules/aka05/src/Makefile
                  podules/aka10/src/Makefile
                  podules/aka12/src/Makefile
                  podules/aka16/src/Makefile
                  podules/aka31/src/Makefile
                  podules/lark/src/Makefile
                  podules/midimax/src/Makefile
+                 podules/morley_uap/src/Makefile
                  podules/oak_scsi/src/Makefile
                  podules/ultimatecdrom/src/Makefile])
 AC_OUTPUT
