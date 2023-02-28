@@ -147,7 +147,7 @@ static int aka10_init(struct podule_t *podule) {
     f = fopen(rom_fn, "rb");
 
     if (!f) {
-        aka10_log("Failed to open aka10.ROM!\n");
+        aka10_log("Failed to open aka10.rom!\n");
         return -1;
     }
 

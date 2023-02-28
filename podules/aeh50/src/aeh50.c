@@ -210,20 +210,21 @@ void aeh50_set_irq(void *p, int irq) {
 
 static int aeh50_init(struct podule_t *podule) {
     FILE *f;
-    char rom_fn[512];
+    char rom_fn[PATH_MAX];
     aeh50_t *aeh50 = malloc(sizeof(aeh50_t));
     memset(aeh50, 0, sizeof(aeh50_t));
 
-    sprintf(rom_fn, "%sEthernetII_ID_ROM.ROM", podule_path);
-    aeh50_log("aeh50 ROM %s\n", rom_fn);
+    sprintf(rom_fn, "%s%sEthernetII_ID_ROM.ROM", PODULEROMDIR, "aeh50/");
+    aeh50_log("Loading AEH50 ROM %s\n", rom_fn);
+
     f = fopen(rom_fn, "rb");
     if (!f) {
         aeh50_log("Failed to open EthernetII_ID_ROM.ROM!\n");
         return -1;
     }
-    fread(aeh50->rom, 0x4000, 1, f);
-    fclose(f);
 
+    ignore_result(fread(aeh50->rom, 0x4000, 1, f));
+    fclose(f);
     aeh50->podule = podule;
     podule->p = aeh50;
     const char *network_device = podule_callbacks->config_get_string(podule, "network_device", NETWORK_DEVICE_DEFAULT);
