@@ -51,14 +51,11 @@ static FILE *aeh50_logf;
 static int timestamp = 0;
 
 void aeh50_log(const char *format, ...) {
-#ifdef DEBUG_LOG
     char buf[1024];
     char logfile[PATH_MAX];
     get_config_dir_loc(logfile);
     strncat(logfile, AEH50LOG, sizeof(logfile) - strlen(logfile));
     va_list ap;
-
-    return;
 
     if (!aeh50_logf)
         aeh50_logf = fopen(logfile, "wt");
@@ -69,27 +66,10 @@ void aeh50_log(const char *format, ...) {
     fprintf(aeh50_logf, "[%08i] : ", timestamp);
     fputs(buf, aeh50_logf);
     fflush(aeh50_logf);
-#endif
 }
 
 void aeh50_fatal(const char *format, ...) {
-    char buf[1024];
-    char logfile[PATH_MAX];
-    get_config_dir_loc(logfile);
-    strncat(logfile, AEH50LOG, sizeof(logfile) - strlen(logfile));
-    va_list ap;
-
-    return;
-
-    if (!aeh50_logf)
-        aeh50_logf = fopen(logfile, "wt");
-
-    va_start(ap, format);
-    vsprintf(buf, format, ap);
-    va_end(ap);
-    fprintf(aeh50_logf, "[%08i] : ", timestamp);
-    fputs(buf, aeh50_logf);
-    fflush(aeh50_logf);
+    aeh50_log(format);
     exit(-1);
 }
 
@@ -109,7 +89,7 @@ static uint8_t aeh50_read_b(struct podule_t *podule, podule_io_type type, uint32
                 return 0xff;
         }
     } else {
-        //		aeh50_log("aeh50_read_b MEMC %08x\n", addr);
+        //        aeh50_log("aeh50_read_b MEMC %08x\n", addr);
 
         switch ((addr & 0x3000)) {
             case 0x2000:
@@ -129,7 +109,7 @@ static uint16_t aeh50_read_w(struct podule_t *podule, podule_io_type type, uint3
     if (type == PODULE_IO_TYPE_IOC)
         return aeh50_read_b(podule, type, addr) | 0xff00;
     else {
-        //		aeh50_log("aeh50_read_w MEMC %08x\n", addr);
+        //        aeh50_log("aeh50_read_w MEMC %08x\n", addr);
 
         switch ((addr & 0x3000)) {
             case 0x2000:
@@ -150,11 +130,11 @@ static void aeh50_write_b(struct podule_t *podule, podule_io_type type, uint32_t
         switch (addr & 0x3000) {
             case 0x3000:
                 aeh50->page_reg = val | (val << 8);
-                //        		aeh50_log("page_reg = %04x\n", val | (val << 8));
+                //                aeh50_log("page_reg = %04x\n", val | (val << 8));
                 break;
         }
     } else {
-        //		aeh50_log("aeh50_write_b MEMC %08x %02x\n", addr, val);
+        //        aeh50_log("aeh50_write_b MEMC %08x %02x\n", addr, val);
 
         switch ((addr & 0x3000)) {
             case 0x2000:
@@ -177,11 +157,11 @@ static void aeh50_write_w(struct podule_t *podule, podule_io_type type, uint32_t
                 if (!(aeh50->page_reg & 0x8000) && (val & 0x8000))
                     ne2000_do_reset(aeh50->ne2000);
                 aeh50->page_reg = val;
-                //        		aeh50_log("page_reg = %04x\n", val);
+                //                aeh50_log("page_reg = %04x\n", val);
                 break;
         }
     } else {
-        //		aeh50_log("aeh50_write_w MEMC %08x %04x\n", addr, val);
+        //        aeh50_log("aeh50_write_w MEMC %08x %04x\n", addr, val);
 
         switch ((addr & 0x3000)) {
             case 0x2000:
@@ -197,7 +177,7 @@ static void aeh50_write_w(struct podule_t *podule, podule_io_type type, uint32_t
 
 static void aeh50_reset(struct podule_t *podule) {
     aeh50_t *aeh50 = podule->p;
-    aeh50_log("Reset aeh50\n");
+    aeh50_log("Reset podule AEH50\n");
     aeh50->page_reg = 0;
 }
 
@@ -219,7 +199,7 @@ static int aeh50_init(struct podule_t *podule) {
 
     f = fopen(rom_fn, "rb");
     if (!f) {
-        aeh50_log("Failed to open EthernetII_ID_ROM.ROM!\n");
+        aeh50_log("Failed to open %s\n", rom_fn);
         return -1;
     }
 

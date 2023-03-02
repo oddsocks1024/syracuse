@@ -50,17 +50,14 @@ static FILE *aeh54_logf;
 static int timestamp = 0;
 
 void aeh54_log(const char *format, ...) {
-#ifdef DEBUG_LOG
     char buf[1024];
     char logfile[PATH_MAX];
     get_config_dir_loc(logfile);
     strncat(logfile, AEH54LOG, sizeof(logfile) - strlen(logfile));
     va_list ap;
 
-    return;
-
     if (!aeh54_logf)
-        aeh54_logf = fopen(AEH54LOG, "wt");
+        aeh54_logf = fopen(logfile, "wt");
 
     va_start(ap, format);
     vsprintf(buf, format, ap);
@@ -68,27 +65,10 @@ void aeh54_log(const char *format, ...) {
     fprintf(aeh54_logf, "[%08i] : ", timestamp);
     fputs(buf, aeh54_logf);
     fflush(aeh54_logf);
-#endif
 }
 
 void aeh54_fatal(const char *format, ...) {
-    char buf[1024];
-    char logfile[PATH_MAX];
-    get_config_dir_loc(logfile);
-    strncat(logfile, AEH54LOG, sizeof(logfile) - strlen(logfile));
-    va_list ap;
-
-    return;
-
-    if (!aeh54_logf)
-        aeh54_logf = fopen(AEH54LOG, "wt");
-
-    va_start(ap, format);
-    vsprintf(buf, format, ap);
-    va_end(ap);
-    fprintf(aeh54_logf, "[%08i] : ", timestamp);
-    fputs(buf, aeh54_logf);
-    fflush(aeh54_logf);
+    aeh54_log(format);
     exit(-1);
 }
 
@@ -134,9 +114,7 @@ static void aeh54_write_w(struct podule_t *podule, podule_io_type type, uint32_t
 
 static void aeh54_reset(struct podule_t *podule) {
     aeh54_t *aeh54 = podule->p;
-
-    aeh54_log("Reset aeh54\n");
-
+    aeh54_log("Reset podule AEH54\n");
     aeh54->rom_page = 0;
 }
 
@@ -148,28 +126,26 @@ void aeh54_set_irq(void *p, int irq) {
 
 static int aeh54_init(struct podule_t *podule) {
     FILE *f;
-    char rom_fn[512];
+    char rom_fn[PATH_MAX];
     uint8_t mac[6] = {0x00, 0x02, 0x07, 0x00, 0xda, 0x98};
     aeh54_t *aeh54 = malloc(sizeof(aeh54_t));
     memset(aeh54, 0, sizeof(aeh54_t));
-
-    sprintf(rom_fn, "%sether3.rom", podule_path);
-    aeh54_log("aeh54 ROM %s\n", rom_fn);
+    sprintf(rom_fn, "%s%sAEH54.ROM", PODULEROMDIR, "aeh54/");
+    aeh54_log("Loading AEH54 ROM %s\n", rom_fn);
     f = fopen(rom_fn, "rb");
+
     if (!f) {
-        aeh54_log("Failed to open ether3.rom!\n");
+        aeh54_log("Failed to open %s\n", rom_fn);
         return -1;
     }
-    fread(aeh54->rom, 0x20000, 1, f);
+
+    ignore_result(fread(aeh54->rom, 0x20000, 1, f));
+
     fclose(f);
-
     sscanf(&aeh54->rom[0x5a], "%02x:%02x:%02x:%02x:%02x:%02x", &mac[0], &mac[1], &mac[2], &mac[3], &mac[4], &mac[5]);
-
     const char *network_device = podule_callbacks->config_get_string(podule, "network_device", NETWORK_DEVICE_DEFAULT);
     aeh54->net = net_init(network_device, mac);
-
     seeq8005_init(&aeh54->seeq8005, aeh54_set_irq, aeh54, aeh54->net);
-
     aeh54_log("aeh54_init: podule=%p\n", podule);
     aeh54->podule = podule;
     podule->p = aeh54;

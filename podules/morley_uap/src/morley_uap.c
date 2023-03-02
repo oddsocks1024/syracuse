@@ -42,7 +42,6 @@ char podule_path[PATH_MAX];
 static FILE *morley_uap_logf;
 
 void morley_uap_log(const char *format, ...) {
-#ifdef DEBUG_LOG
     char buf[1024];
     char logfile[PATH_MAX];
     get_config_dir_loc(logfile);
@@ -50,13 +49,13 @@ void morley_uap_log(const char *format, ...) {
 
     if (!morley_uap_logf)
         morley_uap_logf = fopen(logfile, "wt");
+
     va_list ap;
     va_start(ap, format);
     vsprintf(buf, format, ap);
     va_end(ap);
     fputs(buf, morley_uap_logf);
     fflush(morley_uap_logf);
-#endif
 }
 
 typedef struct morley_uap_t {
@@ -79,15 +78,15 @@ static uint8_t morley_uap_read_b(struct podule_t *podule, podule_io_type type, u
     uint8_t temp = 0xff;
 
     if (type == PODULE_IO_TYPE_MEMC) {
-        //		morley_uap_log("morley_uap_read_b: MEMC, addr=%04x\n", addr);
+        //        morley_uap_log("morley_uap_read_b: MEMC, addr=%04x\n", addr);
 
         switch (addr & 0x3000) {
             case 0x1000: /*D7002C ADC*/
                 return d7002c_read(&morley_uap->d7002c, addr >> 2);
         }
     } else {
-        //		if ((addr & 0x3fff) >= 0x2010)
-        //			morley_uap_log("morley_uap_read_b: addr=%04x\n", addr);
+        //        if ((addr & 0x3fff) >= 0x2010)
+        //            morley_uap_log("morley_uap_read_b: addr=%04x\n", addr);
         switch (addr & 0x3000) {
             case 0x0000:
             case 0x1000:
@@ -105,16 +104,16 @@ static void morley_uap_write_b(struct podule_t *podule, podule_io_type type, uin
     morley_uap_t *morley_uap = podule->p;
 
     if (type == PODULE_IO_TYPE_MEMC) {
-        //		morley_uap_log("morley_uap_write_b: MEMC, addr=%04x val=%02x\n", addr, val);
+        //        morley_uap_log("morley_uap_write_b: MEMC, addr=%04x val=%02x\n", addr, val);
         switch (addr & 0x3000) {
             case 0x1000: /*D7002C ADC*/
-                         //			morley_uap_log("ADC write %08x %02x\n", addr, val);
+                         //            morley_uap_log("ADC write %08x %02x\n", addr, val);
                 d7002c_write(&morley_uap->d7002c, addr >> 2, val);
                 break;
         }
     } else {
-        //		if ((addr & 0x3fff) >= 0x2010)
-        //			morley_uap_log("morley_uap_write_b: addr=%04x val=%02x\n", addr, val);
+        //        if ((addr & 0x3fff) >= 0x2010)
+        //            morley_uap_log("morley_uap_write_b: addr=%04x val=%02x\n", addr, val);
         switch (addr & 0x3000) {
             case 0x2000:
                 via6522_write(&morley_uap->via6522, addr >> 2, val);
@@ -191,18 +190,19 @@ int joystick_get_pov_count(void) {
 
 static int morley_uap_init(struct podule_t *podule) {
     FILE *f;
-    char rom_fn[512];
+    char rom_fn[PATH_MAX];
     morley_uap_t *morley_uap = malloc(sizeof(morley_uap_t));
     memset(morley_uap, 0, sizeof(morley_uap_t));
-
-    sprintf(rom_fn, "%sMorleyIO.BIN", podule_path);
-    morley_uap_log("morley_uap ROM %s\n", rom_fn);
+    sprintf(rom_fn, "%s%sMorleyIO.BIN", PODULEROMDIR, "morley_uap/");
+    morley_uap_log("Loading Morley UAP ROM %s\n", rom_fn);
     f = fopen(rom_fn, "rb");
+
     if (!f) {
-        morley_uap_log("Failed to open morley_uap.ROM!\n");
+        morley_uap_log("Failed to open %s\n", rom_fn);
         return -1;
     }
-    fread(morley_uap->rom, 0x4000, 1, f);
+
+    ignore_result(fread(morley_uap->rom, 0x4000, 1, f));
     fclose(f);
 
     morley_uap->rom_page = 7; /*Header is in last page*/
