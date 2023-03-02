@@ -70,7 +70,7 @@ MIDI podules.
 
 #define BOOL int
 #define APIENTRY
-#define MIDI_UART_CLOCK 2000000 //(31250Hz * 4 * 16)
+#define MIDI_UART_CLOCK 2000000  //(31250Hz * 4 * 16)
 #define CTRL_OUT_FIFO_ENA (1 << 3)
 #define CTRL_IN_FIFO_ENA (1 << 4)
 #define LARKLOG LOGDIR "lark.log"
@@ -94,7 +94,6 @@ typedef struct lark_t {
 } lark_t;
 
 void lark_log(const char *format, ...) {
-#ifdef DEBUG_LOG
     char buf[1024];
     char logfile[PATH_MAX];
     get_config_dir_loc(logfile);
@@ -109,7 +108,6 @@ void lark_log(const char *format, ...) {
     va_end(ap);
     fputs(buf, lark_logf);
     fflush(lark_logf);
-#endif
 }
 
 static void lark_update_irqs(lark_t *lark) {
@@ -129,13 +127,19 @@ static uint8_t lark_read_b(struct podule_t *podule, podule_io_type type, uint32_
     uint8_t temp = 0xff;
 
     if (type != PODULE_IO_TYPE_IOC) {
-        lark_log("lark_read_b: MEMC %04x\n", addr);
+        // lark_log("lark_read_b: MEMC %04x\n", addr);
         return 0xff;
     }
 
-    switch (addr&0x3c00) {
-        case 0x0000: case 0x0400: case 0x0800: case 0x0c00:
-        case 0x1000: case 0x1400: case 0x1800: case 0x1c00:
+    switch (addr & 0x3c00) {
+        case 0x0000:
+        case 0x0400:
+        case 0x0800:
+        case 0x0c00:
+        case 0x1000:
+        case 0x1400:
+        case 0x1800:
+        case 0x1c00:
             addr = ((addr & 0x1ffc) | (lark->page << 13)) >> 2;
             temp = lark->rom[addr];
             break;
@@ -162,7 +166,7 @@ static void lark_write_b(struct podule_t *podule, podule_io_type type, uint32_t 
     lark_t *lark = podule->p;
 
     if (type != PODULE_IO_TYPE_IOC) {
-        lark_log("lark_write_b: MEMC %04x %02x\n", addr, val);
+        // lark_log("lark_write_b: MEMC %04x %02x\n", addr, val);
         return;
     }
 
@@ -192,8 +196,9 @@ static uint16_t lark_read_w(struct podule_t *podule, podule_io_type type, uint32
     lark_t *lark = podule->p;
     uint16_t temp = 0xffff;
 
-    if (type == PODULE_IO_TYPE_IOC)
-        lark_log("lark_read_w: IOC %04x\n", addr);
+    if (type == PODULE_IO_TYPE_IOC) {
+        //lark_log("lark_read_w: IOC %04x\n", addr);
+    }
     else {
         temp = am7202a_read(&lark->in_fifo);
         temp |= am7202a_read(&lark->in_fifo) << 8;
@@ -205,10 +210,10 @@ static uint16_t lark_read_w(struct podule_t *podule, podule_io_type type, uint32
 static void lark_write_w(struct podule_t *podule, podule_io_type type, uint32_t addr, uint16_t val) {
     lark_t *lark = podule->p;
 
-    if (type == PODULE_IO_TYPE_IOC)
-        lark_log("lark_write_w: IOC %04x %04x\n", addr, val);
-    else
-    {
+    if (type == PODULE_IO_TYPE_IOC) {
+        // lark_log("lark_write_w: IOC %04x %04x\n", addr, val);
+    }
+    else {
         am7202a_write(&lark->out_fifo, val & 0xff);
         am7202a_write(&lark->out_fifo, val >> 8);
     }
@@ -309,7 +314,7 @@ static int lark_init(struct podule_t *podule) {
     f = fopen(rom_fn, "rb");
 
     if (!f) {
-        lark_log("Failed to load the Lark ROM\n");
+        lark_log("Failed to open %s\n", rom_fn);
         return -1;
     }
 
@@ -336,53 +341,18 @@ static void lark_close(struct podule_t *podule) {
     free(lark);
 }
 
-static podule_config_t lark_config = {
-    .items =
-    {
-        {
-            .name = "sound_in_device",
-            .description = "Sound input device",
-            .type = CONFIG_SELECTION,
-            .selection = NULL,
-            .default_int = -1
-        },
-        {
-            .name = "midi_out_device",
-            .description = "MIDI output device",
-            .type = CONFIG_SELECTION,
-            .selection = NULL,
-            .default_int = -1
-        },
-        {
-            .name = "midi_in_device",
-            .description = "MIDI input device",
-            .type = CONFIG_SELECTION,
-            .selection = NULL,
-            .default_int = -1
-        },
-        {
-            .type = -1
-        }
-    }
-};
+static podule_config_t lark_config = {.items = {{.name = "sound_in_device", .description = "Sound input device", .type = CONFIG_SELECTION, .selection = NULL, .default_int = -1},
+                                                {.name = "midi_out_device", .description = "MIDI output device", .type = CONFIG_SELECTION, .selection = NULL, .default_int = -1},
+                                                {.name = "midi_in_device", .description = "MIDI input device", .type = CONFIG_SELECTION, .selection = NULL, .default_int = -1},
+                                                {.type = -1}}};
 
 static const podule_header_t lark_podule_header = {
     .version = PODULE_API_VERSION,
     .flags = PODULE_FLAGS_UNIQUE,
     .short_name = "lark",
     .name = "Computer Concepts Lark",
-    .functions =
-    {
-        .init = lark_init,
-        .close = lark_close,
-        .read_b = lark_read_b,
-        .read_w = lark_read_w,
-        .write_b = lark_write_b,
-        .write_w = lark_write_w,
-        .run = lark_run
-    },
-    .config = &lark_config
-};
+    .functions = {.init = lark_init, .close = lark_close, .read_b = lark_read_b, .read_w = lark_read_w, .write_b = lark_write_b, .write_w = lark_write_w, .run = lark_run},
+    .config = &lark_config};
 
 const podule_header_t *podule_probe(const podule_callbacks_t *callbacks, char *path) {
     podule_callbacks = callbacks;

@@ -45,7 +45,6 @@ static FILE *aka31_logf;
 
 /* Log entries for the AKA31 podule */
 void aka31_log(const char *format, ...) {
-#ifdef DEBUG_LOG
     char buf[1024];
     char logfile[PATH_MAX];
     get_config_dir_loc(logfile);
@@ -60,7 +59,6 @@ void aka31_log(const char *format, ...) {
     va_end(ap);
     fputs(buf, aka31_logf);
     fflush(aka31_logf);
-#endif
 }
 
 /* Creates a log entry and then dies */
@@ -265,7 +263,7 @@ static int aka31_init(struct podule_t *podule) {
     f = fopen(rom_fn, "rb");
 
     if (!f) {
-        aka31_log("Failed to open the AKA31 SCSI ROM!\n");
+        aka31_log("Failed to open %s\n", rom_fn);
         return -1;
     }
 

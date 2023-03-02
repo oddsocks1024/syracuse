@@ -29,7 +29,6 @@ char podule_path[PATH_MAX];
 static FILE *aka05_logf;
 
 void aka05_log(const char *format, ...) {
-#ifdef DEBUG_LOG
     char buf[1024];
     char logfile[PATH_MAX];
     get_config_dir_loc(logfile);
@@ -44,7 +43,6 @@ void aka05_log(const char *format, ...) {
     va_end(ap);
     fputs(buf,aka05_logf);
     fflush(aka05_logf);
-#endif
 }
 
 typedef struct aka05_t {
@@ -118,7 +116,7 @@ static int aka05_init(struct podule_t *podule) {
     f = fopen(rom_fn, "rb");
 
     if (!f) {
-        aka05_log("Failed to load the AKA05 Manager ROM\n");
+        aka05_log("Failed to open %s\n", rom_fn);
         return -1;
     }
 

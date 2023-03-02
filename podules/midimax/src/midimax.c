@@ -21,7 +21,6 @@ char podule_path[PATH_MAX];
 static FILE *midimax_logf;
 
 void midimax_log(const char *format, ...) {
-#ifdef DEBUG_LOG
     char buf[1024];
     char logfile[PATH_MAX];
     get_config_dir_loc(logfile);
@@ -36,7 +35,6 @@ void midimax_log(const char *format, ...) {
     va_end(ap);
     fputs(buf,midimax_logf);
     fflush(midimax_logf);
-#endif
 }
 
 typedef struct midimax_t {
@@ -116,7 +114,7 @@ static int midimax_init(struct podule_t *podule) {
     f = fopen(rom_fn, "rb");
 
     if (!f) {
-        midimax_log("Failed to load the MIDIMax\n");
+        midimax_log("Failed to open %s\n", rom_fn);
         return -1;
     }
 

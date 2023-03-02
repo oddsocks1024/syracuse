@@ -33,7 +33,6 @@ char podule_path[PATH_MAX];
 static FILE *cdlogf;
 
 void cdlog(const char *format, ...) {
-#ifdef DEBUG_LOG
     char buf[1024];
     char logfile[PATH_MAX];
     get_config_dir_loc(logfile);
@@ -48,24 +47,10 @@ void cdlog(const char *format, ...) {
     va_end(ap);
     fputs(buf, cdlogf);
     fflush(cdlogf);
-#endif
 }
 
 void cdfatal(const char *format, ...) {
-    char buf[1024];
-    char logfile[PATH_MAX];
-    get_config_dir_loc(logfile);
-    strncat(logfile, ULTIMATECDROMLOG, sizeof(logfile) - strlen(logfile));
-
-    if (!cdlogf)
-        cdlogf = fopen(logfile,"wt");
-
-    va_list ap;
-    va_start(ap, format);
-    vsprintf(buf, format, ap);
-    va_end(ap);
-    fputs(buf, cdlogf);
-    fflush(cdlogf);
+    cdlog(format);
     exit(-1);
 }
 
@@ -140,7 +125,7 @@ static int cdrom_init(struct podule_t *podule) {
     f = fopen(rom_fn, "rb");
 
     if (!f) {
-        cdlog("Failed to load the Ultimate CD-ROM ROM\n");
+        cdlog("Failed to open %s\n", rom_fn);
         return -1;
     }
 

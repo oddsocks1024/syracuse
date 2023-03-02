@@ -95,7 +95,6 @@ static const uint16_t oak_eeprom_default[16] = {
 static FILE *oak_scsi_logf;
 
 void oak_scsi_log(const char *format, ...) {
-#ifdef DEBUG_LOG
     char buf[1024];
     char logfile[PATH_MAX];
     get_config_dir_loc(logfile);
@@ -110,7 +109,6 @@ void oak_scsi_log(const char *format, ...) {
     va_end(ap);
     fputs(buf, oak_scsi_logf);
     fflush(oak_scsi_logf);
-#endif
 }
 
 void fatal(const char *format, ...) {
@@ -291,7 +289,7 @@ static int oak_scsi_init(struct podule_t *podule) {
     f = fopen(rom_fn, "rb");
 
     if (!f) {
-        oak_scsi_log("Failed to load the OAK SCSI ROM %s\n", rom_fn);
+        oak_scsi_log("Failed to open %s\n", rom_fn);
         return -1;
     }
 

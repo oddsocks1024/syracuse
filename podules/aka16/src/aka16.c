@@ -28,7 +28,6 @@ char podule_path[PATH_MAX];
 static FILE *aka16_logf;
 
 void aka16_log(const char *format, ...) {
-#ifdef DEBUG_LOG
     char buf[1024];
     char logfile[PATH_MAX];
     get_config_dir_loc(logfile);
@@ -43,7 +42,6 @@ void aka16_log(const char *format, ...) {
     va_end(ap);
     fputs(buf,aka16_logf);
     fflush(aka16_logf);
-#endif
 }
 
 typedef struct aka16_t {
@@ -122,7 +120,7 @@ static int aka16_init(struct podule_t *podule) {
     f = fopen(rom_fn, "rb");
 
     if (!f) {
-        aka16_log("Failed to load AKA16 ROM\n");
+        aka16_log("Failed to open %s\n", rom_fn);
         return -1;
     }
 
