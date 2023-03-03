@@ -14,12 +14,12 @@ noinst_SCRIPTS += ../aka12.so
 endif
 
 amrefresh:
-libaka12_la_SOURCES = ../../common/uart/scc2691.c aka12.c ../../../src/master-cfg-file.c
+libaka12_la_SOURCES = ../../common/misc/6522.c ../../common/uart/scc2691.c aka12.c ../../../src/master-cfg-file.c
 
 if OS_LINUX
 libaka12_la_SOURCES += ../../common/midi/midi_alsa.c
 endif
 
-libaka12_la_CFLAGS = -I../../../src -I../../common/midi -I../../common/uart
+libaka12_la_CFLAGS = -I../../../src -I../../common/midi -I../../common/misc -I../../common/uart
 libaka12_la_LIBADD = @LIBS@
 endif

@@ -10,12 +10,15 @@
     Expansion card header is at ROM address 0x3800 (ROM bank 7). VIA port A is set to all input on reset, which
     results in the ROM high bits being pulled high. The loader will switch PA0-PA2 between input to read the
     header and chunk directory, and output to read module data.
+
+    Both UART and VIA are connected to podule IRQ.
 */
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdarg.h>
 #include <string.h>
+#include "6522.h"
 #include "aka12.h"
 #include "scc2691.h"
 #include "midi.h"
@@ -54,7 +57,10 @@ typedef struct aka12_t {
     uint8_t rom[0x4000];
     int rom_page;
     scc2691_t scc2691;
+    via6522_t via6522;
     uint8_t ora, ddra;
+    int uart_irq;
+    int via_irq;
     podule_t *podule;
     void *midi;
 } aka12_t;
@@ -71,6 +77,9 @@ static uint8_t aka12_read_b(struct podule_t *podule, podule_io_type type, uint32
             //aka12_log("  rom_page=%i rom_addr=%04x\n", aka12->rom_page, ((aka12->rom_page * 2048) + ((addr & 0x1fff) >> 2)) & 0x3fff);
             return aka12->rom[((aka12->rom_page * 2048) + ((addr & 0x1fff) >> 2)) & 0x3fff];
 
+        case 0x2000:
+            return via6522_read(&aka12->via6522, addr >> 2);
+
         case 0x3000:
             return scc2691_read(&aka12->scc2691, (addr >> 2) & 7);
     }
@@ -83,16 +92,10 @@ static void aka12_write_b(struct podule_t *podule, podule_io_type type, uint32_t
     if (type != PODULE_IO_TYPE_IOC)
         return;
 
-    //	aka12_log("aka12_write_b: addr=%04x val=%02x\n", addr, val);
+    //    aka12_log("aka12_write_b: addr=%04x val=%02x\n", addr, val);
     switch (addr & 0x3000) {
         case 0x2000:
-            /*6522 VIA is mapped here. We only currently look at port A which is used for ROM paging*/
-            if ((addr & 0x3c) == 0x4)
-                aka12->ora = val;
-            if ((addr & 0x3c) == 0xc)
-                aka12->ddra = val;
-
-            aka12->rom_page = aka12->ora | ~aka12->ddra;
+            via6522_write(&aka12->via6522, addr >> 2, val);
             return;
         case 0x3000: /*SCC2691*/
             scc2691_write(&aka12->scc2691, (addr >> 2) & 7, val);
@@ -103,13 +106,27 @@ static void aka12_write_b(struct podule_t *podule, podule_io_type type, uint32_t
 static int aka12_run(struct podule_t *podule, int timeslice_us) {
     aka12_t *aka12 = podule->p;
     scc2691_run(&aka12->scc2691, timeslice_us);
-    return 256; /*256us = 1 byte at 31250 baud*/
+    via6522_updatetimers(&aka12->via6522, timeslice_us*2);
+    return 256; /* 256us = 1 byte at 31250 baud */
 }
 
 static void aka12_uart_irq(void *p, int state) {
     aka12_t *aka12 = p;
     podule_t *podule = aka12->podule;
-    podule_callbacks->set_irq(podule, state);
+    aka12->uart_irq = state;
+    podule_callbacks->set_irq(podule, aka12->uart_irq | aka12->via_irq);
+}
+
+static void aka12_via_irq(void *p, int state) {
+    aka12_t *aka12 = p;
+    podule_t *podule = aka12->podule;
+    aka12->via_irq = state;
+    podule_callbacks->set_irq(podule, aka12->uart_irq | aka12->via_irq);
+}
+
+static void aka12_via_write_portA(void *p, uint8_t val) {
+    aka12_t *aka12 = p;
+    aka12->rom_page = val & 7;
 }
 
 static void aka12_uart_send(void *p, uint8_t val) {
@@ -141,6 +158,8 @@ static int aka12_init(struct podule_t *podule) {
     fclose(f);
     aka12->rom_page = 7; /* Header is in last page */
     scc2691_init(&aka12->scc2691, MIDI_UART_CLOCK, aka12_uart_irq, aka12_uart_send, aka12, aka12_log);
+    via6522_init(&aka12->via6522, aka12_via_irq, aka12);
+    aka12->via6522.write_portA = aka12_via_write_portA;
     aka12->midi = midi_init(aka12, aka12_midi_receive, aka12_log, podule_callbacks, podule);
     aka12->podule = podule;
     podule->p = aka12;
