@@ -97,14 +97,16 @@ static uint8_t aka10_read_b(struct podule_t *podule, podule_io_type type, uint32
                 /* 6522 VIA is mapped here. We only currently look at port A which is used for ROM paging and joystick buttons */
                 switch ((addr & 0x3c) >> 2) {
                     case 0x1:
-                    temp = aka10->ora | 0xc0;
+                        temp = aka10->ora | 0xc0;
 
-                    if (joystick_state[0].button[0])
-                        temp &= ~0x40;
+                        if (joystick_state[0].button[0])
+                            temp &= ~0x40;
 
-                    if (joystick_state[1].button[0])
-                        temp &= ~0x80;
-                    return temp;
+                        if (joystick_state[1].button[0])
+                            temp &= ~0x80;
+                        return temp;
+                    case 0xd: /* IFR */
+                        return 0;
             }
             break;
         }
