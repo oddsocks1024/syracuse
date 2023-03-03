@@ -132,14 +132,13 @@ am__installdirs = "$(DESTDIR)$(libdir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libaka10_la_DEPENDENCIES =
 am__libaka10_la_SOURCES_DIST = ../../common/uart/6850.c aka10.c \
-	../../../src/master-cfg-file.c ../../common/midi/midi_alsa.c
+	./../common/joystick/joystick_sdl2.o ../../common/adc/d7002c.o \
+	../../../src/master-cfg-file.o ../../common/midi/midi_alsa.c
 am__dirstamp = $(am__leading_dot)dirstamp
 @BUILD_PODULES_TRUE@@OS_LINUX_TRUE@am__objects_1 = ../../common/midi/libaka10_la-midi_alsa.lo
 @BUILD_PODULES_TRUE@am_libaka10_la_OBJECTS =  \
 @BUILD_PODULES_TRUE@	../../common/uart/libaka10_la-6850.lo \
-@BUILD_PODULES_TRUE@	libaka10_la-aka10.lo \
-@BUILD_PODULES_TRUE@	../../../src/libaka10_la-master-cfg-file.lo \
-@BUILD_PODULES_TRUE@	$(am__objects_1)
+@BUILD_PODULES_TRUE@	libaka10_la-aka10.lo $(am__objects_1)
 libaka10_la_OBJECTS = $(am_libaka10_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -166,7 +165,6 @@ DEFAULT_INCLUDES = -I.@am__isrc@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__maybe_remake_depfiles = depfiles
 am__depfiles_remade =  \
-	../../../src/$(DEPDIR)/libaka10_la-master-cfg-file.Plo \
 	../../common/midi/$(DEPDIR)/libaka10_la-midi_alsa.Plo \
 	../../common/uart/$(DEPDIR)/libaka10_la-6850.Plo \
 	./$(DEPDIR)/libaka10_la-aka10.Plo
@@ -366,9 +364,12 @@ AUTOMAKE_OPTIONS = subdir-objects
 @BUILD_PODULES_TRUE@noinst_SCRIPTS = $(am__append_2)
 @BUILD_PODULES_TRUE@CLEANFILES = $(am__append_1)
 @BUILD_PODULES_TRUE@libaka10_la_SOURCES = ../../common/uart/6850.c \
-@BUILD_PODULES_TRUE@	aka10.c ../../../src/master-cfg-file.c \
+@BUILD_PODULES_TRUE@	aka10.c \
+@BUILD_PODULES_TRUE@	./../common/joystick/joystick_sdl2.o \
+@BUILD_PODULES_TRUE@	../../common/adc/d7002c.o \
+@BUILD_PODULES_TRUE@	../../../src/master-cfg-file.o \
 @BUILD_PODULES_TRUE@	$(am__append_3)
-@BUILD_PODULES_TRUE@libaka10_la_CFLAGS = -I../../../src -I../../common/midi -I../../common/uart
+@BUILD_PODULES_TRUE@libaka10_la_CFLAGS = -I../../../src -I../../common/adc -I../../common/joystick -I../../common/midi -I../../common/uart $(shell sdl2-config --cflags)
 @BUILD_PODULES_TRUE@libaka10_la_LIBADD = @LIBS@
 all: all-am
 
@@ -447,15 +448,6 @@ clean-libLTLIBRARIES:
 ../../common/uart/libaka10_la-6850.lo:  \
 	../../common/uart/$(am__dirstamp) \
 	../../common/uart/$(DEPDIR)/$(am__dirstamp)
-../../../src/$(am__dirstamp):
-	@$(MKDIR_P) ../../../src
-	@: > ../../../src/$(am__dirstamp)
-../../../src/$(DEPDIR)/$(am__dirstamp):
-	@$(MKDIR_P) ../../../src/$(DEPDIR)
-	@: > ../../../src/$(DEPDIR)/$(am__dirstamp)
-../../../src/libaka10_la-master-cfg-file.lo:  \
-	../../../src/$(am__dirstamp) \
-	../../../src/$(DEPDIR)/$(am__dirstamp)
 ../../common/midi/$(am__dirstamp):
 	@$(MKDIR_P) ../../common/midi
 	@: > ../../common/midi/$(am__dirstamp)
@@ -471,8 +463,6 @@ libaka10.la: $(libaka10_la_OBJECTS) $(libaka10_la_DEPENDENCIES) $(EXTRA_libaka10
 
 mostlyclean-compile:
 	-rm -f *.$(OBJEXT)
-	-rm -f ../../../src/*.$(OBJEXT)
-	-rm -f ../../../src/*.lo
 	-rm -f ../../common/midi/*.$(OBJEXT)
 	-rm -f ../../common/midi/*.lo
 	-rm -f ../../common/uart/*.$(OBJEXT)
@@ -481,7 +471,6 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@../../../src/$(DEPDIR)/libaka10_la-master-cfg-file.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@../../common/midi/$(DEPDIR)/libaka10_la-midi_alsa.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@../../common/uart/$(DEPDIR)/libaka10_la-6850.Plo@am__quote@ # am--include-marker
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libaka10_la-aka10.Plo@am__quote@ # am--include-marker
@@ -530,13 +519,6 @@ libaka10_la-aka10.lo: aka10.c
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka10_la_CFLAGS) $(CFLAGS) -c -o libaka10_la-aka10.lo `test -f 'aka10.c' || echo '$(srcdir)/'`aka10.c
 
-../../../src/libaka10_la-master-cfg-file.lo: ../../../src/master-cfg-file.c
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka10_la_CFLAGS) $(CFLAGS) -MT ../../../src/libaka10_la-master-cfg-file.lo -MD -MP -MF ../../../src/$(DEPDIR)/libaka10_la-master-cfg-file.Tpo -c -o ../../../src/libaka10_la-master-cfg-file.lo `test -f '../../../src/master-cfg-file.c' || echo '$(srcdir)/'`../../../src/master-cfg-file.c
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../../src/$(DEPDIR)/libaka10_la-master-cfg-file.Tpo ../../../src/$(DEPDIR)/libaka10_la-master-cfg-file.Plo
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='../../../src/master-cfg-file.c' object='../../../src/libaka10_la-master-cfg-file.lo' libtool=yes @AMDEPBACKSLASH@
-@AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
-@am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka10_la_CFLAGS) $(CFLAGS) -c -o ../../../src/libaka10_la-master-cfg-file.lo `test -f '../../../src/master-cfg-file.c' || echo '$(srcdir)/'`../../../src/master-cfg-file.c
-
 ../../common/midi/libaka10_la-midi_alsa.lo: ../../common/midi/midi_alsa.c
 @am__fastdepCC_TRUE@	$(AM_V_CC)$(LIBTOOL) $(AM_V_lt) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libaka10_la_CFLAGS) $(CFLAGS) -MT ../../common/midi/libaka10_la-midi_alsa.lo -MD -MP -MF ../../common/midi/$(DEPDIR)/libaka10_la-midi_alsa.Tpo -c -o ../../common/midi/libaka10_la-midi_alsa.lo `test -f '../../common/midi/midi_alsa.c' || echo '$(srcdir)/'`../../common/midi/midi_alsa.c
 @am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) ../../common/midi/$(DEPDIR)/libaka10_la-midi_alsa.Tpo ../../common/midi/$(DEPDIR)/libaka10_la-midi_alsa.Plo
@@ -549,7 +531,6 @@ mostlyclean-libtool:
 
 clean-libtool:
 	-rm -rf .libs _libs
-	-rm -rf ../../../src/.libs ../../../src/_libs
 	-rm -rf ../../common/midi/.libs ../../common/midi/_libs
 	-rm -rf ../../common/uart/.libs ../../common/uart/_libs
 
@@ -671,8 +652,6 @@ clean-generic:
 distclean-generic:
 	-test -z "$(CONFIG_CLEAN_FILES)" || rm -f $(CONFIG_CLEAN_FILES)
 	-test . = "$(srcdir)" || test -z "$(CONFIG_CLEAN_VPATH_FILES)" || rm -f $(CONFIG_CLEAN_VPATH_FILES)
-	-rm -f ../../../src/$(DEPDIR)/$(am__dirstamp)
-	-rm -f ../../../src/$(am__dirstamp)
 	-rm -f ../../common/midi/$(DEPDIR)/$(am__dirstamp)
 	-rm -f ../../common/midi/$(am__dirstamp)
 	-rm -f ../../common/uart/$(DEPDIR)/$(am__dirstamp)
@@ -687,8 +666,7 @@ clean-am: clean-generic clean-libLTLIBRARIES clean-libtool \
 	mostlyclean-am
 
 distclean: distclean-am
-		-rm -f ../../../src/$(DEPDIR)/libaka10_la-master-cfg-file.Plo
-	-rm -f ../../common/midi/$(DEPDIR)/libaka10_la-midi_alsa.Plo
+		-rm -f ../../common/midi/$(DEPDIR)/libaka10_la-midi_alsa.Plo
 	-rm -f ../../common/uart/$(DEPDIR)/libaka10_la-6850.Plo
 	-rm -f ./$(DEPDIR)/libaka10_la-aka10.Plo
 	-rm -f Makefile
@@ -736,8 +714,7 @@ install-ps-am:
 installcheck-am:
 
 maintainer-clean: maintainer-clean-am
-		-rm -f ../../../src/$(DEPDIR)/libaka10_la-master-cfg-file.Plo
-	-rm -f ../../common/midi/$(DEPDIR)/libaka10_la-midi_alsa.Plo
+		-rm -f ../../common/midi/$(DEPDIR)/libaka10_la-midi_alsa.Plo
 	-rm -f ../../common/uart/$(DEPDIR)/libaka10_la-6850.Plo
 	-rm -f ./$(DEPDIR)/libaka10_la-aka10.Plo
 	-rm -f Makefile
