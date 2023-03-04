@@ -252,7 +252,7 @@ uint8_t readmemfb(uint32_t a)
                         return podule_memc_read_b((a & 0xc000) >> 14, a & 0x3fff);
 
                 if (fdctype == FDC_82C711 && a >= 0x3012000 && a <= 0x302A000)
-                        return c82c711_fdc_dmaread(a);
+                         return c82c711_fdc_dmaread(a == 0x302A000, NULL);
 
                 bank=(a>>16)&7;
 
@@ -380,7 +380,7 @@ uint32_t readmemfl(uint32_t a)
                         return podule_memc_read_w((a & 0xc000) >> 14, a & 0x3fff);
 
                 if (fdctype == FDC_82C711 && a >= 0x3012000 && a <= 0x302A000)
-                        return c82c711_fdc_dmaread(a);
+                        return c82c711_fdc_dmaread(a == 0x302A000, NULL);
 
 //                        if (output) rpclog("IOC space readl %08X\n",a);
                 bank=(a>>16)&7;
@@ -503,7 +503,7 @@ void writememfb(uint32_t a,uint8_t v)
 
                 if (fdctype == FDC_82C711 && a >= 0x3012000 && a <= 0x302A000)
                 {
-                        c82c711_fdc_dmawrite(a, v);
+                        c82c711_fdc_dmawrite(v, (a == 0x302A000), NULL);
                         return;
         }
 
@@ -641,7 +641,7 @@ void writememfl(uint32_t a,uint32_t v)
                 }
                 if (fdctype == FDC_82C711 && a >= 0x3012000 && a <= 0x302A000)
                 {
-                        c82c711_fdc_dmawrite(a, v);
+                        c82c711_fdc_dmawrite(v, (a == 0x302A000), NULL);
                         return;
         }
 //                rpclog("IOC space writel %08X %02X\n",a,v);

@@ -50,7 +50,7 @@ void c82c711_write(uint32_t addr, uint8_t val)
            writeide(&ide_internal, addr, val);
 
         if ((addr & ~7) == 0x3f0 && addr != 0x3f6)
-           c82c711_fdc_write(addr & 7, val);
+           c82c711_fdc_write(addr & 7, val, NULL);
 
         if ((addr & 0x3ff) == 0x278)
                 printer_data_write(val);
@@ -74,10 +74,10 @@ uint8_t c82c711_read(uint32_t addr)
            return readide(&ide_internal, addr);
 
         if ((addr & ~7) == 0x3f0)
-           return c82c711_fdc_read(addr & 7);
+           return c82c711_fdc_read(addr & 7, NULL);
 
         if ((addr & 0x3ff) == 0x279)
-                return printer_status_read();
+            return printer_status_read();
 
         return 0xff;
 }
