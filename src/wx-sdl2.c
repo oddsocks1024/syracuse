@@ -7,6 +7,7 @@
 #include <string.h>
 #include <wx/defs.h>
 #include "arc.h"
+#include "debugger.h"
 #include "disc.h"
 #include "ioc.h"
 #include "plat_input.h"
@@ -261,36 +262,44 @@ void arc_resume_main_thread()
 
 void arc_do_reset()
 {
+    debugger_start_reset();
     SDL_LockMutex(main_thread_mutex);
     arc_reset();
     SDL_UnlockMutex(main_thread_mutex);
+    debugger_end_reset();
 }
 
 void arc_disc_change(int drive, char *fn)
 {
+    int is_indebug = indebug;
     rpclog("arc_disc_change: drive=%i fn=%s\n", drive, fn);
 
-    SDL_LockMutex(main_thread_mutex);
+    if (!is_indebug)
+        SDL_LockMutex(main_thread_mutex);
 
     disc_close(drive);
     strcpy(discname[drive], fn);
     disc_load(drive, discname[drive]);
     ioc_discchange(drive);
 
-    SDL_UnlockMutex(main_thread_mutex);
+    if (!is_indebug)
+        SDL_UnlockMutex(main_thread_mutex);
 }
 
 void arc_disc_eject(int drive)
 {
+    int is_indebug = indebug;
     rpclog("arc_disc_eject: drive=%i\n", drive);
 
-    SDL_LockMutex(main_thread_mutex);
+    if (!is_indebug)
+        SDL_LockMutex(main_thread_mutex);
 
     ioc_discchange(drive);
     disc_close(drive);
     discname[drive][0] = 0;
 
-    SDL_UnlockMutex(main_thread_mutex);
+    if (!is_indebug)
+        SDL_UnlockMutex(main_thread_mutex);
 }
 
 void arc_renderer_reset()
