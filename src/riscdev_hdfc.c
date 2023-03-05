@@ -50,21 +50,19 @@ static void hdfc_fdc_fiq(int state, void *p);
 static int hdfc_init(struct podule_t *podule)
 {
     FILE *f;
-    char fn[512];
-
+    char fn[PATH_MAX];
     hdfc_t *hdfc = malloc(sizeof(hdfc_t));
     memset(hdfc, 0, sizeof(hdfc_t));
-    // FIXME
-    //append_filename(fn, exname, "roms/podules/hdfc/hdfc.rom", 511);
+    sprintf(fn, "%s%shdfc.rom", PODULEROMDIR, "hdfc/");
+    rpclog("Loading HDFC ROM %s\n", fn);
     f = fopen(fn, "rb");
-    if (f)
-    {
+
+    if (f) {
         fread(hdfc->rom, 0x10000, 1, f);
         fclose(f);
     }
-    else
-    {
-        rpclog("hdfc_init failed\n");
+    else {
+        rpclog("Failed to open %s. hdfc_init failed\n", fn);
         free(hdfc);
         return -1;
     }
@@ -262,17 +260,16 @@ static const podule_header_t hdfc_podule_header =
     }
 };
 
-const podule_header_t *riscdev_hdfc_probe(const podule_callbacks_t *callbacks, char *path)
-{
+const podule_header_t *riscdev_hdfc_probe(const podule_callbacks_t *callbacks, char *path) {
     FILE *f;
-    char fn[512];
-
+    char fn[PATH_MAX];
     podule_callbacks = callbacks;
-    //FIXME
-    //append_filename(fn, exname, "roms/podules/hdfc/hdfc.rom", 511);
+    sprintf(fn, "%s%shdfc.rom", PODULEROMDIR, "hdfc/");
     f = fopen(fn, "rb");
+
     if (!f)
         return NULL;
+
     fclose(f);
     return &hdfc_podule_header;
 }
