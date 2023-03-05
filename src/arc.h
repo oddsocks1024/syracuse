@@ -96,12 +96,17 @@ extern uint32_t readcp15(int reg);
 extern void writecp15(int reg, uint32_t val);
 
 /*Memory*/
-extern int modepritabler[3][6],modepritablew[3][6];
+extern const int modepritabler[3][8],modepritablew[3][8];
 extern uint32_t *mempoint[0x4000];
 extern uint8_t *mempointb[0x4000];
 extern int memstat[0x4000];
 extern uint32_t *ram,*rom;
 extern uint8_t *romb;
+enum {
+    MEMMODE_USER,
+    MEMMODE_OS,
+    MEMMODE_SUPER
+};
 extern int memmode;
 extern void initmem(int memsize);
 extern void resizemem(int memsize);
