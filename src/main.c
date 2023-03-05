@@ -238,6 +238,7 @@ void arc_reset() {
     keyboard_init();
     disc_reset();
     wd1770_reset();
+    c82c711_init();
     c82c711_fdc_init();
 
     if ((fdctype != FDC_82C711) && st506_present)
