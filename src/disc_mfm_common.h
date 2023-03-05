@@ -1,4 +1,5 @@
-typedef struct mfm_t {
+typedef struct mfm_t
+{
     uint8_t track_data[2][65536]; /*[side][byte]*/
     int track_len[3];
     int track_index[3];
@@ -31,3 +32,6 @@ void mfm_writesector(mfm_t *mfm, int drive, int sector, int track, int side, int
 void mfm_readaddress(mfm_t *mfm, int drive, int track, int side, int density);
 void mfm_format(mfm_t *mfm, int drive, int track, int side, int density);
 void mfm_stop(mfm_t *mfm);
+
+void mfm_index(mfm_t *mfm, int is_blank_track);
+void mfm_process_read_bit(mfm_t *mfm, uint16_t new_data);

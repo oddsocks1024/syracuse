@@ -11,7 +11,6 @@
 #include "vidc.h"
 #include "plat_video.h"
 
-#define MIN(a, b) (((a) < (b)) ? (a) : (b))
 
 /*for mode 27, VDSR=1ff, VDLR=ed, HDSR=6e4, HDLR=50*/
 /*LICR=7d2*/

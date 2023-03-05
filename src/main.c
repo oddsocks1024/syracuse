@@ -23,6 +23,7 @@
 #include "disc_hfe.h"
 #include "disc_jfd.h"
 #include "disc_mfm_common.h"
+#include "disc_scp.h"
 #include "ds2401.h"
 #include "ide.h"
 #include "ioc.h"
@@ -180,6 +181,7 @@ int arc_init() {
     hfe_init();
     jfd_init();
     mfm_init();
+    scp_init();
     ddnoise_init();
     wd1770_reset();
     c82c711_fdc_init();
