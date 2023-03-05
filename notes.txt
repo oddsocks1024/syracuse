@@ -1,3 +1,4 @@
+
 Ethernet II Emulation (AEH50)
 ------------------------------
 DP8390 (NE2000) clone
@@ -20,3 +21,8 @@ IP addresses are fixed:
 - Netmask: 255.255.255.0
 - Gateway: 10.0.2.2
 - DNS: 10.0.2.3
+
+
+RISC Developments High Density Floppy Controller
+------------------------------------------------
+ROM File: <PODULEROMDIR>/hdfc/hdfc.rom
