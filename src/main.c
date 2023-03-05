@@ -1,6 +1,7 @@
 /*
     Main init/close/run functions
 */
+
 #include <stdio.h>
 #include <stdint.h>
 #include <stdlib.h>
@@ -226,6 +227,7 @@ void arc_reset() {
     rom_load_5th_column();
     cmos_load();
     resizemem(memsize);
+    initmemc();
     resetarm();
     memset(ram,0,memsize*1024);
     resetmouse();

@@ -129,6 +129,7 @@ static int arc_main_thread(void *p)
         /*Resize window to match screen mode*/
         if (!fullscreen && win_doresize)
         {
+
             SDL_Rect rect;
 
             win_doresize = 0;
@@ -141,6 +142,7 @@ static int arc_main_thread(void *p)
                 SDL_SetWindowSize(sdl_main_window, winsizex, winsizey);
                 SDL_SetWindowPosition(sdl_main_window, rect.x, rect.y);
             }
+
         }
 
         /*Toggle fullscreen with RWIN-Enter (Alt-Enter, Cmd-Enter),
@@ -172,10 +174,12 @@ static int arc_main_thread(void *p)
 
         if (win_renderer_reset)
         {
+
             win_renderer_reset = 0;
 
             if (!video_renderer_reinit(NULL))
                 fatal("Video renderer init failed");
+
         }
 
         // Run for 10 ms of processor time
@@ -203,6 +207,7 @@ static int arc_main_thread(void *p)
 
         if (updatemips)
         {
+
             char s[80];
 
             sprintf(s, "Syracuse %s - %i%% - %s", VERSION_STRING, inssec, mousecapture ? "Press CTRL-END to release mouse" : "Click to capture mouse");
@@ -210,16 +215,14 @@ static int arc_main_thread(void *p)
             if (!fullscreen)
                 SDL_SetWindowTitle(sdl_main_window, s);
             updatemips=0;
+
         }
     }
     rpclog("SHUTTING DOWN\n");
 
     arc_close();
-
     input_close();
-
     video_renderer_close();
-
     SDL_DestroyWindow(sdl_main_window);
 
     return 0;

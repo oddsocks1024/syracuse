@@ -767,12 +767,11 @@ void debugger_do()
                 sscanf(param1, "%X", (unsigned int *)&addr);
                 sscanf(param2, "%X", (unsigned int *)&data);
 
-                /* FIXME
                 if (!strncasecmp(command, "writeb", 6))
                     writememfb_debug(addr, data);
                 else
                     writememfl_debug(addr, data);
-                */
+
             }
             break;
             case 'h': case 'H': case '?':

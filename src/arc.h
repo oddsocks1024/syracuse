@@ -1,6 +1,7 @@
 /*
     Main header file
 */
+
 #define VERSION_STRING "v2.2"
 
 #include <stdio.h>
@@ -63,16 +64,19 @@ extern void fatal(const char *format, ...);
 #endif
 
 
-
 #define container_of(ptr, type, member) ({                      \
-        const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
-        (type *)( (char *)__mptr - offsetof(type,member) );})
+    const typeof( ((type *)0)->member ) *__mptr = (ptr);    \
+    (type *)( (char *)__mptr - offsetof(type,member) );})
 
 
 #define nr_elems(array) (int)(sizeof(array) / sizeof(array[0]))
 
+#define MAX(x, y) ((x) > (y) ? (x) : (y))
+#define MIN(x, y) ((x) < (y) ? (x) : (y))
+
 extern void arc_set_cpu(int cpu, int memc);
 extern void updatewindowsize(int x, int y);
+
 extern int updatemips,inssec;
 
 /*ARM*/
@@ -81,11 +85,13 @@ extern int armirq,armfiq;
 #define PC ((armregs[15])&0x3FFFFFC)
 extern int ins,output;
 extern int inscount;
+
 extern void resetarm();
 extern void execarm(int cycs);
 extern void dumpregs();
 extern int databort;
 extern uint32_t opcode;
+
 extern int fpaena;
 extern int fpaopcode(uint32_t opcode);
 extern void resetfpa();
@@ -97,27 +103,27 @@ extern void writecp15(int reg, uint32_t val);
 
 /*Memory*/
 extern const int modepritabler[3][8],modepritablew[3][8];
-extern uint32_t *mempoint[0x4000];
-extern uint8_t *mempointb[0x4000];
-extern int memstat[0x4000];
+extern uint8_t *mempoint[0x4000];
+extern uint8_t memstat[0x4000];
 extern uint32_t *ram,*rom;
-extern uint8_t *romb;
+
 enum {
     MEMMODE_USER,
     MEMMODE_OS,
     MEMMODE_SUPER
 };
 extern int memmode;
+
 extern void initmem(int memsize);
 extern void resizemem(int memsize);
 extern int loadrom();
 extern void resetpagesize(int pagesize);
 
-#define readmemb(a)    ((modepritabler[memmode][memstat[((a)>>12)&0x3FFF]])?mempointb[((a)>>12)&0x3FFF][(a)&0xFFF]:readmemfb(a))
-#define readmeml(a)    ((modepritabler[memmode][memstat[((a)>>12)&0x3FFF]])?mempoint[((a)>>12)&0x3FFF][((a)&0xFFF)>>2]:readmemfl(a))
-#define writememb(a,v) do { if (modepritablew[memmode][memstat[((a)>>12)&0x3FFF]]) mempointb[((a)>>12)&0x3FFF][(a)&0xFFF]=(v&0xFF); else { writememfb(a,v); } } while (0)
-#define writememl(a,v) do { if (modepritablew[memmode][memstat[((a)>>12)&0x3FFF]]) mempoint[((a)>>12)&0x3FFF][((a)&0xFFF)>>2]=v; else { writememfl(a,v); } } while (0)
-#define readmemff(a)    ((modepritabler[memmode][memstat[((a)>>12)&0x3FFF]])?mempoint[((a)>>12)&0x3FFF][((a)&0xFFF)>>2]:readmemf(a))
+#define readmemb(a)    ((modepritabler[memmode][memstat[((a) >> 12) & 0x3FFF]]) ? mempoint[((a) >> 12) & 0x3FFF][(a)] : readmemfb(a))
+#define readmeml(a)    ((modepritabler[memmode][memstat[((a) >> 12) & 0x3FFF]]) ? *(uint32_t *)&mempoint[((a) >> 12) & 0x3FFF][(a) & ~3] : readmemfl(a))
+#define writememb(a,v) do { if (modepritablew[memmode][memstat[((a) >> 12) & 0x3FFF]]) mempoint[((a) >> 12) & 0x3FFF][(a)] = v; else { writememfb(a, v); } } while (0)
+#define writememl(a,v) do { if (modepritablew[memmode][memstat[((a) >> 12) & 0x3FFF]]) *(uint32_t *)&mempoint[((a) >> 12) & 0x3FFF][(a) & ~3] = v; else { writememfl(a, v); } } while (0)
+#define readmemff(a)    ((modepritabler[memmode][memstat[((a) >> 12) & 0x3FFF]]) ? *(uint32_t *)&mempoint[((a) >> 12) & 0x3FFF][(a) & ~3] : readmemf(a))
 
 extern uint32_t readmemf(uint32_t a);
 extern uint8_t readmemfb(uint32_t a);
@@ -132,6 +138,7 @@ extern uint32_t vend; /*End of video RAM*/
 extern uint32_t cinit;
 extern int osmode;
 extern int prefabort, prefabort_next;
+
 extern void initmemc();
 extern void writememc(uint32_t a);
 extern void writecam(uint32_t a);
@@ -144,6 +151,7 @@ extern int fullborders,noborders;
 extern int dblscan;
 extern int stereoimages[8];
 extern int flyback;
+
 extern void initvid();
 extern void reinitvideo();
 extern void writevidc(uint32_t v);
@@ -158,10 +166,10 @@ extern int discchange[4];
 extern int fdctype;
 extern int readflash[4];
 
+
 /*Causes a databort during RISC OS 3.11 startup*/
 #define mousehack 0
 extern char configdir[4096];
-
 
 /*Eterna*/
 extern uint8_t readeterna(uint32_t addr);
@@ -170,28 +178,46 @@ extern void writeeterna(uint32_t addr, uint32_t val);
 /*Config*/
 extern int romset;
 extern int stereo;
+
+
 extern int soundena;
+
 extern int fullscreen;
 extern int fullborders,noborders;
 extern int firstfull;
 extern int dblscan;
+
 extern int arm3;
+
 extern int memsize;
+
 extern int fdctype;
+
+
 extern int speed_mhz;
+
+
 extern int mousecapture;
 
+
 void updateins();
+
 void get_executable_name(char *s, int size);
+
+
 void updatewindowsize(int x, int y);
+
 int arc_init();
 void arc_reset();
 void arc_run();
 void arc_close();
+
+
 void arc_start_main_thread(void *wx_window, void *wx_menu);
 void arc_stop_main_thread();
 void arc_pause_main_thread();
 void arc_resume_main_thread();
+
 void arc_do_reset();
 void arc_disc_change(int drive, char *fn);
 void arc_disc_eject(int drive);
@@ -199,6 +225,8 @@ void arc_enter_fullscreen();
 void arc_renderer_reset();
 void arc_set_display_mode(int new_display_mode);
 void arc_set_dblscan(int new_dblscan);
+
+
 void arc_stop_emulation();
 void arc_popup_menu();
 void arc_update_menu();

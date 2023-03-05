@@ -7,6 +7,7 @@
 #include "arc.h"
 #include "arm.h"
 #include "config.h"
+#include "debugger.h"
 #include "ioc.h"
 #include "keyboard.h"
 #include "mem.h"
@@ -14,12 +15,8 @@
 #include "sound.h"
 #include "timer.h"
 #include "vidc.h"
-#include "debugger.h"
 #include "video.h"
 #include "plat_video.h"
-
-#define MIN(a, b) (((a) < (b)) ? (a) : (b))
-#define MAX(a, b) (((a) > (b)) ? (a) : (b))
 
 /*
     RISC OS 3 sets a total of 832 horizontal and 288 vertical for MODE 12. We use
@@ -91,6 +88,7 @@ int vidc_displayon = 0;
 int blitcount = 0;
 /* b - memory buffer */
 BITMAP *buffer;
+
 int flyback;
 int deskdepth;
 int videodma = 0;
@@ -111,33 +109,47 @@ struct {
     int hdstart2, hdend2;
     uint32_t cr;
     int sync, inter;
+
     int horiz_length;
     int hsync_length;
     int front_porch_length;
     int display_length;
     int back_porch_length;
+
     int state;
+
     uint64_t pixel_time;
     uint64_t fetch_time; /*Time for one fetch (four words) to be consumed*/
     uint64_t initial_fetch_time;
+
     int cursor_lines;
     int first_line;
+
     /*Palette lookups - pal8 for 8bpp modes, pal for all others*/
     uint32_t pal[32], pal8[256];
     int cx, cys, cye, cxh;
     int scanrate;
+
     int in_display;
     int cyclesperline_display, cyclesperline_blanking;
     int cycles_per_fetch;
     int fetch_count;
+
     int clear_pending;
+
     int clock;
+
     int disp_len, disp_rate, disp_count;
+
     int disp_y_min, disp_y_max;
     int y_min, y_max;
+
     int border_was_disabled, display_was_disabled;
+
     int output_enable;
+
     emu_timer_t timer;
+
     void (*data_callback)(uint8_t *data, int pixels, int hsync_length, int resolution, void *p);
     void (*vsync_callback)(void *p, int state);
     void *callback_p;
@@ -213,8 +225,8 @@ void recalcse() {
     }
 
     /*                rpclog("pixel_time %016llx  %016llx %016llx\n", vidc.pixel_time,
-                            (TIMER_USEC * 1000) / vidc.clock,
-                            (TIMER_USEC * 1000) / ((vidc.clock * 2) / 3));*/
+                (TIMER_USEC * 1000) / vidc.clock,
+                (TIMER_USEC * 1000) / ((vidc.clock * 2) / 3));*/
 
     switch (vidcr[VIDC_CR] & 0xC) {
         case 0xC: /*8bpp*/
@@ -295,8 +307,8 @@ void recalcse() {
         vidc.back_porch_length = 0;
 
     /*        rpclog("recalcse: horiz_length=%i  hsync_length=%i front_porch_length=%i display_length=%i back_port_length=%i\n",
-                    vidc.horiz_length,
-                    vidc.hsync_length, vidc.front_porch_length, vidc.display_length, vidc.back_porch_length);*/
+            vidc.horiz_length,
+            vidc.hsync_length, vidc.front_porch_length, vidc.display_length, vidc.back_porch_length);*/
 }
 
 void writevidc(uint32_t v) {
@@ -310,25 +322,25 @@ void writevidc(uint32_t v) {
     }
     if (((v >> 26) < 0x14) && (v != vidcr[v >> 26] || redrawpalette)) {
         /*                if ((v>>26)<0x10) rpclog("Write pal %08X\n", v);
-                        switch (v >> 26)
-                        {
-                                case  0: v = 0x00000000; break;
-                                case  1: v = 0x04000111; break;
-                                case  2: v = 0x08000222; break;
-                                case  3: v = 0x0C000333; break;
-                                case  4: v = 0x10000004; break;
-                                case  5: v = 0x14000115; break;
-                                case  6: v = 0x18000226; break;
-                                case  7: v = 0x1C000337; break;
-                                case  8: v = 0x20000400; break;
-                                case  9: v = 0x24000511; break;
-                                case 10: v = 0x28000622; break;
-                                case 11: v = 0x2C000733; break;
-                                case 12: v = 0x30000404; break;
-                                case 13: v = 0x34000515; break;
-                                case 14: v = 0x38000626; break;
-                                case 15: v = 0x3C000737; break;
-                        }*/
+                switch (v >> 26)
+                {
+                    case  0: v = 0x00000000; break;
+                    case  1: v = 0x04000111; break;
+                    case  2: v = 0x08000222; break;
+                    case  3: v = 0x0C000333; break;
+                    case  4: v = 0x10000004; break;
+                    case  5: v = 0x14000115; break;
+                    case  6: v = 0x18000226; break;
+                    case  7: v = 0x1C000337; break;
+                    case  8: v = 0x20000400; break;
+                    case  9: v = 0x24000511; break;
+                    case 10: v = 0x28000622; break;
+                    case 11: v = 0x2C000733; break;
+                    case 12: v = 0x30000404; break;
+                    case 13: v = 0x34000515; break;
+                    case 14: v = 0x38000626; break;
+                    case 15: v = 0x3C000737; break;
+                }*/
         vidcr[v >> 26] = v & 0x1fff;
         r.b = (v & 0xF00) >> 6;
         r.g = (v & 0xF0) >> 2;
@@ -415,8 +427,8 @@ void writevidc(uint32_t v) {
         vidc.cx = ((v & 0xFFE000) >> 13) + 6;
         vidc.cxh = ((v & 0xFFF800) >> 11) + 24;
     }
-    if ((v>>24)==0x9C) vidc.inter = (v & 0xffc000) >> 13;
-        vidc.inter = (v & 0xFFFFFF);
+    if ((v >> 24) == 0x9C)
+        vidc.inter = (v & 0xffc000) >> 13;
     if ((v >> 24) == 0xA4) {
         if (vidc.vsync != ((v >> 14) & 0x3FF) + 1) {
             vidc.vsync = ((v >> 14) & 0x3FF) + 1;
@@ -535,6 +547,7 @@ static void vidc_poll(void *__p) {
             timer_advance_u64(&vidc.timer, vidc.back_porch_length * vidc.pixel_time);
             /*Delay next fetch until display starts again*/
             memc_dma_video_req_ts += ((vidc.back_porch_length + vidc.hsync_length + vidc.front_porch_length) * vidc.pixel_time);
+            recalc_min_timer();
             vidc.in_display = 0;
             break;
 
@@ -568,6 +581,7 @@ static void vidc_poll(void *__p) {
                 vidc.cursor_lines = 2;
                 vidc.first_line = 1;
                 recalc_min_timer();
+
                 vidc.displayon = vidc_displayon = 1;
                 vidc.fetch_count = vidc.cycles_per_fetch;
                 mem_dorefresh = memc_refresh_always;
@@ -1106,10 +1120,10 @@ static void vidc_poll(void *__p) {
         vidc_framecount++;
 
         /*                rpclog("htot=%i hswr=%i hbsr=%i hdsr=%i hder=%i hber=%i\n",
-                                        vidc.htot, vidc.sync, vidc.hbstart, vidc.hdstart, vidc.hdend, vidc.hbend);
-                        rpclog("vtot=%i vswr=%i vbsr=%i vdsr=%i vder=%i vber=%i cr=%08x\n",
-                                        vidc.vtot, vidc.vsync, vidc.vbstart,
-                                        vidc.vdstart, vidc.vdend, vidc.vbend, vidcr[VIDC_CR]);*/
+                        vidc.htot, vidc.sync, vidc.hbstart, vidc.hdstart, vidc.hdend, vidc.hbend);
+                rpclog("vtot=%i vswr=%i vbsr=%i vdsr=%i vder=%i vber=%i cr=%08x\n",
+                        vidc.vtot, vidc.vsync, vidc.vbstart,
+                        vidc.vdstart, vidc.vdend, vidc.vbend, vidcr[VIDC_CR]);*/
     }
 }
 
@@ -1168,74 +1182,52 @@ void vidc_output_enable(int ena) {
     vidc.output_enable = ena;
 }
 
-uint32_t vidc_get_current_vaddr(void)
-{
-        return vidc.addr;
+uint32_t vidc_get_current_vaddr(void) {
+    return vidc.addr;
 }
-uint32_t vidc_get_current_caddr(void)
-{
-        return vidc.caddr;
+
+uint32_t vidc_get_current_caddr(void) {
+    return vidc.caddr;
 }
 
 static const int pixel_rates[4] = {8, 12, 16, 24};
-static const char *stereo_images[8] =
-{
-        "Undefined ", "100% left ", "83% left  ", "67% left  ",
-        "Centre    ", "67% right ", "83% right ", "100% right"
-};
+static const char *stereo_images[8] = {"Undefined ", "100% left ", "83% left  ", "67% left  ", "Centre    ", "67% right ", "83% right ", "100% right"};
 
-void vidc_debug_print(char *s)
-{
-        sprintf(s, "VIDC registers :\n"
-                   " Horizontal cycle        =%4i   Vertical cycle        =%4i\n"
-                   " Horizontal sync width   =%4i   Vertical sync width   =%4i\n"
-                   " Horizontal border start =%4i   Vertical border start =%4i\n"
-                   " Horizontal display start=%4i   Vertical display start=%4i\n"
-                   " Horizontal display end  =%4i   Vertical display end  =%4i\n"
-                   " Horizontal border end   =%4i   Vertical border end   =%4i\n"
-                   " Horizontal cursor start =%4i   Vertical cursor start =%4i\n"
-                   "                                 Vertical cursor end   =%4i\n"
-                   " Interlace=%4i\n"
-                   " Sound period=%i  frequency=%i kHz\n"
-                   " Control=%x\n"
-                   "   Pixel rate=%g MHz\n"
-                   "   Bits per pixel=%i\n"
-                   "   DMA request=end of word %i,%i\n"
-                   "   Interlace sync %s\n"
-                   "   %s sync\n"
-                   " Input clock=%g MHz\n\n",
-                   vidc.htot*2 + 2, vidc.vtot,
-                   vidc.sync*2 + 2, vidc.vsync,
-                   vidc.hbstart, vidc.vbstart,
-                   vidc.hdstart, vidc.vdstart,
-                   vidc.hdend, vidc.vdend,
-                   vidc.hbend, vidc.vbend,
-                   vidc.cx, vidc.cys >> 14,
-                   vidc.cye >> 14,
-                   vidc.inter,
-                   (vidcr[0xc0 >> 2] & 0xff) + 2,
-                   ((vidc.clock * 1000) / 24) / ((vidcr[0xc0 >> 2] & 0xff) + 2),
-                   vidc.cr,
-                   (double)((vidc.clock * pixel_rates[vidc.cr & 3]) / 24) / 1000.0,
-                   1 << ((vidc.cr >> 2) & 3),
-                   (vidc.cr >> 4) & 3, 4 + ((vidc.cr >> 4) & 3),
-                   (vidc.cr & (1 << 6)) ? "on" : "off",
-                   (vidc.cr & (1 << 7)) ? "Composite" : "Vertical",
-                   (double)vidc.clock / 1000.0);
-        debug_out(s);
+void vidc_debug_print(char *s) {
+    sprintf(s,
+            "VIDC registers :\n"
+            " Horizontal cycle        =%4i   Vertical cycle        =%4i\n"
+            " Horizontal sync width   =%4i   Vertical sync width   =%4i\n"
+            " Horizontal border start =%4i   Vertical border start =%4i\n"
+            " Horizontal display start=%4i   Vertical display start=%4i\n"
+            " Horizontal display end  =%4i   Vertical display end  =%4i\n"
+            " Horizontal border end   =%4i   Vertical border end   =%4i\n"
+            " Horizontal cursor start =%4i   Vertical cursor start =%4i\n"
+            "                                 Vertical cursor end   =%4i\n"
+            " Interlace=%4i\n"
+            " Sound period=%i  frequency=%i kHz\n"
+            " Control=%x\n"
+            "   Pixel rate=%g MHz\n"
+            "   Bits per pixel=%i\n"
+            "   DMA request=end of word %i,%i\n"
+            "   Interlace sync %s\n"
+            "   %s sync\n"
+            " Input clock=%g MHz\n\n",
+            vidc.htot * 2 + 2, vidc.vtot, vidc.sync * 2 + 2, vidc.vsync, vidc.hbstart, vidc.vbstart, vidc.hdstart, vidc.vdstart, vidc.hdend, vidc.vdend, vidc.hbend, vidc.vbend, vidc.cx,
+            vidc.cys >> 14, vidc.cye >> 14, vidc.inter, (vidcr[0xc0 >> 2] & 0xff) + 2, ((vidc.clock * 1000) / 24) / ((vidcr[0xc0 >> 2] & 0xff) + 2), vidc.cr,
+            (double)((vidc.clock * pixel_rates[vidc.cr & 3]) / 24) / 1000.0, 1 << ((vidc.cr >> 2) & 3), (vidc.cr >> 4) & 3, 4 + ((vidc.cr >> 4) & 3), (vidc.cr & (1 << 6)) ? "on" : "off",
+            (vidc.cr & (1 << 7)) ? "Composite" : "Vertical", (double)vidc.clock / 1000.0);
+    debug_out(s);
 
-        sprintf(s, "Palette :\n"
-                   " [0]=%04x [1]=%04x [2]=%04x [3]=%04x [4]=%04x [5]=%04x [6]=%04x [7]=%04x\n"
-                   " [8]=%04x [9]=%04x [a]=%04x [b]=%04x [c]=%04x [d]=%04x [e]=%04x [f]=%04x\n"
-                   " Border=%04x  Cursor[1]=%04x  Cursor[2]=%04x  Cursor[3]=%04x\n\n"
-                   "Stereo images :\n"
-                   " [0]=%s [1]=%s [2]=%s [3]=%s\n"
-                   " [4]=%s [5]=%s [6]=%s [7]=%s\n\n",
-                   vidcr[0], vidcr[1], vidcr[2], vidcr[3], vidcr[4], vidcr[5], vidcr[6], vidcr[7],
-                   vidcr[8], vidcr[9], vidcr[10], vidcr[11], vidcr[12], vidcr[13], vidcr[14], vidcr[15],
-                   vidcr[16], vidcr[17], vidcr[18], vidcr[19],
-                   stereo_images[stereoimages[0]], stereo_images[stereoimages[1]],
-                   stereo_images[stereoimages[2]], stereo_images[stereoimages[3]],
-                   stereo_images[stereoimages[4]], stereo_images[stereoimages[5]],
-                   stereo_images[stereoimages[6]], stereo_images[stereoimages[7]]);
+    sprintf(s,
+            "Palette :\n"
+            " [0]=%04x [1]=%04x [2]=%04x [3]=%04x [4]=%04x [5]=%04x [6]=%04x [7]=%04x\n"
+            " [8]=%04x [9]=%04x [a]=%04x [b]=%04x [c]=%04x [d]=%04x [e]=%04x [f]=%04x\n"
+            " Border=%04x  Cursor[1]=%04x  Cursor[2]=%04x  Cursor[3]=%04x\n\n"
+            "Stereo images :\n"
+            " [0]=%s [1]=%s [2]=%s [3]=%s\n"
+            " [4]=%s [5]=%s [6]=%s [7]=%s\n\n",
+            vidcr[0], vidcr[1], vidcr[2], vidcr[3], vidcr[4], vidcr[5], vidcr[6], vidcr[7], vidcr[8], vidcr[9], vidcr[10], vidcr[11], vidcr[12], vidcr[13], vidcr[14], vidcr[15], vidcr[16], vidcr[17],
+            vidcr[18], vidcr[19], stereo_images[stereoimages[0]], stereo_images[stereoimages[1]], stereo_images[stereoimages[2]], stereo_images[stereoimages[3]], stereo_images[stereoimages[4]],
+            stereo_images[stereoimages[5]], stereo_images[stereoimages[6]], stereo_images[stereoimages[7]]);
 }
