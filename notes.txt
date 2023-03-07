@@ -1,9 +1,11 @@
+PODULES
+=======
 
-Ethernet II Emulation (AEH50)
-------------------------------
+AEH50 (Ethernet II)
+-------------------
 DP8390 (NE2000) clone
 
-Uses libslirp for basic internet type access with a fixed configuration
+Libslirp connection uses a fixed configuration
 
 IP addresses are fixed:
 - IP addess: 10.0.2.15
@@ -12,9 +14,9 @@ IP addresses are fixed:
 - DNS: 10.0.2.3
 
 
-Ethernet III Emulation (AEH54)
-------------------------------
-Uses libslirp for basic internet type access with a fixed configuration
+AEH54 (Ethernet III)
+--------------------
+Libslirp connection uses a fixed configuration
 
 IP addresses are fixed:
 - IP addess: 10.0.2.15
@@ -26,3 +28,14 @@ IP addresses are fixed:
 RISC Developments High Density Floppy Controller
 ------------------------------------------------
 ROM File: <PODULEROMDIR>/hdfc/hdfc.rom
+
+
+AKA31 (SCSI Controller)
+-----------------------
+ROM File: <PODULEROMDIR>/aka31/scsirom
+
+
+AKA32 (SCSI Controller)
+-----------------------
+Variant of the AKA31 using a different ROM
+ROM File: <PODULEROMDIR>/aka32/aka32.rom
