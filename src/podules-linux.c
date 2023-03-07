@@ -51,7 +51,7 @@ void opendlls(void) {
         dll_t *dll = malloc(sizeof(dll_t));
         memset(dll, 0, sizeof(dll_t));
 
-        if (dp->d_type != DT_DIR || strcmp(dp->d_name, ".") == 0 || strcmp(dp->d_name, "..") == 0 ) {
+        if (dp->d_type != DT_DIR || dp->d_name[0] == '.') {
             free(dll);
             continue;
         }
