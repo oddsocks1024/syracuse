@@ -774,13 +774,15 @@ void ConfigDialog::OnOK(wxCommandEvent &event) {
     hd_spt[1] = atoi(temp_s);
 
     for (c = 0; c < 4; c++) {
-        strncpy(podule_names[c], config_podules[c], PODULE_SHORT_NAME_LEN - 1);
+        strncpy(podule_names[c], config_podules[c], sizeof(podule_names[c]) - 1);
+        podule_names[c][sizeof(podule_names[c]) - 1] = 0;
     }
 
     unique_id = config_unique_id;
     char temp_s2[256];
     wxComboBox *cbox = (wxComboBox *)this->FindWindow(XRCID("IDC_COMBO_JOY"));
-    strncpy(temp_s2, cbox->GetValue(), sizeof(temp_s2));
+    strncpy(temp_s2, cbox->GetValue(), sizeof(temp_s2) - 1);
+    temp_s2[sizeof(temp_s2) - 1] = 0;
     strcpy(joystick_if, "none");
     c = 0;
 
@@ -814,7 +816,8 @@ void ConfigDialog::OnMachine(wxCommandEvent &event) {
     char machine_c_s[256];
 
     wxString machine_s = ((wxComboBox *)this->FindWindow(XRCID("IDC_COMBO_MACHINE")))->GetValue();
-    strncpy(machine_c_s, machine_s, sizeof(machine_c_s));
+    strncpy(machine_c_s, machine_s, sizeof(machine_c_s) - 1);
+    machine_c_s[sizeof(machine_c_s) - 1] = 0;
     config_preset = get_preset(machine_c_s);
     config_cpu = presets[config_preset].default_cpu;
     config_mem = presets[config_preset].default_mem;
@@ -828,7 +831,8 @@ void ConfigDialog::OnMachine(wxCommandEvent &event) {
 void ConfigDialog::OnComboCPU(wxCommandEvent &event) {
     char cpu_c_s[256];
     wxString cpu_s = ((wxComboBox *)this->FindWindow(event.GetId()))->GetValue();
-    strncpy(cpu_c_s, cpu_s, sizeof(cpu_c_s));
+    strncpy(cpu_c_s, cpu_s, sizeof(cpu_c_s) - 1);
+    cpu_c_s[sizeof(cpu_c_s) - 1] = 0;
 
     rpclog("New CPU = %s\n", cpu_c_s);
     config_cpu = get_cpu(cpu_c_s);
@@ -851,14 +855,16 @@ void ConfigDialog::OnComboMemory(wxCommandEvent &event) {
     char mem_c_s[256];
 
     wxString mem_s = ((wxComboBox *)this->FindWindow(event.GetId()))->GetValue();
-    strncpy(mem_c_s, mem_s, sizeof(mem_c_s));
+    strncpy(mem_c_s, mem_s, sizeof(mem_c_s) - 1);
+    mem_c_s[sizeof(mem_c_s) - 1] = 0;
     config_mem = get_mem(mem_c_s);
 }
 
 void ConfigDialog::OnComboMEMC(wxCommandEvent &event) {
     char memc_c_s[256];
     wxString memc_s = ((wxComboBox *)this->FindWindow(event.GetId()))->GetValue();
-    strncpy(memc_c_s, memc_s, sizeof(memc_c_s));
+    strncpy(memc_c_s, memc_s, sizeof(memc_c_s) - 1);
+    memc_c_s[sizeof(memc_c_s) - 1] = 0;
     config_memc = get_memc(memc_c_s);
 }
 
@@ -870,8 +876,8 @@ void ConfigDialog::OnComboFPU(wxCommandEvent &event) {
 void ConfigDialog::OnComboOS(wxCommandEvent &event) {
     char rom_c_s[256];
     wxString rom_s = ((wxComboBox *)this->FindWindow(event.GetId()))->GetValue();
-    strncpy(rom_c_s, rom_s, sizeof(rom_c_s));
-
+    strncpy(rom_c_s, rom_s, sizeof(rom_c_s) - 1);
+    rom_c_s[sizeof(rom_c_s) - 1] = 0;
     config_rom = get_rom(rom_c_s);
     ((wxCheckBox *)FindWindow(XRCID("IDC_CHECK_ASROM")))->Enable(config_rom >= ROM_RISCOS_300);
 }
@@ -879,8 +885,8 @@ void ConfigDialog::OnComboOS(wxCommandEvent &event) {
 void ConfigDialog::OnComboMonitor(wxCommandEvent &event) {
     char monitor_c_s[256];
     wxString monitor_s = ((wxComboBox *)this->FindWindow(event.GetId()))->GetValue();
-    strncpy(monitor_c_s, monitor_s, sizeof(monitor_c_s));
-
+    strncpy(monitor_c_s, monitor_s, sizeof(monitor_c_s) - 1);
+    monitor_c_s[sizeof(monitor_c_s) - 1] = 0;
     config_monitor = get_monitor(monitor_c_s);
 }
 
@@ -894,7 +900,8 @@ void ConfigDialog::OnHDSel(wxCommandEvent &event) {
         char new_fn_c[256];
         int new_sectors, new_heads, new_cylinders;
 
-        strncpy(new_fn_c, new_fn, sizeof(new_fn_c));
+        strncpy(new_fn_c, new_fn, sizeof(new_fn_c) - 1);
+        new_fn_c[sizeof(new_fn_c) - 1] = 0;
 
         if (ShowConfHD(this, &new_sectors, &new_heads, &new_cylinders, new_fn_c, config_io != IO_NEW)) {
             char temp_s[80];
@@ -1073,10 +1080,11 @@ void ConfigDialog::OnConfigJoystick(wxCommandEvent &event) {
 
     char temp_s[256];
     wxComboBox *cbox = (wxComboBox *)this->FindWindow(XRCID("IDC_COMBO_JOY"));
-    strncpy(temp_s, cbox->GetValue(), sizeof(temp_s));
-
+    strncpy(temp_s, cbox->GetValue(), sizeof(temp_s) - 1);
+    temp_s[sizeof(temp_s)-1] = 0;
     int c = 0;
     int joy_type = 0;
+
     while (joystick_get_name(c)) {
         if (!strcmp(temp_s, joystick_get_name(c)))
             joy_type = c;
