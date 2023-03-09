@@ -3,6 +3,8 @@ PODULES
 
 AEH50 (Ethernet II)
 -------------------
+ROM File: <PODULEROMDIR>/aeh50/EthernetII_ID_ROM.ROM
+
 DP8390 (NE2000) clone
 
 Libslirp connection uses a fixed configuration
@@ -16,6 +18,8 @@ IP addresses are fixed:
 
 AEH54 (Ethernet III)
 --------------------
+ROM File: <PODULEROMDIR>/aeh54/AEH54.ROM
+
 Libslirp connection uses a fixed configuration
 
 IP addresses are fixed:
@@ -25,9 +29,25 @@ IP addresses are fixed:
 - DNS: 10.0.2.3
 
 
-RISC Developments High Density Floppy Controller
-------------------------------------------------
-ROM File: <PODULEROMDIR>/hdfc/hdfc.rom
+AKA05 (ROM Podule)
+------------------
+Manager ROM File: <PODULEROMDIR>/aka05/rom_podule_0.07.bin
+Other ROMs are managed by the configuration
+
+
+AKA10 (MIDI and IO Podule)
+--------------------------
+ROM File: <PODULEROMDIR>/aka10/aka10.rom
+
+
+AKA12 (MIDI / User Port)
+------------------------
+ROM File: <PODULEROMDIR>/aka12/aka12.rom
+
+
+AKA16 (MIDI)
+------------
+ROM File: <PODULEROMDIR>/aka16/aka16.rom
 
 
 AKA31 (SCSI Controller)
@@ -39,3 +59,13 @@ AKA32 (SCSI Controller)
 -----------------------
 Variant of the AKA31 using a different ROM
 ROM File: <PODULEROMDIR>/aka32/aka32.rom
+
+
+LARK (Sound Card)
+-----------------
+<PODULEROMDIR>/lark/lark.rom
+
+
+RISC Developments High Density Floppy Controller
+------------------------------------------------
+ROM File: <PODULEROMDIR>/hdfc/hdfc.rom
