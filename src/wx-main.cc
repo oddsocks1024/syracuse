@@ -55,5 +55,6 @@ int main(int argc, char **argv) {
     SDL_SetHint(SDL_HINT_WINDOWS_DISABLE_THREAD_NAMING, "1");
     wxApp::SetInstance(new App());
     wxEntry(argc, argv);
+    al_close();
     return 0;
 }
